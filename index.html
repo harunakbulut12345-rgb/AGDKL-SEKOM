@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -7,643 +6,89 @@
 <title>AGDKLİSEKOM</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f3f5f9;color:#202938}
-button,input,textarea,select{font:inherit}
-button{cursor:pointer}
-header{background:#142b50;color:white;padding:16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-header h1{font-size:19px;margin:0}
-.menu-btn{border:0;background:#ffffff20;color:white;font-size:25px;border-radius:8px;padding:5px 12px}
-main{max-width:1050px;margin:20px auto;padding:0 14px}
-.card{background:white;border-radius:12px;padding:18px;margin-bottom:15px;box-shadow:0 2px 9px #142b5010}
-h2{font-size:20px;margin:0 0 14px}
-h3{font-size:17px;margin:0 0 9px}
-p{line-height:1.5}
-input,textarea,select{width:100%;padding:11px;border:1px solid #ccd3df;border-radius:8px;margin:6px 0 12px;background:white}
-textarea{min-height:85px;resize:vertical}
-.btn{border:0;border-radius:8px;padding:11px 15px;background:#174b88;color:white;font-weight:600}
-.btn:hover{opacity:.9}
-.btn-secondary{background:#64748b}
-.btn-danger{background:#c0392b}
-.btn-success{background:#16834a}
-.btn-light{background:#e8eef7;color:#17365f}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-.muted{color:#687589;font-size:13px}
-.hidden{display:none!important}
-.activity-item,.record-item{border:1px solid #e1e6ee;border-radius:10px;padding:14px;margin:12px 0}
-.activity-item h3,.record-item h3{margin-bottom:7px}
-.tag{display:inline-block;background:#e8eef7;color:#174b88;padding:4px 8px;border-radius:20px;font-size:12px;margin:3px}
-#drawer-bg{position:fixed;inset:0;background:#0008;z-index:20;display:none}
-#drawer-bg.open{display:block}
-#drawer{position:fixed;right:0;top:0;height:100%;width:min(460px,88vw);background:white;z-index:21;padding:20px;overflow:auto;transform:translateX(105%);transition:.25s}
-#drawer.open{transform:translateX(0)}
-.drawer-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
-.drawer-head button{border:0;background:#eee;border-radius:8px;padding:8px 12px;font-size:20px}
-.drawer-link{display:block;width:100%;text-align:left;padding:14px;border:0;border-bottom:1px solid #eee;background:white;font-size:15px;color:#20334f}
-.drawer-link:hover{background:#f1f5fa}
-.notice{padding:12px;border-radius:8px;background:#fff4d8;color:#785600;margin:10px 0}
-.success{background:#e3f7eb;color:#17643a}
-.error{background:#fde8e7;color:#9b2420}
-footer{text-align:center;color:#7b8798;padding:25px;font-size:12px}
-@media(min-width:700px){.two-col{display:grid;grid-template-columns:1fr 1fr;gap:15px}}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f3f5f9;color:#202938}button,input,textarea,select{font:inherit}button{cursor:pointer}header{background:#142b50;color:#fff;padding:16px;display:flex;align-items:center;justify-content:space-between;gap:12px}header h1{font-size:19px;margin:0}.menu-btn{border:0;background:#ffffff20;color:white;font-size:25px;border-radius:8px;padding:5px 12px}main{max-width:1050px;margin:20px auto;padding:0 14px}.card{background:white;border-radius:12px;padding:18px;margin-bottom:15px;box-shadow:0 2px 9px #142b5010}h2{font-size:20px;margin:0 0 14px}h3{font-size:17px;margin:0 0 9px}p{line-height:1.5}input,textarea,select{width:100%;padding:11px;border:1px solid #ccd3df;border-radius:8px;margin:6px 0 12px;background:white}textarea{min-height:85px;resize:vertical}.btn{border:0;border-radius:8px;padding:11px 15px;background:#174b88;color:white;font-weight:600}.btn-secondary{background:#64748b}.btn-danger{background:#c0392b}.btn-success{background:#16834a}.btn-light{background:#e8eef7;color:#17365f}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.muted{color:#687589;font-size:13px}.hidden{display:none!important}.item{border:1px solid #e1e6ee;border-radius:10px;padding:14px;margin:12px 0}.tag{display:inline-block;background:#e8eef7;color:#174b88;padding:4px 8px;border-radius:20px;font-size:12px;margin:3px}#drawer-bg{position:fixed;inset:0;background:#0008;z-index:20;display:none}#drawer{position:fixed;right:0;top:0;height:100%;width:min(460px,88vw);background:white;z-index:21;padding:20px;overflow:auto;transform:translateX(105%);transition:.25s}#drawer.open{transform:translateX(0)}#drawer-bg.open{display:block}.drawer-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.drawer-head button{border:0;background:#eee;border-radius:8px;padding:8px 12px;font-size:20px}.drawer-link{display:block;width:100%;text-align:left;padding:14px;border:0;border-bottom:1px solid #eee;background:white;font-size:15px;color:#20334f}.drawer-link:hover{background:#f1f5fa}.notice{padding:12px;border-radius:8px;background:#fff4d8;color:#785600;margin:10px 0}.success{background:#e3f7eb;color:#17643a}.error{background:#fde8e7;color:#9b2420}footer{text-align:center;color:#7b8798;padding:25px;font-size:12px}@media(min-width:700px){.two-col{display:grid;grid-template-columns:1fr 1fr;gap:15px}}
 </style>
 </head>
 <body>
-
-<header>
-  <h1>AGDKLİSEKOM</h1>
-  <button class="menu-btn" id="menuBtn" type="button">☰</button>
-</header>
-
+<header><h1>AGDKLİSEKOM</h1><button class="menu-btn" id="menuBtn" aria-label="Menüyü aç">☰</button></header>
 <div id="drawer-bg"></div>
 <aside id="drawer">
-  <div class="drawer-head">
-    <h2>Yönetim Menüsü</h2>
-    <button id="closeDrawer" type="button">✕</button>
-  </div>
-  <div id="drawerUser" class="muted">Oturum açılmadı</div>
-  <button class="drawer-link" data-page="home">Ana Sayfa</button>
-  <button class="drawer-link" data-page="activities">Faaliyetler</button>
-  <button class="drawer-link" data-page="meetings">Toplantılar</button>
-  <button class="drawer-link" data-page="decisions">Kararlar</button>
-  <button class="drawer-link" data-page="tasks">Görevler</button>
-  <button class="drawer-link" data-page="units">Birimler</button>
-  <button class="drawer-link" data-page="users">Kullanıcılar</button>
-  <button class="drawer-link" id="loginMenuBtn" type="button">Giriş Yap</button>
-  <button class="drawer-link hidden" id="logoutBtn" type="button">Çıkış Yap</button>
+ <div class="drawer-head"><h2>Yönetim Menüsü</h2><button id="closeDrawer">✕</button></div>
+ <div id="drawerUser" class="muted">Oturum açılmadı</div>
+ <button class="drawer-link" data-page="home">Ana Sayfa</button>
+ <button class="drawer-link" data-page="activities">Faaliyetler</button>
+ <button class="drawer-link" data-page="meetings">Toplantılar</button>
+ <button class="drawer-link" data-page="decisions">Kararlar</button>
+ <button class="drawer-link" data-page="tasks">Görevler</button>
+ <button class="drawer-link" data-page="units">Birimler</button>
+ <button class="drawer-link" data-page="users">Kullanıcılar</button>
+ <button class="drawer-link" id="loginMenuBtn">Giriş Yap</button>
+ <button class="drawer-link hidden" id="logoutBtn">Çıkış Yap</button>
 </aside>
-
 <main>
-
 <section id="page-home">
-  <div class="card">
-    <h2>AGDKLİSEKOM'a Hoş Geldiniz</h2>
-    <p>Toplantı, karar, görev ve faaliyet takip platformu.</p>
-    <div class="actions">
-      <button class="btn" onclick="showPage('activities')">Faaliyetleri Gör</button>
-      <button class="btn btn-light" onclick="showPage('login')">Yönetici Girişi</button>
-    </div>
-  </div>
-  <div class="card">
-    <h2>Güncel Faaliyetler</h2>
-    <div id="homeActivities">Faaliyetler yükleniyor...</div>
-  </div>
+ <div class="card"><h2>AGDKLİSEKOM'a Hoş Geldiniz</h2><p>Toplantı, karar, görev ve faaliyet takip platformu.</p><div class="actions"><button class="btn" onclick="showPage('activities')">Faaliyetleri Gör</button><button class="btn btn-light" onclick="showPage('login')">Yönetici Girişi</button></div></div>
+ <div class="card"><h2>Güncel Faaliyetler</h2><div id="homeActivities">Faaliyetler yükleniyor...</div></div>
 </section>
-
 <section id="page-activities" class="hidden">
-  <div class="card">
-    <h2>Faaliyetler</h2>
-    <p class="muted">Açık faaliyetleri inceleyebilir ve kayıt oluşturabilirsiniz.</p>
-    <div id="activityList">Faaliyetler yükleniyor...</div>
-  </div>
-  <div class="card">
-    <h2>Faaliyete Kayıt Ol</h2>
-    <form id="registrationForm">
-      <label>Faaliyet</label>
-      <select id="registrationActivity" required>
-        <option value="">Faaliyet seçiniz</option>
-      </select>
-      <label>Ad Soyad</label>
-      <input id="registrationName" required placeholder="Adınız ve soyadınız">
-      <label>Telefon</label>
-      <input id="registrationPhone" required type="tel" placeholder="05XXXXXXXXX">
-      <button class="btn btn-success" type="submit">Kaydımı Oluştur</button>
-    </form>
-    <div id="registrationMessage"></div>
-  </div>
+ <div class="card"><h2>Faaliyetler</h2><p class="muted">Açık faaliyetleri inceleyebilir ve kayıt oluşturabilirsiniz.</p><div id="activityList">Faaliyetler yükleniyor...</div></div>
+ <div class="card"><h2>Faaliyete Kayıt Ol</h2><form id="registrationForm"><label>Faaliyet</label><select id="registrationActivity" required><option value="">Faaliyet seçiniz</option></select><label>Ad Soyad</label><input id="registrationName" required placeholder="Adınız ve soyadınız"><label>Telefon</label><input id="registrationPhone" required type="tel" placeholder="05XXXXXXXXX"><button class="btn btn-success" type="submit">Kaydımı Oluştur</button></form><div id="registrationMessage"></div></div>
 </section>
-
-<section id="page-login" class="hidden">
-  <div class="card" style="max-width:480px;margin:25px auto">
-    <h2>Yönetici Girişi</h2>
-    <form id="loginForm">
-      <label>E-posta</label>
-      <input id="loginEmail" type="email" required placeholder="E-posta adresiniz">
-      <label>Şifre</label>
-      <input id="loginPassword" type="password" required placeholder="Şifreniz">
-      <button class="btn" type="submit">Giriş Yap</button>
-    </form>
-    <div id="loginMessage"></div>
-  </div>
-</section>
-
+<section id="page-login" class="hidden"><div class="card" style="max-width:480px;margin:25px auto"><h2>Yönetici Girişi</h2><form id="loginForm"><label>E-posta</label><input id="loginEmail" type="email" required placeholder="E-posta adresiniz"><label>Şifre</label><input id="loginPassword" type="password" required placeholder="Şifreniz"><button class="btn" type="submit">Giriş Yap</button></form><div id="loginMessage"></div></div></section>
 <section id="page-dashboard" class="hidden">
-  <div class="card">
-    <h2>Yönetim Paneli</h2>
-    <div id="profileInfo">Kullanıcı bilgileri yükleniyor...</div>
-  </div>
-
-  <div class="card hidden" id="activityCreateArea">
-    <h2>Yeni Faaliyet Ekle</h2>
-    <p class="muted">Yalnızca Komisyon Başkanı ve Teşkilat Başkanı kullanabilir.</p>
-    <form id="activityCreateForm">
-      <label>Faaliyet Başlığı</label>
-      <input id="activityTitle" required maxlength="200" placeholder="Faaliyet başlığı">
-      <label>Faaliyet Açıklaması</label>
-      <textarea id="activityDescription" placeholder="Faaliyet açıklaması"></textarea>
-      <label>Faaliyet Tarihi</label>
-      <input id="activityDate" type="date">
-      <label>Faaliyet Yeri</label>
-      <input id="activityLocation" placeholder="Faaliyet yeri">
-      <button class="btn btn-success" type="submit">Faaliyeti Kaydet</button>
-    </form>
-    <div id="activityCreateMessage"></div>
-  </div>
-
-  <div class="two-col">
-    <div class="card">
-      <h3>Toplantılar</h3>
-      <p>Toplantıları görüntüleyin ve yönetin.</p>
-      <button class="btn" onclick="showPage('meetings')">Toplantılara Git</button>
-    </div>
-    <div class="card">
-      <h3>Faaliyet Yönetimi</h3>
-      <p>Faaliyet oluşturun ve mevcut faaliyetleri yönetin.</p>
-      <button class="btn" onclick="showPage('activities')">Faaliyetlere Git</button>
-    </div>
-  </div>
+ <div class="card"><h2>Yönetim Paneli</h2><div id="profileInfo">Kullanıcı bilgileri yükleniyor...</div></div>
+ <div class="card hidden" id="activityCreateArea"><h2>Yeni Faaliyet Ekle</h2><form id="activityCreateForm"><label>Faaliyet Başlığı</label><input id="activityTitle" required maxlength="200"><label>Faaliyet Açıklaması</label><textarea id="activityDescription"></textarea><label>Faaliyet Tarihi</label><input id="activityDate" type="date"><label>Faaliyet Yeri</label><input id="activityLocation"><button class="btn btn-success" type="submit">Faaliyeti Kaydet</button></form><div id="activityCreateMessage"></div></div>
+ <div class="two-col"><div class="card"><h3>Toplantılar</h3><p>Toplantıları görüntüleyin ve yönetin.</p><button class="btn" onclick="showPage('meetings')">Toplantılara Git</button></div><div class="card"><h3>Faaliyet Yönetimi</h3><p>Faaliyet oluşturun ve mevcut faaliyetleri yönetin.</p><button class="btn" onclick="showPage('activities')">Faaliyetlere Git</button></div></div>
 </section>
-
-<section id="page-meetings" class="hidden">
-  <div class="card">
-    <h2>Toplantılar</h2>
-    <div id="meetingCreateArea" class="hidden">
-      <h3>Yeni Toplantı Oluştur</h3>
-      <form id="meetingForm">
-        <label>Toplantı Başlığı</label>
-        <input id="meetingTitle" required>
-        <label>Toplantı Tarihi</label>
-        <input id="meetingDate" type="date" required>
-        <label>Katılımcılar</label>
-        <textarea id="meetingAttendees"></textarea>
-        <label>Gündem</label>
-        <textarea id="meetingAgenda"></textarea>
-        <label>Toplantı Notları</label>
-        <textarea id="meetingMinutes"></textarea>
-        <button class="btn" type="submit">Toplantıyı Kaydet</button>
-      </form>
-    </div>
-    <div id="meetingList">Toplantılar yükleniyor...</div>
-  </div>
-</section>
-
-<section id="page-decisions" class="hidden">
-  <div class="card">
-    <h2>Kararlar</h2>
-    <div id="decisionList">Kararlar yükleniyor...</div>
-  </div>
-</section>
-
-<section id="page-tasks" class="hidden">
-  <div class="card">
-    <h2>Görevler</h2>
-    <div class="card hidden" id="taskCreateArea">
-      <h3>Yeni Görev Ata</h3>
-      <p class="muted">Bu alan yalnızca Komisyon Başkanı ve Teşkilat Başkanı tarafından kullanılabilir.</p>
-      <form id="taskCreateForm">
-        <label>Görev Başlığı</label>
-        <input id="taskTitle" required maxlength="200" placeholder="Görev başlığı">
-        <label>Görev Açıklaması</label>
-        <textarea id="taskDescription" placeholder="Görev açıklaması"></textarea>
-        <label>Görev Verilecek Üye</label>
-        <select id="taskAssignee" required>
-          <option value="">Üyeler yükleniyor...</option>
-        </select>
-        <label>Son Tarih</label>
-        <input id="taskDueDate" type="date">
-        <button class="btn btn-success" type="submit">Görevi Ata</button>
-      </form>
-      <div id="taskCreateMessage"></div>
-    </div>
-    <div id="taskList">Görevler yükleniyor...</div>
-  </div>
-</section>
-
-<section id="page-units" class="hidden">
-  <div class="card">
-    <h2>Birimler</h2>
-    <div id="unitList">Birimler yükleniyor...</div>
-  </div>
-</section>
-
-<section id="page-users" class="hidden">
-  <div class="card">
-    <h2>Kullanıcılar</h2>
-    <div id="userList">Kullanıcılar yükleniyor...</div>
-  </div>
-</section>
-
+<section id="page-meetings" class="hidden"><div class="card"><h2>Toplantılar</h2><div id="meetingCreateArea" class="hidden"><h3>Yeni Toplantı Oluştur</h3><form id="meetingForm"><label>Toplantı Başlığı</label><input id="meetingTitle" required><label>Toplantı Tarihi</label><input id="meetingDate" type="date" required><label>Katılımcılar</label><textarea id="meetingAttendees"></textarea><label>Gündem</label><textarea id="meetingAgenda"></textarea><label>Toplantı Notları</label><textarea id="meetingMinutes"></textarea><button class="btn" type="submit">Toplantıyı Kaydet</button></form><div id="meetingMessage"></div></div><div id="meetingList">Toplantılar yükleniyor...</div></div></section>
+<section id="page-decisions" class="hidden"><div class="card"><h2>Kararlar</h2><div id="decisionCreateArea" class="hidden"><h3>Yeni Karar Ekle</h3><form id="decisionForm"><label>Toplantı</label><select id="decisionMeeting"><option value="">Toplantı seçiniz</option></select><label>Karar Başlığı</label><input id="decisionTitle" required><label>Gerekçe / Açıklama</label><textarea id="decisionRationale"></textarea><label>İlgili Birim (zorunlu)</label><select id="decisionUnit" required><option value="">Birim seçiniz</option></select><label>Sorumlu Üye</label><select id="decisionAssignee"><option value="">Sorumlu seçiniz</option></select><label>Son Tarih</label><input id="decisionDueDate" type="date"><button class="btn btn-success" type="submit">Kararı Kaydet</button></form><div id="decisionMessage"></div></div><div id="decisionList">Kararlar yükleniyor...</div></div></section>
+<section id="page-tasks" class="hidden"><div class="card"><h2>Görevler</h2><div class="card hidden" id="taskCreateArea"><h3>Yeni Görev Ata</h3><form id="taskCreateForm"><label>Görev Başlığı</label><input id="taskTitle" required maxlength="200"><label>Görev Açıklaması</label><textarea id="taskDescription"></textarea><label>Görev Verilecek Üye</label><select id="taskAssignee" required><option value="">Üyeler yükleniyor...</option></select><label>Son Tarih</label><input id="taskDueDate" type="date"><button class="btn btn-success" type="submit">Görevi Ata</button></form><div id="taskCreateMessage"></div></div><div id="taskList">Görevler yükleniyor...</div></div></section>
+<section id="page-units" class="hidden"><div class="card"><h2>Birimler</h2><div id="unitList">Birimler yükleniyor...</div></div></section>
+<section id="page-users" class="hidden"><div class="card"><h2>Kullanıcılar</h2><div id="userList">Kullanıcılar yükleniyor...</div></div></section>
 </main>
-
 <footer>AGDKLİSEKOM | Toplantı ve Karar Takip Platformu</footer>
-
 <script>
-const SUPABASE_URL = "https://jxldxyfqkfsvajkzxyjr.supabase.co";
-const SUPABASE_KEY = "sb_publishable_6bo9gBRnMADXZmV_tfFASQ_2F2FMRhH";
-
-const client = window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-const db = client;
-
-let currentUser = null;
-let currentProfile = null;
-let activitiesCache = [];
-let taskProfilesCache = [];
-
-const $ = id => document.getElementById(id);
-
-function escapeHTML(value){
-  return String(value ?? "").replace(/[&<>"']/g,char=>({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#039;"
-  })[char]);
-}
-
-function message(id,text,type="notice"){
-  const el=$(id);
-  if(!el)return;
-  el.className="notice "+type;
-  el.textContent=text;
-}
-
-function openMenu(){
-  $("drawer").classList.add("open");
-  $("drawer-bg").classList.add("open");
-}
-
-function closeMenu(){
-  $("drawer").classList.remove("open");
-  $("drawer-bg").classList.remove("open");
-}
-
-function showPage(name){
-  document.querySelectorAll("main section").forEach(section=>{
-    section.classList.add("hidden");
-  });
-
-  const page=$("page-"+name);
-  if(page)page.classList.remove("hidden");
-
-  closeMenu();
-
-  if(name==="activities")loadActivities();
-  if(name==="meetings")loadMeetings();
-  if(name==="decisions")loadDecisions();
-  if(name==="tasks")loadTasks();
-  if(name==="units")loadUnits();
-  if(name==="users")loadUsers();
-  if(name==="dashboard")loadProfile();
-}
-
-function canManageActivities(){
-  return !!currentUser &&
-    currentProfile?.active===true &&
-    ["komisyon_baskani","teskilat_baskani"].includes(currentProfile?.role);
-}
-
-function canAssignTasks(){
-  return !!currentUser &&
-    currentProfile?.active===true &&
-    ["komisyon_baskani","teskilat_baskani"].includes(currentProfile?.role);
-}
-
-function updateActivityManagerUI(){
-  const area=$("activityCreateArea");
-  if(area)area.classList.toggle("hidden",!canManageActivities());
-}
-
-function updateTaskAssignmentUI(){
-  const area=$("taskCreateArea");
-  if(area)area.classList.toggle("hidden",!canAssignTasks());
-}
-
-function updateMenu(){
-  const loggedIn=!!currentUser;
-  $("loginMenuBtn").classList.toggle("hidden",loggedIn);
-  $("logoutBtn").classList.toggle("hidden",!loggedIn);
-  $("drawerUser").textContent=loggedIn
-    ?(currentProfile?.full_name||currentUser.email||"Giriş yapıldı")
-    :"Oturum açılmadı";
-}
-
-async function loadProfile(){
-  if(!currentUser)return;
-
-  const {data,error}=await db.from("profiles")
-    .select("*")
-    .eq("id",currentUser.id)
-    .maybeSingle();
-
-  if(error){
-    $("profileInfo").textContent="Profil yüklenemedi: "+error.message;
-    currentProfile=null;
-    updateActivityManagerUI();
-    updateTaskAssignmentUI();
-    return;
-  }
-
-  currentProfile=data||null;
-
-  if(!currentProfile){
-    $("profileInfo").textContent="Bu kullanıcı için profil kaydı bulunamadı.";
-  }else{
-    $("profileInfo").innerHTML=
-      "<p><b>E-posta:</b> "+escapeHTML(currentUser.email)+"</p>"+
-      "<p><b>Ad Soyad:</b> "+escapeHTML(currentProfile.full_name||"Belirtilmemiş")+"</p>"+
-      "<p><b>Görev:</b> "+escapeHTML(currentProfile.role||"Belirtilmemiş")+"</p>";
-  }
-
-  updateActivityManagerUI();
-  updateTaskAssignmentUI();
-}
-
-async function refreshProfile(){
-  const {data,error}=await db.auth.getUser();
-
-  if(error)throw error;
-
-  currentUser=data.user||null;
-  currentProfile=null;
-
-  if(!currentUser){
-    updateMenu();
-    updateActivityManagerUI();
-    updateTaskAssignmentUI();
-    return;
-  }
-
-  const {data:profile,error:profileError}=await db.from("profiles")
-    .select("*")
-    .eq("id",currentUser.id)
-    .maybeSingle();
-
-  if(profileError)throw profileError;
-
-  currentProfile=profile||null;
-
-  updateMenu();
-  updateActivityManagerUI();
-  updateTaskAssignmentUI();
-}
-
-async function loadActivities(){
-  const list=$("activityList");
-  const home=$("homeActivities");
-
-  if(list)list.textContent="Faaliyetler yükleniyor...";
-  if(home)home.textContent="Faaliyetler yükleniyor...";
-
-  try{
-    const {data,error}=await db.from("activities")
-      .select("*")
-      .order("created_at",{ascending:false});
-
-    if(error)throw error;
-
-    activitiesCache=data||[];
-
-    if(list)list.innerHTML="";
-    if(home)home.innerHTML="";
-
-    if(!activitiesCache.length){
-      if(list)list.textContent="Henüz faaliyet bulunmuyor.";
-      if(home)home.textContent="Henüz faaliyet bulunmuyor.";
-    }
-
-    activitiesCache.forEach(a=>{
-      const item=document.createElement("div");
-      item.className="activity-item";
-      item.innerHTML=`
-        <h3>${escapeHTML(a.title||"Faaliyet")}</h3>
-        <p>${escapeHTML(a.description||"")}</p>
-        <p>${escapeHTML(a.location||"")}</p>
-        <small>${a.activity_date?new Date(a.activity_date).toLocaleDateString("tr-TR"):""}</small>
-      `;
-
-      if(list)list.appendChild(item.cloneNode(true));
-      if(home)home.appendChild(item);
-    });
-
-    const select=$("registrationActivity");
-    if(select){
-      select.innerHTML='<option value="">Faaliyet seçiniz</option>';
-      activitiesCache.forEach(a=>{
-        const option=document.createElement("option");
-        option.value=a.id;
-        option.textContent=a.title||"Faaliyet";
-        select.appendChild(option);
-      });
-    }
-  }catch(error){
-    console.error("Faaliyetler yüklenemedi:",error);
-    if(list)list.textContent="Faaliyetler yüklenemedi: "+error.message;
-    if(home)home.textContent="Faaliyetler yüklenemedi: "+error.message;
-  }
-}
-
-async function loadMeetings(){
-  const list=$("meetingList");
-  if(!list)return;
-  list.textContent="Toplantılar yükleniyor...";
-
-  try{
-    const {data,error}=await db.from("meetings")
-      .select("*")
-      .order("meeting_date",{ascending:false});
-
-    if(error)throw error;
-
-    list.innerHTML="";
-
-    if(!data||!data.length){
-      list.textContent="Henüz toplantı bulunmuyor.";
-      return;
-    }
-
-    data.forEach(m=>{
-      const item=document.createElement("div");
-      item.className="record-item";
-      item.innerHTML=`
-        <h3>${escapeHTML(m.title||"Toplantı")}</h3>
-        <p><b>Tarih:</b> ${m.meeting_date?new Date(m.meeting_date).toLocaleDateString("tr-TR"):"Belirtilmedi"}</p>
-        <p><b>Katılımcılar:</b> ${escapeHTML(m.attendees||"")}</p>
-        <p><b>Gündem:</b> ${escapeHTML(m.agenda||"")}</p>
-        <p><b>Toplantı notları:</b> ${escapeHTML(m.minutes||"")}</p>
-      `;
-      list.appendChild(item);
-    });
-  }catch(error){
-    console.error(error);
-    list.textContent="Toplantılar yüklenemedi: "+error.message;
-  }
-}
-
-async function loadDecisions(){
-  const list=$("decisionList");
-  if(!list)return;
-  list.textContent="Kararlar yükleniyor...";
-
-  try{
-    const {data,error}=await db.from("decisions")
-      .select("*")
-      .order("created_at",{ascending:false});
-
-    if(error)throw error;
-
-    list.innerHTML="";
-
-    if(!data||!data.length){
-      list.textContent="Henüz karar bulunmuyor.";
-      return;
-    }
-
-    data.forEach(d=>{
-      const item=document.createElement("div");
-      item.className="record-item";
-      item.innerHTML=`
-        <h3>${escapeHTML(d.title||"Karar")}</h3>
-        <p>${escapeHTML(d.description||"")}</p>
-      `;
-      list.appendChild(item);
-    });
-  }catch(error){
-    console.error(error);
-    list.textContent="Kararlar yüklenemedi: "+error.message;
-  }
-}
-
-async function loadTasks(){
-  const list=$("taskList");
-  if(!list)return;
-  list.textContent="Görevler yükleniyor...";
-
-  try{
-    const {data,error}=await db.from("tasks")
-      .select("*")
-      .order("created_at",{ascending:false});
-
-    if(error)throw error;
-
-    list.innerHTML="";
-
-    if(!data||!data.length){
-      list.textContent="Henüz görev bulunmuyor.";
-      return;
-    }
-
-    for(const task of data){
-      let assigneeName="Atanmamış";
-
-      if(task.assignee_id){
-        const {data:profile,error:profileError}=await db.from("profiles")
-          .select("full_name")
-          .eq("id",task.assignee_id)
-          .maybeSingle();
-
-        if(!profileError&&profile){
-          assigneeName=profile.full_name||"İsimsiz";
-        }
-      }
-
-      const item=document.createElement("div");
-      item.className="record-item";
-      item.innerHTML=`
-        <h3>${escapeHTML(task.title||"Görev")}</h3>
-        <p>${escapeHTML(task.description||"")}</p>
-        <p><b>Sorumlu:</b> ${escapeHTML(assigneeName)}</p>
-        <p><b>Durum:</b> ${escapeHTML(task.status||"Bekliyor")}</p>
-        <p><b>Son tarih:</b> ${task.due_date?new Date(task.due_date).toLocaleDateString("tr-TR"):"Belirtilmedi"}</p>
-      `;
-      list.appendChild(item);
-    }
-  }catch(error){
-    console.error(error);
-    list.textContent="Görevler yüklenemedi: "+error.message;
-  }
-}
-
-async function loadUnits(){
-  const list=$("unitList");
-  if(!list)return;
-  list.textContent="Birimler yükleniyor...";
-
-  try{
-    const {data,error}=await db.from("units")
-      .select("*")
-      .order("name");
-
-    if(error)throw error;
-
-    list.innerHTML="";
-
-    if(!data||!data.length){
-      list.textContent="Henüz birim bulunmuyor.";
-      return;
-    }
-
-    data.forEach(u=>{
-      const item=document.createElement("div");
-      item.className="record-item";
-      item.textContent=u.name||"Birim";
-      list.appendChild(item);
-    });
-  }catch(error){
-    console.error(error);
-    list.textContent="Birimler yüklenemedi: "+error.message;
-  }
-}
-
-async function loadUsers(){
-  const list=$("userList");
-  if(!list)return;
-  list.textContent="Kullanıcılar yükleniyor...";
-
-  try{
-    const {data,error}=await db.from("profiles")
-      .select("*")
-      .order("full_name");
-
-    if(error)throw error;
-
-    list.innerHTML="";
-
-    if(!data||!data.length){
-      list.textContent="Henüz kullanıcı bulunmuyor.";
-      return;
-    }
-
-    data.forEach(u=>{
-      const item=document.createElement("div");
-      item.className="record-item";
-      item.innerHTML=`
-        <strong>${escapeHTML(u.full_name||"İsimsiz")}</strong>
-        <p>${escapeHTML(u.role||"")}</p>
-        <small>${u.active?"Aktif":"Pasif"}</small>
-      `;
-      list.appendChild(item);
-    });
-  }catch(error){
-    console.error(error);
-    list.textContent="Kullanıcılar yüklenemedi: "+error.message;
-  }
-}
-
-async function loadTaskAssignees(){
-  const select=$("taskAssignee");
-  if(!select)return;
-
-  select.innerHTML='<option value="">Sorumlu seçiniz</option>';
-
-  try{
-    let query=db.from("profiles")
-      .select("id,full_name,role,unit_id")
-      .eq("active",true)
-      .order("full_name");
-
-    if(currentProfile?.role==="teskilat_baskani"){
-      query=query.neq("role","komisyon_baskani");
-    }
-
-    const {data,error}=await query
+"use strict";
+const SUPABASE_URL="https://jxldxyfqkfsvajkzxyjr.supabase.co";
+const SUPABASE_KEY="sb_publishable_6bo9gBRnMADXZmV_tfFASQ_2F2FMRhH";
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const $=id=>document.getElementById(id);
+let currentUser=null,currentProfile=null,taskProfilesCache=[];
+const PRESIDENT="komisyon_baskani",ORGANIZER="teskilat_baskani";
+function escapeHTML(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));}
+function showMessage(id,text,type="notice"){const e=$(id);if(!e)return;e.className="notice "+type;e.textContent=text;}
+function clearMessage(id){const e=$(id);if(e){e.className="";e.textContent="";}}
+function canManage(){return !!currentUser&&currentProfile?.active===true&&[PRESIDENT,ORGANIZER].includes(currentProfile?.role);}
+function canAssign(){return canManage();}
+function isPresident(){return currentProfile?.role===PRESIDENT;}
+function closeMenu(){$("drawer").classList.remove("open");$("drawer-bg").classList.remove("open");}
+function openMenu(){$("drawer").classList.add("open");$("drawer-bg").classList.add("open");}
+function updateMenu(){const logged=!!currentUser;$("loginMenuBtn").classList.toggle("hidden",logged);$("logoutBtn").classList.toggle("hidden",!logged);$("drawerUser").textContent=currentProfile?.full_name||currentUser?.email||"Oturum açılmadı";}
+function updateRoleUI(){$("activityCreateArea").classList.toggle("hidden",!canManage());$("taskCreateArea").classList.toggle("hidden",!canAssign());$("meetingCreateArea").classList.toggle("hidden",!currentUser);$("decisionCreateArea").classList.toggle("hidden",!currentUser);}
+function showPage(name){document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));const target=$("page-"+name);if(target)target.classList.remove("hidden");closeMenu();const loaders={activities:loadActivities,meetings:loadMeetings,decisions:loadDecisions,tasks:loadTasks,units:loadUnits,users:loadUsers,dashboard:loadProfile};if(loaders[name])loaders[name]();}
+$("menuBtn").addEventListener("click",openMenu);$("closeDrawer").addEventListener("click",closeMenu);$("drawer-bg").addEventListener("click",closeMenu);
+document.querySelectorAll(".drawer-link[data-page]").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
+$("loginMenuBtn").addEventListener("click",()=>showPage("login"));
+async function refreshProfile(){const {data:{user},error:authError}=await db.auth.getUser();if(authError)console.error(authError);currentUser=user||null;currentProfile=null;if(currentUser){const {data,error}=await db.from("profiles").select("*").eq("id",currentUser.id).maybeSingle();if(error){console.error("Profil yüklenemedi:",error);showMessage("profileInfo","Profil bilgisi alınamadı: "+error.message,"error");}else currentProfile=data||null;}updateMenu();updateRoleUI();if(currentUser&&$("profileInfo")){if(!currentProfile){$("profileInfo").textContent="Kullanıcı profili bulunamadı. Yöneticiyle iletişime geçin."; }else{$("profileInfo").innerHTML="<p><b>E-posta:</b> "+escapeHTML(currentUser.email)+"</p><p><b>Ad Soyad:</b> "+escapeHTML(currentProfile.full_name||"Belirtilmemiş")+"</p><p><b>Görev:</b> "+escapeHTML(currentProfile.role||"Belirtilmemiş")+"</p>";}}}
+async function loadActivities(){const list=$("activityList"),home=$("homeActivities");if(list)list.textContent="Faaliyetler yükleniyor...";if(home)home.textContent="Faaliyetler yükleniyor...";const {data,error}=await db.from("activities").select("*").order("created_at",{ascending:false});if(error){if(list)list.textContent="Faaliyetler yüklenemedi: "+error.message;if(home)home.textContent="Faaliyetler yüklenemedi.";console.error(error);return;}if(list)list.innerHTML="";if(home)home.innerHTML="";const rows=data||[];if(!rows.length){if(list)list.textContent="Henüz faaliyet bulunmuyor.";if(home)home.textContent="Henüz faaliyet bulunmuyor.";}rows.forEach(a=>{const html='<h3>'+escapeHTML(a.title||"Faaliyet")+'</h3><p>'+escapeHTML(a.description||"")+'</p><p>'+escapeHTML(a.location||"")+'</p><small>'+(a.activity_date?new Date(a.activity_date).toLocaleDateString("tr-TR"):"")+'</small>';if(list){const d=document.createElement("div");d.className="item";d.innerHTML=html;list.appendChild(d);}if(home){const d=document.createElement("div");d.className="item";d.innerHTML=html;home.appendChild(d);}});const sel=$("registrationActivity");if(sel){sel.innerHTML='<option value="">Faaliyet seçiniz</option>';rows.forEach(a=>{const o=document.createElement("option");o.value=a.id;o.textContent=a.title||"Faaliyet";sel.appendChild(o);});}}
+async function loadMeetings(){const list=$("meetingList");list.textContent="Toplantılar yükleniyor...";const {data,error}=await db.from("meetings").select("id,meeting_date,title,attendees,agenda,minutes,created_by").order("meeting_date",{ascending:false});if(error){list.textContent="Toplantılar yüklenemedi: "+error.message;return;}list.innerHTML="";if(!data?.length){list.textContent="Henüz toplantı bulunmuyor.";return;}data.forEach(m=>{const d=document.createElement("div");d.className="item";d.innerHTML="<h3>"+escapeHTML(m.title||"Toplantı")+"</h3><p><b>Tarih:</b> "+(m.meeting_date?new Date(m.meeting_date).toLocaleDateString("tr-TR"):"-")+"</p><p><b>Katılımcılar:</b> "+escapeHTML(m.attendees||"-")+"</p><p><b>Gündem:</b> "+escapeHTML(m.agenda||"-")+"</p><p><b>Notlar:</b> "+escapeHTML(m.minutes||"-")+"</p>";list.appendChild(d);});}
+async function loadUnits(){const list=$("unitList");list.textContent="Birimler yükleniyor...";const {data,error}=await db.from("units").select("id,name").order("name");if(error){list.textContent="Birimler yüklenemedi: "+error.message;return;}list.innerHTML="";(data||[]).forEach(u=>{const d=document.createElement("div");d.className="item";d.textContent=u.name;list.appendChild(d);});if(!data?.length)list.textContent="Birim bulunamadı.";populateUnitSelect(data||[]);}
+function populateUnitSelect(units){const sel=$("decisionUnit");if(!sel)return;const old=sel.value;sel.innerHTML='<option value="">Birim seçiniz</option>';units.forEach(u=>{const o=document.createElement("option");o.value=u.id;o.textContent=u.name;sel.appendChild(o);});if(old)sel.value=old;}
+async function loadUsers(){const list=$("userList");list.textContent="Kullanıcılar yükleniyor...";const {data,error}=await db.from("profiles").select("id,full_name,role,active,unit_id").order("full_name");if(error){list.textContent="Kullanıcılar yüklenemedi: "+error.message;return;}list.innerHTML="";(data||[]).forEach(u=>{const d=document.createElement("div");d.className="item";d.innerHTML="<strong>"+escapeHTML(u.full_name||"İsimsiz")+"</strong><p>"+escapeHTML(u.role||"")+"</p><small>"+(u.active?"Aktif":"Pasif")+"</small>";list.appendChild(d);});if(!data?.length)list.textContent="Kullanıcı bulunamadı.";}
+async function loadTaskAssignees(){const selects=[$("taskAssignee"),$("decisionAssignee")];let q=db.from("profiles").select("id,full_name,role,unit_id").eq("active",true).order("full_name");if(currentProfile?.role===ORGANIZER)q=q.neq("role",PRESIDENT);const {data,error}=await q;if(error){selects.forEach(s=>{if(s)s.innerHTML='<option value="">Üyeler yüklenemedi</option>';});console.error(error);return;}taskProfilesCache=data||[];selects.forEach(s=>{if(!s)return;const required=s.id==="taskAssignee";s.innerHTML='<option value="">'+(required?"Sorumlu seçiniz":"Sorumlu seçiniz (isteğe bağlı)")+'</option>';taskProfilesCache.forEach(p=>{const o=document.createElement("option");o.value=p.id;o.textContent=p.full_name||"İsimsiz";s.appendChild(o);});});}
+async function loadDecisions(){const list=$("decisionList");list.textContent="Kararlar yükleniyor...";const {data,error}=await db.from("decisions").select("id,decision_no,meeting_id,title,rationale,unit_id,assignee_id,due_date,status,rejection_reason,created_at,approved_by,approved_at").order("created_at",{ascending:false});if(error){list.textContent="Kararlar yüklenemedi: "+error.message;return;}list.innerHTML="";if(!data?.length){list.textContent="Henüz karar bulunmuyor.";return;}for(const d0 of data){const d=document.createElement("div");d.className="item";const unit=await db.from("units").select("name").eq("id",d0.unit_id).maybeSingle();const person=d0.assignee_id?await db.from("profiles").select("full_name").eq("id",d0.assignee_id).maybeSingle():{data:null};const status=d0.status||"Beklemede";d.innerHTML="<h3>"+escapeHTML(d0.decision_no||"Karar")+". "+escapeHTML(d0.title||"")+"</h3><p>"+escapeHTML(d0.rationale||"")+"</p><p><b>Birim:</b> "+escapeHTML(unit.data?.name||"-")+" · <b>Sorumlu:</b> "+escapeHTML(person.data?.full_name||"-")+"</p><p><b>Son tarih:</b> "+(d0.due_date?new Date(d0.due_date).toLocaleDateString("tr-TR"):"-")+" · <b>Durum:</b> "+escapeHTML(status)+"</p>"+(d0.rejection_reason?"<p><b>Ret gerekçesi:</b> "+escapeHTML(d0.rejection_reason)+"</p>":"");if(isPresident()&&status!=="approved"&&status!=="rejected"){const controls=document.createElement("div");controls.className="actions";const approve=document.createElement("button");approve.className="btn btn-success";approve.textContent="Onayla";approve.addEventListener("click",()=>updateDecisionStatus(d0.id,"approved",""));const reject=document.createElement("button");reject.className="btn btn-danger";reject.textContent="Reddet";reject.addEventListener("click",()=>{const reason=prompt("Ret gerekçesini yazınız:");if(reason&&reason.trim())updateDecisionStatus(d0.id,"rejected",reason.trim());});controls.append(approve,reject);d.appendChild(controls);}list.appendChild(d);}}
+async function updateDecisionStatus(id,status,reason){const update={status,rejection_reason:reason||null};if(status==="approved"){update.approved_by=currentUser.id;update.approved_at=new Date().toISOString();}const {error}=await db.from("decisions").update(update).eq("id",id);if(error){alert("Karar güncellenemedi: "+error.message);return;}await loadDecisions();}
+async function loadTasks(){const list=$("taskList");list.textContent="Görevler yükleniyor...";const {data,error}=await db.from("tasks").select("*").order("created_at",{ascending:false});if(error){list.textContent="Görevler yüklenemedi: "+error.message;return;}list.innerHTML="";if(!data?.length){list.textContent="Henüz görev bulunmuyor.";return;}for(const t of data){let person=null;if(t.assignee_id){const r=await db.from("profiles").select("full_name").eq("id",t.assignee_id).maybeSingle();person=r.data;}const d=document.createElement("div");d.className="item";d.innerHTML="<h3>"+escapeHTML(t.title||"Görev")+"</h3><p>"+escapeHTML(t.description||"")+"</p><p><b>Sorumlu:</b> "+escapeHTML(person?.full_name||"Atanmamış")+"</p><p><b>Durum:</b> "+escapeHTML(t.status||"Bekliyor")+"</p><p><b>Son tarih:</b> "+(t.due_date?new Date(t.due_date).toLocaleDateString("tr-TR"):"Belirtilmedi")+"</p>";list.appendChild(d);}}
+async function createMeeting(e){e.preventDefault();if(!currentUser){showMessage("meetingMessage","Toplantı oluşturmak için giriş yapmalısınız.","error");return;}const payload={title:$("meetingTitle").value.trim(),meeting_date:$("meetingDate").value,attendees:$("meetingAttendees").value.trim(),agenda:$("meetingAgenda").value.trim(),minutes:$("meetingMinutes").value.trim(),created_by:currentUser.id};const {error}=await db.from("meetings").insert(payload);if(error){showMessage("meetingMessage","Toplantı kaydedilemedi: "+error.message,"error");return;}showMessage("meetingMessage","Toplantı başarıyla kaydedildi.","success");$("meetingForm").reset();await loadMeetings();}
+async function createDecision(e){e.preventDefault();if(!currentUser){showMessage("decisionMessage","Karar oluşturmak için giriş yapmalısınız.","error");return;}const unitId=$("decisionUnit").value;if(!unitId){showMessage("decisionMessage","Karar için birim seçimi zorunludur.","error");return;}const payload={meeting_id:$("decisionMeeting").value||null,title:$("decisionTitle").value.trim(),rationale:$("decisionRationale").value.trim(),unit_id:unitId,assignee_id:$("decisionAssignee").value||null,due_date:$("decisionDueDate").value||null,created_by:currentUser.id};const {error}=await db.from("decisions").insert(payload);if(error){showMessage("decisionMessage","Karar kaydedilemedi: "+error.message,"error");return;}showMessage("decisionMessage","Karar başarıyla kaydedildi.","success");$("decisionForm").reset();await loadDecisions();}
+async function createTask(e){e.preventDefault();if(!canAssign()){showMessage("taskCreateMessage","Bu işlem için yetkiniz bulunmuyor.","error");return;}const assigneeId=$("taskAssignee").value;const person=taskProfilesCache.find(p=>p.id===assigneeId);if(!person){showMessage("taskCreateMessage","Lütfen görev verilecek üyeyi seçin.","error");return;}const payload={title:$("taskTitle").value.trim(),description:$("taskDescription").value.trim(),assignee_id:assigneeId,unit_id:person.unit_id,due_date:$("taskDueDate").value||null};const {error}=await db.from("tasks").insert(payload);if(error){showMessage("taskCreateMessage","Görev kaydedilemedi: "+error.message,"error");return;}showMessage("taskCreateMessage","Görev başarıyla oluşturuldu.","success");$("taskCreateForm").reset();await loadTasks();}
+async function createActivity(e){e.preventDefault();if(!canManage()){showMessage("activityCreateMessage","Bu işlem için yetkiniz bulunmuyor.","error");return;}const payload={title:$("activityTitle").value.trim(),description:$("activityDescription").value.trim(),activity_date:$("activityDate").value||null,location:$("activityLocation").value.trim()};const {error}=await db.from("activities").insert(payload);if(error){showMessage("activityCreateMessage","Faaliyet kaydedilemedi: "+error.message,"error");return;}showMessage("activityCreateMessage","Faaliyet oluşturuldu.","success");$("activityCreateForm").reset();await loadActivities();}
+async function submitActivityRegistration(e){e.preventDefault();const payload={activity_id:$("registrationActivity").value,full_name:$("registrationName").value.trim(),phone:$("registrationPhone").value.trim()};if(!payload.activity_id||!payload.full_name||!payload.phone){showMessage("registrationMessage","Lütfen tüm alanları doldurun.","error");return;}const {error}=await db.from("activity_registrations").insert(payload);if(error){showMessage("registrationMessage","Kayıt yapılamadı: "+error.message,"error");return;}showMessage("registrationMessage","Başvurunuz alındı.","success");$("registrationForm").reset();await loadActivities();}
+$("loginForm").addEventListener("submit",async e=>{e.preventDefault();const btn=$("loginForm").querySelector("button[type=submit]");btn.disabled=true;btn.textContent="Giriş yapılıyor...";clearMessage("loginMessage");const {error}=await db.auth.signInWithPassword({email:$("loginEmail").value.trim(),password:$("loginPassword").value});btn.disabled=false;btn.textContent="Giriş Yap";if(error){showMessage("loginMessage","Giriş başarısız: "+error.message,"error");return;}await refreshProfile();await loadTaskAssignees();updateMenu();showPage("dashboard");});
+$("logoutBtn").addEventListener("click",async()=>{const {error}=await db.auth.signOut();if(error){alert("Çıkış yapılamadı: "+error.message);return;}currentUser=null;currentProfile=null;updateMenu();updateRoleUI();showPage("home");});
+$("meetingForm").addEventListener("submit",createMeeting);$("decisionForm").addEventListener("submit",createDecision);$("taskCreateForm").addEventListener("submit",createTask);$("activityCreateForm").addEventListener("submit",createActivity);$("registrationForm").addEventListener("submit",submitActivityRegistration);
+async function init(){try{const {data,error}=await db.auth.getSession();if(error)console.error(error);if(data.session?.user){await refreshProfile();await loadTaskAssignees();showPage("dashboard");}else{updateMenu();updateRoleUI();showPage("home");}await loadActivities();}catch(err){console.error(err);$("homeActivities").textContent="Başlangıç sırasında hata: "+(err.message||err);}}
+init();
+</script>
+</body>
+</html>
