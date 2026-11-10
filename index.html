@@ -8,6 +8,8 @@
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f3f5f9;color:#202938}button,input,textarea,select{font:inherit}button{cursor:pointer}header{background:#142b50;color:#fff;padding:16px;display:flex;align-items:center;justify-content:space-between;gap:12px}.menu-btn{border:0;background:#ffffff20;color:white;font-size:25px;border-radius:8px;padding:5px 12px}main{max-width:1050px;margin:20px auto;padding:0 14px}.card{background:white;border-radius:12px;padding:18px;margin-bottom:15px;box-shadow:0 2px 9px #142b5010}h2{font-size:20px;margin:0 0 14px}h3{font-size:17px;margin:0 0 9px}p{line-height:1.5}input,textarea,select{width:100%;padding:11px;border:1px solid #ccd3df;border-radius:8px;margin:6px 0 12px;background:white}textarea{min-height:85px;resize:vertical}.btn{border:0;border-radius:8px;padding:11px 15px;background:#174b88;color:white;font-weight:600}.btn-secondary{background:#64748b}.btn-danger{background:#c0392b}.btn-success{background:#16834a}.btn-light{background:#e8eef7;color:#17365f}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.muted{color:#687589;font-size:13px}.hidden{display:none!important}.item{border:1px solid #e1e6ee;border-radius:10px;padding:14px;margin:12px 0}.tag{display:inline-block;background:#e8eef7;color:#174b88;padding:4px 8px;border-radius:20px;font-size:12px;margin:3px}#drawer-bg{position:fixed;inset:0;background:#0008;z-index:20;display:none}#drawer{position:fixed;right:0;top:0;height:100%;width:min(460px,88vw);background:white;z-index:21;padding:20px;overflow:auto;transform:translateX(105%);transition:.25s}#drawer.open{transform:translateX(0)}#drawer-bg.open{display:block}.drawer-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.drawer-head button{border:0;background:#eee;border-radius:8px;padding:8px 12px;font-size:20px}.drawer-link{display:block;width:100%;text-align:left;padding:14px;border:0;border-bottom:1px solid #eee;background:white;font-size:15px;color:#20334f}.drawer-link:hover{background:#f1f5fa}.notice{padding:12px;border-radius:8px;background:#fff4d8;color:#785600;margin:10px 0}.success{background:#e3f7eb;color:#17643a}.error{background:#fde8e7;color:#9b2420}footer{text-align:center;color:#7b8798;padding:25px;font-size:12px}@media(min-width:700px){.two-col{display:grid;grid-template-columns:1fr 1fr;gap:15px}}
 .header-actions{display:flex;align-items:center;gap:6px}.header-actions .btn{padding:8px 9px;font-size:12px}.brand-logo{color:#fff;line-height:1;text-align:center;min-width:120px}.brand-top{display:flex;gap:10px;align-items:center;font-weight:900;font-size:19px;letter-spacing:1px}.brand-bottom{font-size:11px;font-weight:700;letter-spacing:5px;margin-top:5px}@media(max-width:420px){header{padding:12px 9px}.header-actions .btn{font-size:10px;padding:7px 6px}.brand-top{font-size:16px;gap:6px}.brand-logo{min-width:95px}}
+
+.instagram-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:16px;align-items:start}.instagram-card{border:1px solid #e1e6ee;border-radius:10px;padding:12px;min-width:0}.instagram-card h3{margin:2px 0 10px}.instagram-card iframe{display:block;width:100%;max-width:540px;height:650px;margin:0 auto;border:0;border-radius:8px;background:#f7f8fa}.instagram-card a{display:inline-block;margin-top:10px;color:#174b88;font-size:13px;text-decoration:none}.instagram-card a:hover{text-decoration:underline}@media(max-width:420px){.instagram-card iframe{height:600px}}
 </style>
 </head>
 <body>
@@ -22,7 +24,25 @@
  </div>
 </aside>
 <main>
-<section id="page-home"><div class="card"><h2>AGDKLİSEKOM'a Hoş Geldiniz</h2><p>Toplantı, karar, görev ve faaliyet takip platformu.</p></div></section>
+<section id="page-home">
+ <div class="card"><h2>AGDKLİSEKOM'a Hoş Geldiniz</h2><p>Toplantı, karar, görev ve faaliyet takip platformu.</p></div>
+ <div class="card">
+  <h2>Faaliyetlerimizden Kareler</h2>
+  <p class="muted">AGD Kestel faaliyetlerimizden fotoğraflar.</p>
+  <div class="instagram-grid">
+   <article class="instagram-card">
+    <h3>Okul ziyaretlerimiz</h3>
+    <iframe src="https://www.instagram.com/p/DfAGSc_iHBg/embed/" title="AGD Kestel okul ziyaretleri Instagram paylaşımı" loading="lazy" allowtransparency="true" frameborder="0" scrolling="no" allow="encrypted-media; clipboard-write; web-share"></iframe>
+    <a href="https://www.instagram.com/p/DfAGSc_iHBg/" target="_blank" rel="noopener noreferrer">Paylaşımı Instagram'da aç</a>
+   </article>
+   <article class="instagram-card">
+    <h3>Faaliyetlerimizden</h3>
+    <iframe src="https://www.instagram.com/p/DeWO1ubCEZ4/embed/" title="AGD Kestel faaliyet paylaşımı Instagram" loading="lazy" allowtransparency="true" frameborder="0" scrolling="no" allow="encrypted-media; clipboard-write; web-share"></iframe>
+    <a href="https://www.instagram.com/p/DeWO1ubCEZ4/" target="_blank" rel="noopener noreferrer">Paylaşımı Instagram'da aç</a>
+   </article>
+  </div>
+ </div>
+</section>
 <section id="page-commission" class="hidden"><div class="card"><h2>Komisyonumuz</h2><p>AGDKLİSEKOM Kestel komisyonu hakkında bilgilere bu bölümden ulaşabilirsiniz.</p></div></section>
 <section id="page-activities" class="hidden">
  <div class="card"><h2>Faaliyetlerimiz</h2><p class="muted">Açık faaliyetleri inceleyebilir ve kontenjan bulunduğu sürece kayıt oluşturabilirsiniz.</p><div id="activityList">Faaliyetler yükleniyor...</div></div>
