@@ -259,9 +259,16 @@ const {data: profile, error} = await client
 .maybeSingle();
 
 if(error || !profile) {
-await client.auth.signOut();
-showLogin("Kullanıcı profili bulunamadı. Yöneticiyle iletişime geçin.");
-return;
+    console.error("PROFİL HATASI:", error);
+
+    const detay = error
+        ? error.message
+        : "Sorgu başarılı ancak profil kaydı bulunamadı.";
+
+    await client.auth.signOut();
+
+    showLogin("Profil kontrol hatası: " + detay);
+    return;
 }
 
 if(profile.active !== true) {
