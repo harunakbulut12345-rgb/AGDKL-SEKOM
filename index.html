@@ -8,12 +8,12 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial;background:#eef2f6;color:#243447}
-header{background:#102b49;color:white;padding:17px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+body{margin:0;font-family:Arial,sans-serif;background:#eef2f6;color:#243447}
+header{background:#102b49;color:white;padding:14px 17px;display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:100}
 .logo{border:2px solid white;border-radius:8px;padding:12px;font-weight:bold}
-header h1{font-size:20px;margin:0}
-header p{margin:5px 0 0;font-size:13px}
-main{max-width:950px;margin:22px auto;padding:12px}
+header h1{font-size:19px;margin:0}
+header p{margin:5px 0 0;font-size:12px}
+main{max-width:950px;margin:20px auto;padding:12px}
 .panel,.tile,.activity{background:white;padding:18px;border-radius:12px;margin-bottom:15px;box-shadow:0 3px 12px #0001}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
 .tile{text-align:center;cursor:pointer}
@@ -21,21 +21,41 @@ main{max-width:950px;margin:22px auto;padding:12px}
 input,textarea,button,select{width:100%;padding:12px;margin:7px 0;border:1px solid #ccd4df;border-radius:7px;font-size:15px}
 textarea{min-height:85px}
 button{background:#173e65;color:white;border:0;font-weight:bold;cursor:pointer}
-button:disabled{opacity:.5}
+button:disabled{opacity:.5;cursor:not-allowed}
 .secondary{background:#687789}
 .success{background:#18794e}
 .danger{background:#a83232}
 .meeting{padding:14px;border:1px solid #ddd;border-radius:8px;margin:10px 0;background:white}
 .status{font-weight:bold;color:#173e65}
 .muted,.small{font-size:13px;color:#687789}
-.menu{position:relative}
-.menu-toggle{width:auto;margin:0;font-size:23px;padding:5px 13px}
-.menu-items{position:absolute;right:0;top:44px;background:white;min-width:190px;z-index:20;border-radius:9px;box-shadow:0 4px 15px #0003;overflow:hidden}
-.menu-items button{display:block;background:white;color:#243447;text-align:left;border-radius:0;margin:0}
+.menu{position:static}
+.menu-toggle{width:auto;margin:0;font-size:25px;padding:5px 13px;background:transparent;color:white}
+.menu-items{
+ position:fixed;top:0;right:0;width:50vw;max-width:440px;min-width:260px;
+ height:100vh;height:100dvh;padding:75px 16px 20px;background:white;
+ z-index:2000;box-shadow:-8px 0 28px #0004;overflow-y:auto;border-radius:0
+}
+.menu-items button{display:block;background:#f1f5f9;color:#173e65;text-align:left;border-radius:8px;margin:0 0 9px;padding:15px}
+.menu-close{position:absolute;right:12px;top:12px;width:42px;background:#173e65;color:white;font-size:22px}
+.menu-overlay{position:fixed;inset:0;background:#0006;z-index:1999}
 .row{display:flex;gap:8px;flex-wrap:wrap}
 .row button{flex:1;min-width:120px}
 .badge{display:inline-block;padding:5px 9px;background:#e8eef5;border-radius:20px;font-size:12px}
+.item-actions{display:flex;gap:7px;flex-wrap:wrap}
+.item-actions button{flex:1;min-width:110px}
+hr{border:0;border-top:1px solid #e4e8ed;margin:15px 0}
+label{display:block;font-size:13px;font-weight:bold;margin-top:10px}
+h2{margin-top:5px}
+.empty{padding:20px;text-align:center;color:#687789}
+.notice{padding:12px;background:#eef5fc;border-radius:8px;margin:10px 0}
 [hidden]{display:none!important}
+@media(max-width:520px){
+ main{padding:9px;margin:10px auto}
+ .menu-items{width:50vw;min-width:0;padding:70px 9px 15px}
+ .menu-items button{padding:13px 8px;font-size:13px}
+ header h1{font-size:16px}
+ .panel{padding:14px}
+}
 </style>
 </head>
 <body>
@@ -45,18 +65,20 @@ button:disabled{opacity:.5}
   <div class="logo">AGD</div>
   <div><h1>AGDKLİSEKOM</h1><p>Faaliyet ve Yönetim Platformu</p></div>
  </div>
- <div class="menu">
-  <button class="menu-toggle" id="menuToggle">⋮</button>
-  <div class="menu-items" id="menuItems" hidden>
-   <button onclick="showPublic()">Faaliyetler</button>
-   <button onclick="coming('İşlevler')">İşlevler</button>
-   <button onclick="coming('Görevler')">Görevler</button>
-   <button onclick="coming('Kurallar')">Kurallar</button>
-   <button onclick="openMeetings()">Toplantılar</button>
-   <button onclick="showLogin()">Yönetim Girişi</button>
-  </div>
- </div>
+ <button class="menu-toggle" id="menuToggle" aria-label="Menüyü aç">⋮</button>
 </header>
+
+<div class="menu-overlay" id="menuOverlay" hidden></div>
+<nav class="menu-items" id="menuItems" hidden>
+ <button class="menu-close" id="menuClose">×</button>
+ <h3 style="color:#173e65">Menü</h3>
+ <button onclick="showPublic()">🎯 Faaliyetler</button>
+ <button onclick="coming('İşlevler')">⚙️ İşlevler</button>
+ <button onclick="openTasks()">✅ Görevler</button>
+ <button onclick="coming('Kurallar')">📖 Kurallar</button>
+ <button onclick="openMeetings()">📅 Toplantılar</button>
+ <button onclick="showLogin()">🔐 Yönetim Girişi</button>
+</nav>
 
 <main>
 
@@ -99,20 +121,19 @@ button:disabled{opacity:.5}
   <h2>Yönetim Paneli</h2>
   <p>Hoş geldiniz, <b id="userName"></b></p>
   <p id="userRole" class="muted"></p>
-  <button id="logout">Güvenli Çıkış</button>
+  <button id="logout" class="secondary">Güvenli Çıkış</button>
  </div>
- <div id="dashboardMenu" class="grid">
+ <div class="grid">
   <div class="tile" onclick="openActivities()"><h3>🎯 Faaliyetler</h3><p>Faaliyet oluştur ve katılımcıları yönet</p></div>
   <div class="tile" onclick="openMeetings()"><h3>📅 Toplantılar</h3><p>Toplantıları yönet</p></div>
   <div class="tile" onclick="openDecisions()"><h3>📋 Kararlar</h3><p>Kararları takip et</p></div>
-  <div class="tile" onclick="coming('Görevler')"><h3>✅ Görevler</h3><p>Görevleri takip et</p></div>
+  <div class="tile" onclick="openTasks()"><h3>✅ Görevler</h3><p>Görevleri takip et</p></div>
   <div class="tile" onclick="coming('Onay İşlemleri')"><h3>🖊️ Onay İşlemleri</h3></div>
   <div class="tile" onclick="coming('Birimler')"><h3>🏢 Birimler</h3></div>
   <div class="tile" onclick="openUsers()"><h3>👥 Kullanıcılar</h3><p>Kullanıcıları görüntüle</p></div>
  </div>
 </section>
 
-<!-- FAALİYETLER -->
 <section id="activities" hidden>
  <div class="panel">
   <button class="secondary" onclick="backMenu()">← Yönetim Paneline Dön</button>
@@ -121,10 +142,8 @@ button:disabled{opacity:.5}
   <form id="activityForm" hidden>
    <input id="activityTitle" placeholder="Faaliyet adı" required maxlength="180">
    <textarea id="activityDescription" placeholder="Faaliyet açıklaması"></textarea>
-   <label>Tarih</label>
-   <input id="activityDate" type="date" required>
-   <label>Saat</label>
-   <input id="activityTime" type="time">
+   <label>Tarih</label><input id="activityDate" type="date" required>
+   <label>Saat</label><input id="activityTime" type="time">
    <input id="activityLocation" placeholder="Faaliyet yeri">
    <input id="activityCapacity" type="number" min="1" step="1" placeholder="Kontenjan" required>
    <div class="row">
@@ -134,21 +153,17 @@ button:disabled{opacity:.5}
   </form>
   <p id="activityMessage"></p>
  </div>
- <div class="panel">
-  <h2>Faaliyetler ve Katılımcılar</h2>
-  <div id="adminActivityList">Yükleniyor...</div>
- </div>
+ <div class="panel"><h2>Faaliyetler ve Katılımcılar</h2><div id="adminActivityList">Yükleniyor...</div></div>
 </section>
 
-<!-- TOPLANTILAR -->
 <section id="meetings" hidden>
  <div class="panel">
   <button class="secondary" onclick="backMenu()">← Yönetim Paneline Dön</button>
   <h2>📅 Toplantı Yönetimi</h2>
   <button id="newMeeting">+ Yeni Toplantı Oluştur</button>
   <form id="meetingForm" hidden>
-   <input id="date" type="date" required>
-   <input id="title" placeholder="Toplantı başlığı" required>
+   <label>Tarih</label><input id="meetingDate" type="date" required>
+   <input id="meetingTitle" placeholder="Toplantı başlığı" required>
    <textarea id="attendees" placeholder="Katılımcılar"></textarea>
    <textarea id="agenda" placeholder="Gündem"></textarea>
    <textarea id="minutes" placeholder="Toplantı tutanağı"></textarea>
@@ -157,44 +172,40 @@ button:disabled{opacity:.5}
   </form>
   <p id="meetingMessage"></p>
  </div>
- <div class="panel">
-  <h2>Toplantı Kayıtları</h2>
-  <div id="meetingList">Yükleniyor...</div>
- </div>
+ <div class="panel"><h2>Toplantı Kayıtları</h2><div id="meetingList">Yükleniyor...</div></div>
 </section>
 
-<!-- KARARLAR -->
 <section id="decisions" hidden>
  <div class="panel">
   <button class="secondary" onclick="backMenu()">← Yönetim Paneline Dön</button>
   <h2>📋 Karar Yönetimi</h2>
-  <p>Toplantı kararlarını buradan oluşturabilir ve takip edebilirsiniz.</p>
+  <p>Toplantı kararlarını oluşturabilir ve onaya gönderebilirsiniz.</p>
   <button id="newDecision">+ Yeni Karar Oluştur</button>
   <form id="decisionForm" hidden>
    <label>İlgili Toplantı</label>
    <select id="decisionMeeting" required><option value="">Toplantı seçiniz</option></select>
-   <label>Karar Başlığı</label>
-   <input id="decisionTitle" placeholder="Karar başlığı" required>
-   <label>Karar Gerekçesi / Açıklama</label>
-   <textarea id="decisionRationale" placeholder="Karar açıklaması"></textarea>
-   <label>İlgili Birim (Zorunlu)</label>
-   <select id="decisionUnit" required><option value="">Birim seçiniz</option></select>
-   <label>Sorumlu Kişi</label>
-   <select id="decisionAssignee"><option value="">Sorumlu kişi seçiniz</option></select>
-   <label>Son Tarih</label>
-   <input id="decisionDueDate" type="date">
+   <label>Karar Başlığı</label><input id="decisionTitle" required placeholder="Karar başlığı">
+   <label>Karar Gerekçesi / Açıklama</label><textarea id="decisionRationale"></textarea>
+   <label>İlgili Birim</label><select id="decisionUnit" required><option value="">Birim seçiniz</option></select>
+   <label>Sorumlu Kişi</label><select id="decisionAssignee"><option value="">Sorumlu kişi seçiniz</option></select>
+   <label>Son Tarih</label><input id="decisionDueDate" type="date">
    <button type="submit">Kararı Kaydet ve Onaya Gönder</button>
    <button type="button" class="secondary" id="cancelDecision">Vazgeç</button>
   </form>
   <p id="decisionMessage"></p>
  </div>
+ <div class="panel"><h2>Karar Kayıtları</h2><div id="decisionList">Kararlar yükleniyor...</div></div>
+</section>
+
+<section id="tasks" hidden>
  <div class="panel">
-  <h2>Karar Kayıtları</h2>
-  <div id="decisionList">Kararlar yükleniyor...</div>
+  <button class="secondary" onclick="backMenu()">← Yönetim Paneline Dön</button>
+  <h2>✅ Görev Takibi</h2>
+  <p class="muted">Herkes görevleri görüntüleyebilir. Görevli kişi kendi görevini güncelleyebilir.</p>
+  <div id="taskList">Görevler yükleniyor...</div>
  </div>
 </section>
 
-<!-- KULLANICILAR -->
 <section id="users" hidden>
  <div class="panel">
   <button class="secondary" onclick="backMenu()">← Yönetim Paneline Dön</button>
@@ -222,477 +233,190 @@ let currentUser=null;
 let profile=null;
 let selectedActivity=null;
 let editingActivityId=null;
+let meetingsCache=[];
+let unitsCache=[];
+let profilesCache=[];
 
 const $=id=>document.getElementById(id);
+const sectionIds=["publicHome","registrationPage","login","dashboard","activities","meetings","decisions","tasks","users","other"];
 
-const sectionIds=[
- "publicHome","registrationPage","login","dashboard",
- "activities","meetings","decisions","users","other"
-];
-
-function isPresident(){
- return profile && profile.role==="komisyon_baskani";
+function isPresident(){return profile?.role==="komisyon_baskani";}
+function canManageDecisions(){return ["komisyon_baskani","sekreterya"].includes(profile?.role);}
+function canManageMeetings(){return isPresident()||profile?.role==="sekreterya";}
+function escapeHTML(v){
+ return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
-
+function dateText(d){return d?new Date(d+"T00:00:00").toLocaleDateString("tr-TR"):"-";}
 function show(id){
  sectionIds.forEach(x=>$(x).hidden=x!==id);
- $("menuItems").hidden=true;
+ closeMenu();
  window.scrollTo(0,0);
 }
-
-function showPublic(){
- show("publicHome");
- loadPublicActivities();
+function showPublic(){show("publicHome");loadPublicActivities();}
+function showLogin(){show("login");}
+function backMenu(){show("dashboard");}
+function coming(title){$("otherTitle").textContent=title;show("other");}
+function closeMenu(){
+ $("menuItems").hidden=true;
+ $("menuOverlay").hidden=true;
 }
-
-function showLogin(){
- show("login");
-}
-
-function backMenu(){
- show("dashboard");
-}
-
-function coming(title){
- $("otherTitle").textContent=title;
- show("other");
-}
-
-function dateText(d){
- return d ? new Date(d+"T00:00:00").toLocaleDateString("tr-TR") : "-";
-}
-
 $("menuToggle").onclick=()=>{
- $("menuItems").hidden=!$("menuItems").hidden;
+ const opening=$("menuItems").hidden;
+ $("menuItems").hidden=!opening;
+ $("menuOverlay").hidden=!opening;
 };
-
-document.addEventListener("click",e=>{
- if(!e.target.closest(".menu")) $("menuItems").hidden=true;
-});
+$("menuClose").onclick=closeMenu;
+$("menuOverlay").onclick=closeMenu;
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeMenu();});
 
 async function loadProfile(user){
- const {data,error}=await client
-  .from("profiles")
+ const {data,error}=await client.from("profiles")
   .select("id,full_name,role,active,unit_id")
-  .eq("id",user.id)
-  .maybeSingle();
-
- if(error) throw error;
- if(!data) throw new Error("Kullanıcı profili bulunamadı.");
- if(data.active===false) throw new Error("Hesap pasif.");
-
- currentUser=user;
- profile=data;
-
+  .eq("id",user.id).maybeSingle();
+ if(error)throw error;
+ if(!data)throw new Error("Kullanıcı profili bulunamadı.");
+ if(data.active===false)throw new Error("Hesap pasif.");
+ currentUser=user;profile=data;
  $("userName").textContent=data.full_name||"Kullanıcı";
  $("userRole").textContent="Yetki: "+data.role;
  show("dashboard");
 }
-
 $("loginForm").addEventListener("submit",async e=>{
  e.preventDefault();
- const msg=$("loginMessage");
- msg.textContent="Giriş kontrol ediliyor...";
-
+ const msg=$("loginMessage");msg.textContent="Giriş kontrol ediliyor...";
  const {data,error}=await client.auth.signInWithPassword({
-  email:$("email").value.trim(),
-  password:$("password").value
+  email:$("email").value.trim(),password:$("password").value
  });
-
- if(error){
-  msg.textContent="Giriş hatası: "+error.message;
-  return;
- }
-
- try{
-  await loadProfile(data.user);
- }catch(err){
-  await client.auth.signOut();
-  msg.textContent="Profil hatası: "+err.message;
- }
+ if(error){msg.textContent="Giriş hatası: "+error.message;return;}
+ try{await loadProfile(data.user);}
+ catch(err){await client.auth.signOut();msg.textContent="Profil hatası: "+err.message;}
 });
-
 $("logout").onclick=async()=>{
- await client.auth.signOut();
- currentUser=null;
- profile=null;
- showPublic();
+ await client.auth.signOut();currentUser=null;profile=null;showPublic();
 };
 
-async function openActivities(){
- show("activities");
- $("activityForm").hidden=true;
- await loadAdminActivities();
-}
-
-async function openMeetings(){
- show("meetings");
- $("meetingForm").hidden=true;
- await loadMeetings();
-}
-
-async function openDecisions(){
- show("decisions");
- $("decisionForm").hidden=true;
- await loadDecisionOptions();
- await loadDecisions();
-}
-
-async function openUsers(){
- if(!isPresident()){
-  alert("Kullanıcıları görüntüleme yetkiniz yok.");
-  return;
- }
- show("users");
- await loadUsers();
-}
-
-/* FAALİYET SAYACI */
+/* FAALİYETLER */
 async function getActivityCounts(){
  const {data,error}=await client.rpc("get_activity_registration_counts");
- if(error) throw error;
-
- return Object.fromEntries(
-  (data||[]).map(x=>[
-   x.activity_id,
-   Number(x.registration_count)
-  ])
- );
+ if(error)throw error;
+ return Object.fromEntries((data||[]).map(x=>[x.activity_id,Number(x.registration_count)]));
 }
-
-/* HALKA AÇIK FAALİYETLER */
 async function loadPublicActivities(){
- const host=$("publicActivityList");
- host.textContent="Faaliyetler yükleniyor...";
-
+ const host=$("publicActivityList");host.textContent="Faaliyetler yükleniyor...";
  const [a,c]=await Promise.all([
-  client.from("activities")
-   .select("id,title,description,activity_date,activity_time,location,capacity")
-   .eq("is_published",true)
-   .order("activity_date",{ascending:true}),
+  client.from("activities").select("id,title,description,activity_date,activity_time,location,capacity")
+   .eq("is_published",true).order("activity_date",{ascending:true}),
   getActivityCounts().catch(()=>({}))
  ]);
-
- if(a.error){
-  host.textContent="Faaliyetler yüklenemedi: "+a.error.message;
-  return;
- }
-
- if(!a.data || !a.data.length){
-  host.textContent="Şu anda yayınlanmış faaliyet bulunmuyor.";
-  return;
- }
-
+ if(a.error){host.textContent="Faaliyetler yüklenemedi: "+a.error.message;return;}
+ if(!a.data?.length){host.innerHTML='<div class="empty">Şu anda yayınlanmış faaliyet bulunmuyor.</div>';return;}
  host.innerHTML="";
-
  a.data.forEach(x=>{
-  const count=c[x.id]??0;
-  const full=count>=x.capacity;
-  const card=document.createElement("div");
-  card.className="activity";
-
-  const h=document.createElement("h3");
-  h.textContent=x.title;
-
-  const d=document.createElement("p");
-  d.textContent=x.description||"";
-
-  const info=document.createElement("p");
-  info.className="muted";
-  info.textContent=
-   "Tarih: "+dateText(x.activity_date)+
-   " · Saat: "+(x.activity_time||"Belirtilmedi")+
-   " · Yer: "+(x.location||"Belirtilmedi");
-
-  const cap=document.createElement("p");
-  cap.innerHTML='<span class="badge">'+count+" / "+x.capacity+" kişi</span>";
-
-  const b=document.createElement("button");
-  b.textContent=full?"Kontenjan doldu – Kayıt kapandı":"Katıl";
-  b.disabled=full;
-
-  if(full){
-   b.className="secondary";
-  }else{
-   b.onclick=()=>openRegistration(x);
-  }
-
-  card.append(h,d,info,cap,b);
-  host.appendChild(card);
+  const count=c[x.id]??0,full=count>=x.capacity;
+  const card=document.createElement("div");card.className="activity";
+  const h=document.createElement("h3");h.textContent=x.title;
+  const d=document.createElement("p");d.textContent=x.description||"";
+  const info=document.createElement("p");info.className="muted";
+  info.textContent="Tarih: "+dateText(x.activity_date)+" · Saat: "+(x.activity_time||"Belirtilmedi")+" · Yer: "+(x.location||"Belirtilmedi");
+  const cap=document.createElement("p");cap.innerHTML='<span class="badge">'+count+" / "+x.capacity+" kişi</span>";
+  const b=document.createElement("button");b.textContent=full?"Kontenjan doldu – Kayıt kapandı":"Katıl";b.disabled=full;
+  if(full)b.className="secondary";else b.onclick=()=>openRegistration(x);
+  card.append(h,d,info,cap,b);host.appendChild(card);
  });
 }
-
 function openRegistration(a){
- selectedActivity=a;
- $("registrationTitle").textContent=a.title;
- $("registrationInfo").textContent=
-  dateText(a.activity_date)+" · "+
-  (a.activity_time||"")+" · "+
-  (a.location||"");
-
- $("registrationForm").reset();
- $("registrationMessage").textContent="";
- show("registrationPage");
+ selectedActivity=a;$("registrationTitle").textContent=a.title;
+ $("registrationInfo").textContent=dateText(a.activity_date)+" · "+(a.activity_time||"")+" · "+(a.location||"");
+ $("registrationForm").reset();$("registrationMessage").textContent="";show("registrationPage");
 }
-
 $("registrationForm").addEventListener("submit",async e=>{
- e.preventDefault();
- if(!selectedActivity)return;
-
- const button=e.submitter;
- button.disabled=true;
+ e.preventDefault();if(!selectedActivity)return;
+ const button=e.submitter;button.disabled=true;
  $("registrationMessage").textContent="Kaydınız oluşturuluyor...";
-
- const payload={
-  activity_id:selectedActivity.id,
-  full_name:$("studentName").value.trim(),
-  phone:$("studentPhone").value.trim(),
-  school:$("studentSchool").value.trim()
- };
-
- const {error}=await client
-  .from("activity_registrations")
-  .insert(payload);
-
+ const payload={activity_id:selectedActivity.id,full_name:$("studentName").value.trim(),phone:$("studentPhone").value.trim(),school:$("studentSchool").value.trim()};
+ const {error}=await client.from("activity_registrations").insert(payload);
  button.disabled=false;
-
  if(error){
   const msg=error.message||"";
-  $("registrationMessage").textContent=
-   msg.toLowerCase().includes("unique")
-   ?"Bu telefon numarasıyla bu faaliyete daha önce kayıt yapılmış."
-   :msg.includes("Kontenjan")
-   ?"Kontenjan doldu. Kayıt kapandı."
-   :"Kayıt yapılamadı: "+msg;
+  $("registrationMessage").textContent=msg.toLowerCase().includes("unique")?"Bu telefon numarasıyla daha önce kayıt yapılmış.":msg.includes("Kontenjan")?"Kontenjan doldu. Kayıt kapandı.":"Kayıt yapılamadı: "+msg;
   return;
  }
-
- $("registrationMessage").textContent=
-  "Kaydınız başarıyla alındı. Teşekkür ederiz.";
-
- $("registrationForm").reset();
- await loadPublicActivities();
+ $("registrationMessage").textContent="Kaydınız başarıyla alındı. Teşekkür ederiz.";
+ $("registrationForm").reset();await loadPublicActivities();
 });
-
-/* FAALİYET YÖNETİMİ */
+async function openActivities(){
+ if(!currentUser){showLogin();return;}
+ show("activities");$("activityForm").hidden=true;await loadAdminActivities();
+}
 $("newActivity").onclick=()=>{
- if(!isPresident()){
-  alert("Faaliyet oluşturma yetkiniz yok.");
-  return;
- }
- editingActivityId=null;
- $("activityForm").reset();
- $("activityForm").hidden=false;
- $("activityMessage").textContent="";
+ if(!isPresident()){alert("Faaliyet oluşturma yetkiniz yok.");return;}
+ editingActivityId=null;$("activityForm").reset();$("activityForm").hidden=false;$("activityMessage").textContent="";
 };
-
-$("cancelActivity").onclick=()=>{
- $("activityForm").reset();
- $("activityForm").hidden=true;
- editingActivityId=null;
-};
-
+$("cancelActivity").onclick=()=>{$("activityForm").reset();$("activityForm").hidden=true;editingActivityId=null;};
 $("activityForm").addEventListener("submit",async e=>{
- e.preventDefault();
-
- if(!isPresident()){
-  alert("Bu işlem için yetkiniz yok.");
-  return;
- }
-
+ e.preventDefault();if(!isPresident()){alert("Bu işlem için yetkiniz yok.");return;}
  const payload={
-  title:$("activityTitle").value.trim(),
-  description:$("activityDescription").value.trim()||null,
-  activity_date:$("activityDate").value,
-  activity_time:$("activityTime").value||null,
-  location:$("activityLocation").value.trim()||null,
-  capacity:Number($("activityCapacity").value),
-  is_published:true
+  title:$("activityTitle").value.trim(),description:$("activityDescription").value.trim()||null,
+  activity_date:$("activityDate").value,activity_time:$("activityTime").value||null,
+  location:$("activityLocation").value.trim()||null,capacity:Number($("activityCapacity").value),is_published:true
  };
-
  $("activityMessage").textContent="Kaydediliyor...";
-
  const result=editingActivityId
   ?await client.from("activities").update(payload).eq("id",editingActivityId)
   :await client.from("activities").insert({...payload,created_by:currentUser.id});
-
- if(result.error){
-  $("activityMessage").textContent="Kayıt hatası: "+result.error.message;
-  return;
- }
-
+ if(result.error){$("activityMessage").textContent="Kayıt hatası: "+result.error.message;return;}
  $("activityMessage").textContent="Faaliyet kaydedildi ve yayınlandı.";
- $("activityForm").reset();
- $("activityForm").hidden=true;
- editingActivityId=null;
-
- await loadAdminActivities();
+ $("activityForm").reset();$("activityForm").hidden=true;editingActivityId=null;await loadAdminActivities();
 });
-
 async function loadAdminActivities(){
- const host=$("adminActivityList");
- host.textContent="Faaliyetler yükleniyor...";
-
+ const host=$("adminActivityList");host.textContent="Faaliyetler yükleniyor...";
  const [a,c]=await Promise.all([
   client.from("activities").select("*").order("activity_date",{ascending:false}),
   getActivityCounts().catch(()=>({}))
  ]);
-
- if(a.error){
-  host.textContent="Hata: "+a.error.message;
-  return;
- }
-
- if(!a.data || !a.data.length){
-  host.textContent="Henüz faaliyet kaydı bulunmuyor.";
-  return;
- }
-
+ if(a.error){host.textContent="Hata: "+a.error.message;return;}
+ if(!a.data?.length){host.innerHTML='<div class="empty">Henüz faaliyet kaydı bulunmuyor.</div>';return;}
  host.innerHTML="";
-
  a.data.forEach(x=>{
-  const box=document.createElement("div");
-  box.className="meeting";
-
-  const h=document.createElement("h3");
-  h.textContent=x.title;
-
-  const p=document.createElement("p");
-  p.textContent=
-   dateText(x.activity_date)+" · "+
-   (x.activity_time||"")+" · "+
-   (x.location||"");
-
-  const n=document.createElement("p");
-  n.className="status";
-  n.textContent="Kayıt: "+(c[x.id]??"Sayaç alınamadı")+" / "+x.capacity;
-
+  const box=document.createElement("div");box.className="meeting";
+  const h=document.createElement("h3");h.textContent=x.title;
+  const p=document.createElement("p");p.textContent=dateText(x.activity_date)+" · "+(x.activity_time||"")+" · "+(x.location||"");
+  const n=document.createElement("p");n.className="status";n.textContent="Kayıt: "+(c[x.id]??"Sayaç alınamadı")+" / "+x.capacity;
   box.append(h,p,n);
-
   if(isPresident()){
-   const edit=document.createElement("button");
-   edit.textContent="Düzenle";
-   edit.onclick=()=>editActivity(x);
-
-   const people=document.createElement("button");
-   people.className="secondary";
-   people.textContent="Katılımcıları Gör";
-   people.onclick=()=>showRegistrations(x);
-
-   const del=document.createElement("button");
-   del.className="danger";
-   del.textContent="Faaliyeti Kaldır";
-   del.onclick=()=>deleteActivity(x);
-
-   box.append(edit,people,del);
+   const actions=document.createElement("div");actions.className="item-actions";
+   const edit=document.createElement("button");edit.textContent="Düzenle";edit.onclick=()=>editActivity(x);
+   const people=document.createElement("button");people.className="secondary";people.textContent="Katılımcılar";people.onclick=()=>showRegistrations(x);
+   const del=document.createElement("button");del.className="danger";del.textContent="Faaliyeti Kaldır";del.onclick=()=>deleteActivity(x);
+   actions.append(edit,people,del);box.append(actions);
   }
-
   host.appendChild(box);
  });
 }
-
 function editActivity(x){
- if(!isPresident())return;
-
- editingActivityId=x.id;
- $("activityTitle").value=x.title;
- $("activityDescription").value=x.description||"";
- $("activityDate").value=x.activity_date;
- $("activityTime").value=x.activity_time||"";
- $("activityLocation").value=x.location||"";
- $("activityCapacity").value=x.capacity;
- $("activityForm").hidden=false;
- $("activityMessage").textContent="Düzenleme yapıyorsunuz.";
- window.scrollTo(0,0);
+ if(!isPresident())return;editingActivityId=x.id;
+ $("activityTitle").value=x.title;$("activityDescription").value=x.description||"";
+ $("activityDate").value=x.activity_date;$("activityTime").value=x.activity_time||"";
+ $("activityLocation").value=x.location||"";$("activityCapacity").value=x.capacity;
+ $("activityForm").hidden=false;$("activityMessage").textContent="Düzenleme yapıyorsunuz.";window.scrollTo(0,0);
 }
-
 async function showRegistrations(a){
  if(!isPresident())return;
-
- const {data,error}=await client
-  .from("activity_registrations")
-  .select("full_name,phone,school,created_at")
-  .eq("activity_id",a.id)
-  .order("created_at",{ascending:true});
-
- if(error){
-  alert("Katılımcılar alınamadı: "+error.message);
-  return;
- }
-
- const rows=(data||[]).map((x,i)=>
-  (i+1)+". "+x.full_name+" | "+x.phone+" | "+x.school
- );
-
- alert(
-  a.title+"\nToplam: "+(data||[]).length+
-  "\n\n"+(rows.join("\n")||"Henüz kayıt yok.")
- );
+ const {data,error}=await client.from("activity_registrations")
+  .select("full_name,phone,school,created_at").eq("activity_id",a.id).order("created_at",{ascending:true});
+ if(error){alert("Katılımcılar alınamadı: "+error.message);return;}
+ const rows=(data||[]).map((x,i)=>(i+1)+". "+x.full_name+" | "+x.phone+" | "+x.school);
+ alert(a.title+"\nToplam: "+(data||[]).length+"\n\n"+(rows.join("\n")||"Henüz kayıt yok."));
 }
-
 async function deleteActivity(a){
  if(!isPresident())return;
-
- if(!confirm('"'+a.title+'" faaliyetini ve tüm kayıtlarını kaldırmak istiyor musunuz? Bu işlem geri alınamaz.'))return;
-
+ if(!confirm('"'+a.title+'" faaliyetini kaldırmak istiyor musunuz?'))return;
  const {error}=await client.from("activities").delete().eq("id",a.id);
-
- if(error){
-  alert("Faaliyet silinemedi: "+error.message);
-  return;
- }
-
- alert("Faaliyet kaldırıldı.");
- await loadAdminActivities();
+ if(error){alert("Faaliyet silinemedi: "+error.message);return;}
+ alert("Faaliyet kaldırıldı.");await loadAdminActivities();
 }
 
 /* TOPLANTILAR */
-$("newMeeting").onclick=()=>{
- if(!isPresident()){
-  alert("Toplantı oluşturma yetkiniz yok.");
-  return;
- }
- $("meetingForm").hidden=false;
-};
-
-$("cancelMeeting").onclick=()=>{
- $("meetingForm").reset();
- $("meetingForm").hidden=true;
-};
-
-async function loadMeetings(){
- const list=$("meetingList");
- list.textContent="Toplantılar yükleniyor...";
-
- const {data,error}=await client
-  .from("meetings")
-  .select("id,meeting_date,title,attendees,agenda,minutes")
-  .order("meeting_date",{ascending:false});
-
- if(error){
-  list.textContent="Hata: "+error.message;
-  return;
- }
-
- if(!data || !data.length){
-  list.textContent="Henüz toplantı kaydı bulunmuyor.";
-  return;
- }
-
- list.innerHTML="";
-
- data.forEach(m=>{
-  const box=document.createElement("div");
-  box.className="meeting";
-
-  const h=document.createElement("h3");
-  h.textContent=m.title||"Başlıksız toplantı";
-
-  const d=document.createElement("p");
-  d.textContent="Tarih: "+dateText(m.meeting_date);
-
-  const a=document.createElement("p");
-  a.textContent="Katılımcılar: "+(m.attendees||"-");
-
-  const g=document.createElement("p");
-  g.textConte
+async function openMeetings(){
+ if(!currentUser){showLogin();return;}
+ show("meetings");$("meetingForm").hidden=true;await loadMeetings(
