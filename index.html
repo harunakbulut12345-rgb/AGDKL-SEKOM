@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -21,7 +22,7 @@ button{background:#173e65;color:white;border:0;font-weight:bold;cursor:pointer}
 .secondary{background:#687789}
 .success{background:#18794e}
 .danger{background:#a83232}
-.meeting{padding:14px;border:1px solid #ddd;border-radius:8px;margin:10px 0;background:#fff}
+.meeting{padding:14px;border:1px solid #ddd;border-radius:8px;margin:10px 0;background:white}
 .status{font-weight:bold;color:#173e65}
 [hidden]{display:none!important}
 </style>
@@ -57,13 +58,16 @@ button{background:#173e65;color:white;border:0;font-weight:bold;cursor:pointer}
 
 <div id="menu" class="grid">
 <div class="tile" id="meetingsButton">
-<h3>📅 Toplantılar</h3><p>Toplantıları yönet</p>
+<h3>📅 Toplantılar</h3>
+<p>Toplantıları yönet</p>
 </div>
 <div class="tile" id="decisionsButton">
-<h3>📋 Kararlar</h3><p>Kararları takip et</p>
+<h3>📋 Kararlar</h3>
+<p>Kararları takip et</p>
 </div>
 <div class="tile" onclick="coming('Görevler')">
-<h3>✅ Görevler</h3><p>Görevleri takip et</p>
+<h3>✅ Görevler</h3>
+<p>Görevleri takip et</p>
 </div>
 <div class="tile" onclick="coming('Onay İşlemleri')">
 <h3>🖊️ Onay İşlemleri</h3>
@@ -106,6 +110,7 @@ button{background:#173e65;color:white;border:0;font-weight:bold;cursor:pointer}
 <button class="secondary" id="decisionBack">← Yönetim Paneline Dön</button>
 <h2>Karar Yönetimi</h2>
 <p>Toplantı kararlarını buradan oluşturabilir ve takip edebilirsiniz.</p>
+
 <div id="decisionCreateArea">
 <button id="newDecision">+ Yeni Karar Oluştur</button>
 </div>
@@ -122,8 +127,8 @@ button{background:#173e65;color:white;border:0;font-weight:bold;cursor:pointer}
 <label>Karar Gerekçesi / Açıklama</label>
 <textarea id="decisionRationale" placeholder="Karar açıklaması"></textarea>
 
-<label>İlgili Birim</label>
-<select id="decisionUnit">
+<label>İlgili Birim (Zorunlu)</label>
+<select id="decisionUnit" required>
 <option value="">Birim seçiniz</option>
 </select>
 
@@ -157,7 +162,7 @@ button{background:#173e65;color:white;border:0;font-weight:bold;cursor:pointer}
 </main>
 
 <script>
-const client = window.supabase.createClient(
+const client=window.supabase.createClient(
 "https://jxldxyfqkfsvajkzxyjr.supabase.co",
 "sb_publishable_6bo9gBRnMADXZmV_tfFASQ_2F2FMRhH"
 );
@@ -326,7 +331,6 @@ show("decisions");
 
 document.getElementById("decisionForm").hidden=true;
 document.getElementById("decisionMessage").textContent="";
-
 document.getElementById("decisionCreateArea").hidden=!isPresident();
 
 await loadDecisionOptions();
@@ -403,13 +407,21 @@ msg.textContent="Karar oluşturma yetkiniz bulunmuyor.";
 return;
 }
 
+const selectedUnit=document.getElementById("decisionUnit").value;
+
+if(!selectedUnit){
+msg.textContent="Lütfen birim seçiniz.";
+document.getElementById("decisionUnit").focus();
+return;
+}
+
 msg.textContent="Karar kaydediliyor...";
 
 const decision={
 meeting_id:document.getElementById("decisionMeeting").value||null,
 title:document.getElementById("decisionTitle").value.trim(),
 rationale:document.getElementById("decisionRationale").value.trim()||null,
-unit_id:document.getElementById("decisionUnit").value||null,
+unit_id:selectedUnit,
 assignee_id:document.getElementById("decisionAssignee").value||null,
 due_date:document.getElementById("decisionDueDate").value||null,
 created_by:currentUser.id
@@ -425,7 +437,6 @@ return;
 msg.textContent="Karar başarıyla kaydedildi. Otomatik karar numarası verildi.";
 document.getElementById("decisionForm").reset();
 document.getElementById("decisionForm").hidden=true;
-
 await loadDecisions();
 });
 
@@ -577,8 +588,6 @@ return;
 alert("Karar reddedildi.");
 await loadDecisions();
 }
-
-/* DİĞER BÖLÜMLER */
 
 function coming(title){
 document.getElementById("menu").hidden=true;
