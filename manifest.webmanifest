@@ -1,0 +1,11 @@
+{
+  "name": "AGD LİSEKOM Kestel",
+  "short_name": "AGD LİSEKOM",
+  "description": "AGD Kestel Lise Komisyonu",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#123b70",
+  "orientation": "portrait"
+}
