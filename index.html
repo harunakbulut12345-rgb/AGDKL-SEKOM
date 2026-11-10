@@ -269,7 +269,23 @@ const unitNames={};(u.data||[]).forEach(x=>unitNames[x.id]=x.name);
 const roleNames={komisyon_baskani:"Komisyon Başkanı",teskilat_baskani:"Teşkilat Başkanı",egitim_baskani:"Eğitim Başkanı",sksf_baskani:"SKSF Başkanı",sksf_yardimcisi:"SKSF Birim Yardımcısı",sekreterya:"Sekreterya",sosyal_medya_1:"Sosyal Medya Sorumlusu 1",sosyal_medya_2:"Sosyal Medya Sorumlusu 2"};
 if(!p.data.length){list.textContent="Henüz kullanıcı profili bulunmuyor.";return;}
 list.innerHTML="";
-p.data.forEach(x=>{
+
+const roleOrder={
+komisyon_baskani:1,
+teskilat_baskani:2,
+egitim_baskani:3,
+sksf_baskani:4,
+sksf_yardimcisi:5,
+sekreterya:6,
+sosyal_medya_1:7,
+sosyal_medya_2:8
+};
+
+const sortedUsers=[...(p.data||[])].sort((a,b)=>
+(roleOrder[a.role]||99)-(roleOrder[b.role]||99)
+);
+
+sortedUsers.forEach(x=>{
 const card=document.createElement("div");card.className="meeting";
 const name=document.createElement("h3");name.textContent=x.full_name||"İsimsiz kullanıcı";
 const role=document.createElement("p");role.textContent="Görev: "+(roleNames[x.role]||x.role||"-");
