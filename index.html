@@ -6,7 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AGDKLİSEKOM</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:#f3f5f9;color:#202938}
@@ -49,12 +48,11 @@ footer{text-align:center;color:#7b8798;padding:25px;font-size:12px}
 @media(min-width:700px){.two-col{display:grid;grid-template-columns:1fr 1fr;gap:15px}}
 </style>
 </head>
-
 <body>
 
 <header>
   <h1>AGDKLİSEKOM</h1>
-  <button class="menu-btn" id="menuBtn" aria-label="Menüyü aç">☰</button>
+  <button class="menu-btn" id="menuBtn">☰</button>
 </header>
 
 <div id="drawer-bg"></div>
@@ -76,127 +74,130 @@ footer{text-align:center;color:#7b8798;padding:25px;font-size:12px}
 </aside>
 
 <main>
-  <section id="page-home">
-    <div class="card">
-      <h2>AGDKLİSEKOM'a Hoş Geldiniz</h2>
-      <p>Toplantı, karar, görev ve faaliyet takip platformu.</p>
-      <div class="actions">
-        <button class="btn" onclick="showPage('activities')">Faaliyetleri Gör</button>
-        <button class="btn btn-light" onclick="showPage('login')">Yönetici Girişi</button>
-      </div>
+<section id="page-home">
+  <div class="card">
+    <h2>AGDKLİSEKOM'a Hoş Geldiniz</h2>
+    <p>Toplantı, karar, görev ve faaliyet takip platformu.</p>
+    <div class="actions">
+      <button class="btn" onclick="showPage('activities')">Faaliyetleri Gör</button>
+      <button class="btn btn-light" onclick="showPage('login')">Yönetici Girişi</button>
     </div>
-    <div class="card">
-      <h2>Güncel Faaliyetler</h2>
-      <div id="homeActivities">Faaliyetler yükleniyor...</div>
-    </div>
-  </section>
+  </div>
+  <div class="card">
+    <h2>Güncel Faaliyetler</h2>
+    <div id="homeActivities">Faaliyetler yükleniyor...</div>
+  </div>
+</section>
 
-  <section id="page-activities" class="hidden">
+<section id="page-activities" class="hidden">
+  <div class="card">
+    <h2>Faaliyetler</h2>
+    <p class="muted">Açık faaliyetleri inceleyebilir ve kayıt oluşturabilirsiniz.</p>
+    <div id="activityList">Faaliyetler yükleniyor...</div>
+  </div>
+  <div class="card">
+    <h2>Faaliyete Kayıt Ol</h2>
+    <form id="registrationForm">
+      <label>Faaliyet</label>
+      <select id="registrationActivity" required>
+        <option value="">Faaliyet seçiniz</option>
+      </select>
+      <label>Ad Soyad</label>
+      <input id="registrationName" required placeholder="Adınız ve soyadınız">
+      <label>Telefon</label>
+      <input id="registrationPhone" required type="tel" placeholder="05XXXXXXXXX">
+      <button class="btn btn-success" type="submit">Kaydımı Oluştur</button>
+    </form>
+    <div id="registrationMessage"></div>
+  </div>
+</section>
+
+<section id="page-login" class="hidden">
+  <div class="card" style="max-width:480px;margin:25px auto">
+    <h2>Yönetici Girişi</h2>
+    <form id="loginForm">
+      <label>E-posta</label>
+      <input id="loginEmail" type="email" required placeholder="E-posta adresiniz">
+      <label>Şifre</label>
+      <input id="loginPassword" type="password" required placeholder="Şifreniz">
+      <button class="btn" type="submit">Giriş Yap</button>
+    </form>
+    <div id="loginMessage"></div>
+  </div>
+</section>
+
+<section id="page-dashboard" class="hidden">
+  <div class="card">
+    <h2>Yönetim Paneli</h2>
+    <div id="profileInfo">Kullanıcı bilgileri yükleniyor...</div>
+  </div>
+
+  <div class="card hidden" id="activityCreateArea">
+    <h2>Yeni Faaliyet Ekle</h2>
+    <p class="muted">Yalnızca Komisyon Başkanı ve Teşkilat Başkanı kullanabilir.</p>
+    <form id="activityCreateForm">
+      <label>Faaliyet Başlığı</label>
+      <input id="activityTitle" required maxlength="200" placeholder="Faaliyet başlığı">
+      <label>Faaliyet Açıklaması</label>
+      <textarea id="activityDescription" placeholder="Faaliyet açıklaması"></textarea>
+      <label>Faaliyet Tarihi</label>
+      <input id="activityDate" type="date">
+      <label>Faaliyet Yeri</label>
+      <input id="activityLocation" placeholder="Faaliyet yeri">
+      <button class="btn btn-success" type="submit">Faaliyeti Kaydet</button>
+    </form>
+    <div id="activityCreateMessage"></div>
+  </div>
+
+  <div class="two-col">
     <div class="card">
-      <h2>Faaliyetler</h2>
-      <p class="muted">Açık faaliyetleri inceleyebilir ve kayıt oluşturabilirsiniz.</p>
-      <div id="activityList">Faaliyetler yükleniyor...</div>
+      <h3>Toplantılar</h3>
+      <p>Toplantıları görüntüleyin ve yönetin.</p>
+      <button class="btn" onclick="showPage('meetings')">Toplantılara Git</button>
     </div>
     <div class="card">
-      <h2>Faaliyete Kayıt Ol</h2>
-      <form id="registrationForm">
-        <label>Faaliyet</label>
-        <select id="registrationActivity" required>
-          <option value="">Faaliyet seçiniz</option>
-        </select>
-        <label>Ad Soyad</label>
-        <input id="registrationName" required placeholder="Adınız ve soyadınız">
-        <label>Telefon</label>
-        <input id="registrationPhone" required type="tel" placeholder="05XXXXXXXXX">
-        <button class="btn btn-success" type="submit">Kaydımı Oluştur</button>
+      <h3>Faaliyet Yönetimi</h3>
+      <p>Faaliyet oluşturun ve mevcut faaliyetleri yönetin.</p>
+      <button class="btn" onclick="showPage('activities')">Faaliyetlere Git</button>
+    </div>
+  </div>
+</section>
+
+<section id="page-meetings" class="hidden">
+  <div class="card">
+    <h2>Toplantılar</h2>
+    <div id="meetingCreateArea" class="hidden">
+      <h3>Yeni Toplantı Oluştur</h3>
+      <form id="meetingForm">
+        <label>Toplantı Başlığı</label>
+        <input id="meetingTitle" required>
+        <label>Toplantı Tarihi</label>
+        <input id="meetingDate" type="date" required>
+        <label>Katılımcılar</label>
+        <textarea id="meetingAttendees"></textarea>
+        <label>Gündem</label>
+        <textarea id="meetingAgenda"></textarea>
+        <label>Toplantı Notları</label>
+        <textarea id="meetingMinutes"></textarea>
+        <button class="btn" type="submit">Toplantıyı Kaydet</button>
       </form>
-      <div id="registrationMessage"></div>
     </div>
-  </section>
+    <div id="meetingList">Toplantılar yükleniyor...</div>
+  </div>
+</section>
 
-  <section id="page-login" class="hidden">
-    <div class="card" style="max-width:480px;margin:25px auto">
-      <h2>Yönetici Girişi</h2>
-      <form id="loginForm">
-        <label>E-posta</label>
-        <input id="loginEmail" type="email" required placeholder="E-posta adresiniz">
-        <label>Şifre</label>
-        <input id="loginPassword" type="password" required placeholder="Şifreniz">
-        <button class="btn" type="submit">Giriş Yap</button>
-      </form>
-      <div id="loginMessage"></div>
-    </div>
-  </section>
-
-  <section id="page-dashboard" class="hidden">
-    <div class="card">
-      <h2>Yönetim Paneli</h2>
-      <div id="profileInfo">Kullanıcı bilgileri yükleniyor...</div>
-    </div>
-    <div class="two-col">
-      <div class="card">
-        <h3>Toplantılar</h3>
-        <p>Toplantıları görüntüleyin ve yönetin.</p>
-        <button class="btn" onclick="showPage('meetings')">Toplantılara Git</button>
-      </div>
-      <div class="card">
-        <h3>Faaliyet Yönetimi</h3>
-        <p>Faaliyet oluşturun ve mevcut faaliyetleri yönetin.</p>
-        <button class="btn" onclick="showPage('activities')">Faaliyetlere Git</button>
-      </div>
-    </div>
-  </section>
-
-  <section id="page-meetings" class="hidden">
-    <div class="card">
-      <h2>Toplantılar</h2>
-      <div id="meetingCreateArea" class="hidden">
-        <h3>Yeni Toplantı Oluştur</h3>
-        <form id="meetingForm">
-          <label>Toplantı Başlığı</label>
-          <input id="meetingTitle" required>
-          <label>Toplantı Tarihi</label>
-          <input id="meetingDate" type="date" required>
-          <label>Katılımcılar</label>
-          <textarea id="meetingAttendees"></textarea>
-          <label>Gündem</label>
-          <textarea id="meetingAgenda"></textarea>
-          <label>Toplantı Notları</label>
-          <textarea id="meetingMinutes"></textarea>
-          <button class="btn" type="submit">Toplantıyı Kaydet</button>
-        </form>
-      </div>
-      <div id="meetingList">Toplantılar yükleniyor...</div>
-    </div>
-  </section>
-
-  <section id="page-decisions" class="hidden">
-    <div class="card">
-      <h2>Kararlar</h2>
-      <div id="decisionList">Kararlar yükleniyor...</div>
-    </div>
-  </section>
-
-  <section id="page-tasks" class="hidden">
-    <div class="card">
-      <h2>Görevler</h2>
-      <div id="taskList">Görevler yükleniyor...</div>
-    </div>
-  </section>
-
-  <section id="page-units" class="hidden">
-    <div class="card">
-      <h2>Birimler</h2>
-      <div id="unitList">Birimler yükleniyor...</div>
-    </div>
-  </section>
-
-  <section id="page-users" class="hidden">
-    <div class="card">
-      <h2>Kullanıcılar</h2>
-      <div id="userList">Kullanıcılar yükleniyor...</div>
-    </div>
-  </section>
+<section id="page-decisions" class="hidden">
+  <div class="card"><h2>Kararlar</h2><div id="decisionList">Kararlar yükleniyor...</div></div>
+</section>
+<section id="page-tasks" class="hidden">
+  <div class="card"><h2>Görevler</h2><div id="taskList">Görevler yükleniyor...</div></div>
+</section>
+<section id="page-units" class="hidden">
+  <div class="card"><h2>Birimler</h2><div id="unitList">Birimler yükleniyor...</div></div>
+</section>
+<section id="page-users" class="hidden">
+  <div class="card"><h2>Kullanıcılar</h2><div id="userList">Kullanıcılar yükleniyor...</div></div>
+</section>
 </main>
 
 <footer>AGDKLİSEKOM | Toplantı ve Karar Takip Platformu</footer>
@@ -204,7 +205,6 @@ footer{text-align:center;color:#7b8798;padding:25px;font-size:12px}
 <script>
 const SUPABASE_URL = "https://jxldxyfqkfsvajkzxyjr.supabase.co";
 const SUPABASE_KEY = "sb_publishable_6bo9gBRnMADXZmV_tfFASQ_2F2FMRhH";
-
 const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let currentUser = null;
@@ -213,541 +213,488 @@ let activitiesCache = [];
 
 const $ = id => document.getElementById(id);
 
-function message(id, text, type="notice"){
-  const el = $(id);
-  if(!el) return;
-  el.className = "notice " + type;
-  el.textContent = text;
+function message(id,text,type="notice"){
+  const el=$(id);
+  if(!el)return;
+  el.className="notice "+type;
+  el.textContent=text;
 }
 
 function escapeHTML(value){
-  return String(value ?? "").replace(/[&<>"']/g, char => ({
+  return String(value??"").replace(/[&<>"']/g,char=>({
     "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
   })[char]);
 }
 
 function showPage(name){
-  document.querySelectorAll("main section").forEach(section => section.classList.add("hidden"));
-  const page = $("page-" + name);
-  if(page) page.classList.remove("hidden");
+  document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));
+  const page=$("page-"+name);
+  if(page)page.classList.remove("hidden");
   closeMenu();
-
-  if(name === "activities") loadActivities();
-  if(name === "meetings") loadMeetings();
-  if(name === "decisions") loadDecisions();
-  if(name === "tasks") loadTasks();
-  if(name === "units") loadUnits();
-  if(name === "users") loadUsers();
-  if(name === "dashboard") loadProfile();
+  if(name==="activities")loadActivities();
+  if(name==="meetings")loadMeetings();
+  if(name==="decisions")loadDecisions();
+  if(name==="tasks")loadTasks();
+  if(name==="units")loadUnits();
+  if(name==="users")loadUsers();
+  if(name==="dashboard")loadProfile();
 }
 
 function openMenu(){
   $("drawer").classList.add("open");
   $("drawer-bg").classList.add("open");
 }
-
 function closeMenu(){
   $("drawer").classList.remove("open");
   $("drawer-bg").classList.remove("open");
 }
 
-$("menuBtn").addEventListener("click", openMenu);
-$("closeDrawer").addEventListener("click", closeMenu);
-$("drawer-bg").addEventListener("click", closeMenu);
+$("menuBtn").addEventListener("click",openMenu);
+$("closeDrawer").addEventListener("click",closeMenu);
+$("drawer-bg").addEventListener("click",closeMenu);
 
-document.querySelectorAll(".drawer-link[data-page]").forEach(button => {
-  button.addEventListener("click", () => showPage(button.dataset.page));
+document.querySelectorAll(".drawer-link[data-page]").forEach(b=>{
+  b.addEventListener("click",()=>showPage(b.dataset.page));
 });
+$("loginMenuBtn").addEventListener("click",()=>showPage("login"));
 
-$("loginMenuBtn").addEventListener("click", () => showPage("login"));
+function canManageActivities(){
+  return !!currentUser &&
+    currentProfile?.active===true &&
+    ["komisyon_baskani","teskilat_baskani"].includes(currentProfile?.role);
+}
+
+function updateActivityManagerUI(){
+  $("activityCreateArea").classList.toggle("hidden",!canManageActivities());
+}
 
 async function checkSession(){
-  const {data, error} = await client.auth.getSession();
-  if(error) console.error(error);
-  currentUser = data.session?.user || null;
+  const {data,error}=await client.auth.getSession();
+  if(error)console.error(error);
+  currentUser=data.session?.user||null;
 
   if(currentUser){
     await loadProfile();
     $("logoutBtn").classList.remove("hidden");
     $("loginMenuBtn").classList.add("hidden");
-    $("drawerUser").textContent = currentUser.email || "";
+    $("drawerUser").textContent=currentUser.email||"";
     showPage("dashboard");
   }else{
+    currentProfile=null;
+    updateActivityManagerUI();
     $("logoutBtn").classList.add("hidden");
     $("loginMenuBtn").classList.remove("hidden");
-    $("drawerUser").textContent = "Oturum açılmadı";
+    $("drawerUser").textContent="Oturum açılmadı";
     showPage("home");
   }
 }
 
 async function loadProfile(){
-  if(!currentUser) return;
-  const {data, error} = await client.from("profiles")
-    .select("*")
-    .eq("id", currentUser.id)
-    .maybeSingle();
+  if(!currentUser)return;
+  const {data,error}=await client.from("profiles")
+    .select("*").eq("id",currentUser.id).maybeSingle();
 
   if(error){
-    console.error("Profil yüklenemedi:", error);
-    $("profileInfo").textContent = "Profil bilgileri alınamadı.";
+    console.error("Profil yüklenemedi:",error);
+    $("profileInfo").textContent="Profil bilgileri alınamadı.";
+    currentProfile=null;
+    updateActivityManagerUI();
     return;
   }
 
-  currentProfile = data || {};
-  $("profileInfo").innerHTML =
-    "<p><b>E-posta:</b> " + escapeHTML(currentUser.email) + "</p>" +
-    "<p><b>Ad Soyad:</b> " + escapeHTML(currentProfile.full_name || "Belirtilmemiş") + "</p>" +
-    "<p><b>Birim:</b> " + escapeHTML(currentProfile.unit || "Belirtilmemiş") + "</p>" +
-    "<p><b>Görev:</b> " + escapeHTML(currentProfile.position || currentProfile.role || "Belirtilmemiş") + "</p>";
+  currentProfile=data||{};
+  $("profileInfo").innerHTML=
+    "<p><b>E-posta:</b> "+escapeHTML(currentUser.email)+"</p>"+
+    "<p><b>Ad Soyad:</b> "+escapeHTML(currentProfile.full_name||"Belirtilmemiş")+"</p>"+
+    "<p><b>Görev:</b> "+escapeHTML(currentProfile.role||"Belirtilmemiş")+"</p>";
+  updateActivityManagerUI();
 }
 
 function isPresident(){
-  return currentProfile?.role === "komisyon_baskani";
+  return currentProfile?.role==="komisyon_baskani";
 }
-
+  </script>
+  
+<script>
 async function loadActivities(){
-  const list = $("activityList");
-  list.textContent = "Faaliyetler yükleniyor...";
+  const list=$("activitiesList");
+  if(!list) return;
 
-  const {data, error} = await client.from("activities")
+  list.innerHTML="<p>Faaliyetler yükleniyor...</p>";
+
+  const {data,error}=await client
+    .from("activities")
     .select("*")
-    .order("created_at", {ascending:false});
+    .order("created_at",{ascending:false});
 
   if(error){
-    list.textContent = "Faaliyetler yüklenemedi: " + error.message;
-    $("homeActivities").textContent = list.textContent;
+    list.innerHTML="<p>Faaliyetler yüklenemedi: "+escapeHTML(error.message)+"</p>";
     return;
   }
 
-  activitiesCache = data || [];
-  renderActivities();
+  renderActivities(data||[]);
 }
 
-function renderActivities(){
-  const list = $("activityList");
-  const home = $("homeActivities");
-  const select = $("registrationActivity");
+function renderActivities(items){
+  const list=$("activitiesList");
+  if(!list) return;
 
-  list.innerHTML = "";
-  home.innerHTML = "";
-  select.innerHTML = '<option value="">Faaliyet seçiniz</option>';
-
-  if(!activitiesCache.length){
-    list.textContent = "Henüz faaliyet eklenmemiş.";
-    home.textContent = "Henüz faaliyet bulunmuyor.";
+  if(!items.length){
+    list.innerHTML="<p>Henüz faaliyet bulunmuyor.</p>";
     return;
   }
 
-  activitiesCache.forEach(activity => {
-    const title = activity.title || activity.name || "İsimsiz faaliyet";
-    const date = activity.activity_date || activity.date || "";
-    const description = activity.description || "";
-    const location = activity.location || "";
+  const manager=canManageActivities();
 
-    const option = document.createElement("option");
-    option.value = activity.id;
-    option.textContent = title;
-    select.appendChild(option);
-
-    const html =
-      '<h3>' + escapeHTML(title) + '</h3>' +
-      '<p>' + escapeHTML(description) + '</p>' +
-      (date ? '<span class="tag">Tarih: ' + escapeHTML(date) + '</span>' : '') +
-      (location ? '<span class="tag">Yer: ' + escapeHTML(location) + '</span>' : '');
-
-    const item = document.createElement("div");
-    item.className = "activity-item";
-    item.innerHTML = html;
-
-    if(currentUser){
-      const actions = document.createElement("div");
-      actions.className = "actions";
-      const edit = document.createElement("button");
-      edit.className = "btn btn-light";
-      edit.textContent = "Düzenle";
-      edit.onclick = () => editActivity(activity.id);
-      const del = document.createElement("button");
-      del.className = "btn btn-danger";
-      del.textContent = "Sil";
-      del.onclick = () => deleteActivity(activity.id);
-      actions.append(edit, del);
-      item.appendChild(actions);
-    }
-
-    list.appendChild(item);
-
-    if(home.children.length < 3){
-      const homeItem = document.createElement("div");
-      homeItem.className = "activity-item";
-      homeItem.innerHTML = html;
-      home.appendChild(homeItem);
-    }
-  });
+  list.innerHTML=items.map(a=>`
+    <div class="card">
+      <h3>${escapeHTML(a.title||"İsimsiz faaliyet")}</h3>
+      <p>${escapeHTML(a.description||"")}</p>
+      <p><b>Tarih:</b> ${escapeHTML(a.activity_date||"Belirtilmedi")}</p>
+      <p><b>Yer:</b> ${escapeHTML(a.location||"Belirtilmedi")}</p>
+      ${manager?`
+        <div class="actions">
+          <button class="secondary" onclick="editActivity('${a.id}')">Düzenle</button>
+          <button class="danger" onclick="deleteActivity('${a.id}')">Sil</button>
+        </div>`:""}
+      <hr>
+      <h4>Faaliyete Katıl</h4>
+      <form onsubmit="registerActivity(event,'${a.id}')">
+        <input name="full_name" placeholder="Ad Soyad" required>
+        <input name="phone" type="tel" placeholder="Telefon" required>
+        <button type="submit">Kayıt Ol</button>
+      </form>
+    </div>
+  `).join("");
 }
 
-// ==================== 
+async function registerActivity(event,activityId){
+  event.preventDefault();
+
+  const form=event.target;
+  const full_name=form.full_name.value.trim();
+  const phone=form.phone.value.trim();
+
+  if(!full_name||!phone){
+    message("Ad soyad ve telefon zorunludur.");
+    return;
+  }
+
+  const {error}=await client
+    .from("activity_registrations")
+    .insert({
+      activity_id:activityId,
+      full_name,
+      phone
+    });
+
+  if(error){
+    message("Kayıt yapılamadı: "+error.message);
+    return;
+  }
+
+  message("Faaliyet kaydınız başarıyla alındı.");
+  form.reset();
+}
+
+async function createActivity(event){
+  event.preventDefault();
+
+  if(!canManageActivities()){
+    message("Bu işlem için yetkiniz bulunmuyor.");
+    return;
+  }
+
+  const form=event.target;
+
+  const activity={
+    title:form.title.value.trim(),
+    description:form.description.value.trim(),
+    activity_date:form.activity_date.value,
+    location:form.location.value.trim()
+  };
+
+  if(!activity.title){
+    message("Faaliyet başlığı zorunludur.");
+    return;
+  }
+
+  const {error}=await client
+    .from("activities")
+    .insert(activity);
+
+  if(error){
+    message("Faaliyet eklenemedi: "+error.message);
+    return;
+  }
+
+  message("Faaliyet başarıyla eklendi.");
+  form.reset();
+  await loadActivities();
+  showPage("activities");
+}
+
 async function editActivity(id){
-  const activity = activitiesCache.find(item => String(item.id) === String(id));
-  if(!activity) return;
-
-  const title = prompt("Faaliyet başlığı:", activity.title || activity.name || "");
-  if(title === null) return;
-
-  const description = prompt("Faaliyet açıklaması:", activity.description || "");
-  if(description === null) return;
-
-  const date = prompt("Faaliyet tarihi (YYYY-AA-GG):", activity.activity_date || activity.date || "");
-  if(date === null) return;
-
-  const location = prompt("Faaliyet yeri:", activity.location || "");
-  if(location === null) return;
-
-  const {error} = await client.from("activities").update({
-    title,
-    description,
-    activity_date: date || null,
-    location
-  }).eq("id", id);
-
-  if(error){
-    alert("Faaliyet güncellenemedi: " + error.message);
+  if(!canManageActivities()){
+    message("Yetkiniz bulunmuyor.");
     return;
   }
 
-  alert("Faaliyet güncellendi.");
-  loadActivities();
+  const {data,error}=await client
+    .from("activities")
+    .select("*")
+    .eq("id",id)
+    .single();
+
+  if(error){
+    message("Faaliyet bilgisi alınamadı: "+error.message);
+    return;
+  }
+
+  const title=prompt("Faaliyet başlığı:",data.title||"");
+  if(title===null) return;
+
+  const description=prompt("Açıklama:",data.description||"");
+  if(description===null) return;
+
+  const activity_date=prompt("Tarih (YYYY-AA-GG):",data.activity_date||"");
+  if(activity_date===null) return;
+
+  const location=prompt("Yer:",data.location||"");
+  if(location===null) return;
+
+  const {error:updateError}=await client
+    .from("activities")
+    .update({
+      title:title.trim(),
+      description:description.trim(),
+      activity_date:activity_date.trim()||null,
+      location:location.trim()
+    })
+    .eq("id",id);
+
+  if(updateError){
+    message("Güncelleme başarısız: "+updateError.message);
+    return;
+  }
+
+  message("Faaliyet güncellendi.");
+  await loadActivities();
 }
 
 async function deleteActivity(id){
+  if(!canManageActivities()) return;
   if(!confirm("Bu faaliyeti silmek istediğinize emin misiniz?")) return;
 
-  const {error} = await client.from("activities").delete().eq("id", id);
+  const {error}=await client
+    .from("activities")
+    .delete()
+    .eq("id",id);
 
   if(error){
-    alert("Faaliyet silinemedi: " + error.message);
+    message("Silme işlemi başarısız: "+error.message);
     return;
   }
 
-  alert("Faaliyet silindi.");
-  loadActivities();
+  message("Faaliyet silindi.");
+  await loadActivities();
 }
 
-$("registrationForm").addEventListener("submit", async event => {
+async function login(event){
   event.preventDefault();
 
-  const activity_id = $("registrationActivity").value;
-  const full_name = $("registrationName").value.trim();
-  const phone = $("registrationPhone").value.trim();
+  const form=event.target;
+  const email=form.email.value.trim();
+  const password=form.password.value;
 
-  if(!activity_id || !full_name || !phone){
-    message("registrationMessage", "Lütfen tüm alanları doldurun.", "error");
-    return;
-  }
-
-  const {error} = await client.from("activity_registrations").insert({
-    activity_id,
-    full_name,
-    phone
-  });
-
-  if(error){
-    message("registrationMessage", "Kayıt oluşturulamadı: " + error.message, "error");
-    return;
-  }
-
-  message("registrationMessage", "Faaliyet kaydınız başarıyla oluşturuldu.", "success");
-  $("registrationForm").reset();
-});
-
-$("loginForm").addEventListener("submit", async event => {
-  event.preventDefault();
-
-  const email = $("loginEmail").value.trim();
-  const password = $("loginPassword").value;
-
-  message("loginMessage", "Giriş yapılıyor...");
-
-  const {data, error} = await client.auth.signInWithPassword({
+  const {error}=await client.auth.signInWithPassword({
     email,
     password
   });
 
   if(error){
-    message("loginMessage", "Giriş başarısız: " + error.message, "error");
+    message("Giriş başarısız: "+error.message);
     return;
   }
 
-  currentUser = data.user;
+  message("Giriş başarılı.");
   await checkSession();
-  message("loginMessage", "Giriş başarılı.", "success");
-});
-
-$("logoutBtn").addEventListener("click", async () => {
-  const {error} = await client.auth.signOut();
-
-  if(error){
-    alert("Çıkış yapılamadı: " + error.message);
-    return;
-  }
-
-  currentUser = null;
-  currentProfile = null;
-  closeMenu();
-  showPage("home");
-  await checkSession();
-});
-
-$("meetingForm").addEventListener("submit", async event => {
-  event.preventDefault();
-
-  if(!currentUser){
-    alert("Toplantı oluşturmak için giriş yapmalısınız.");
-    return;
-  }
-
-  const record = {
-    title: $("meetingTitle").value.trim(),
-    meeting_date: $("meetingDate").value,
-    attendees: $("meetingAttendees").value.trim(),
-    agenda: $("meetingAgenda").value.trim(),
-    minutes: $("meetingMinutes").value.trim()
-  };
-
-  const {error} = await client.from("meetings").insert(record);
-
-  if(error){
-    alert("Toplantı kaydedilemedi: " + error.message);
-    return;
-  }
-
-  alert("Toplantı başarıyla oluşturuldu.");
-  $("meetingForm").reset();
-  loadMeetings();
-});
-
-async function loadMeetings(){
-  const list = $("meetingList");
-  list.textContent = "Toplantılar yükleniyor...";
-
-  const {data, error} = await client.from("meetings")
-    .select("id,meeting_date,title,attendees,agenda,minutes")
-    .order("meeting_date", {ascending:false});
-
-  if(error){
-    list.textContent = "Toplantılar yüklenemedi: " + error.message;
-    return;
-  }
-
-  list.innerHTML = "";
-
-  if(!data || data.length === 0){
-    list.textContent = "Henüz toplantı bulunmuyor.";
-    return;
-  }
-
-  $("meetingCreateArea").classList.toggle("hidden", !currentUser);
-
-  data.forEach(meeting => {
-    const item = document.createElement("div");
-    item.className = "record-item";
-
-    item.innerHTML =
-      "<h3>" + escapeHTML(meeting.title || "Başlıksız toplantı") + "</h3>" +
-      "<p><b>Tarih:</b> " + escapeHTML(meeting.meeting_date || "Belirtilmemiş") + "</p>" +
-      "<p><b>Katılımcılar:</b><br>" + escapeHTML(meeting.attendees || "Belirtilmemiş") + "</p>" +
-      "<p><b>Gündem:</b><br>" + escapeHTML(meeting.agenda || "Belirtilmemiş") + "</p>" +
-      "<p><b>Toplantı Notları:</b><br>" + escapeHTML(meeting.minutes || "Belirtilmemiş") + "</p>";
-
-    if(isPresident()){
-      const del = document.createElement("button");
-      del.className = "btn btn-danger";
-      del.textContent = "Toplantıyı Sil";
-      del.onclick = () => deleteMeeting(meeting.id);
-      item.appendChild(del);
-    }
-
-    list.appendChild(item);
-  });
+  showPage("dashboard");
 }
 
-async function deleteMeeting(id){
-  if(!isPresident()){
-    alert("Toplantıları yalnızca Komisyon Başkanı silebilir.");
-    return;
-  }
-
-  if(!confirm("Bu toplantıyı silmek istediğinize emin misiniz?")) return;
-
-  const {error} = await client.from("meetings").delete().eq("id", id);
+async function logout(){
+  const {error}=await client.auth.signOut();
 
   if(error){
-    alert("Toplantı silinemedi: " + error.message);
+    message("Çıkış yapılamadı: "+error.message);
     return;
   }
 
-  alert("Toplantı silindi.");
-  loadMeetings();
+  currentUser=null;
+  currentProfile=null;
+  updateActivityManagerUI();
+  showPage("home");
+  message("Oturum kapatıldı.");
+}
+
+async function loadMeetings(){
+  const el=$("meetingsList");
+  if(!el) return;
+
+  const {data,error}=await client
+    .from("meetings")
+    .select("*")
+    .order("created_at",{ascending:false});
+
+  if(error){
+    el.innerHTML="<p>Toplantılar yüklenemedi: "+escapeHTML(error.message)+"</p>";
+    return;
+  }
+
+  el.innerHTML=(data||[]).map(m=>`
+    <div class="card">
+      <h3>${escapeHTML(m.title||"Toplantı")}</h3>
+      <p><b>Tarih:</b> ${escapeHTML(m.meeting_date||m.date||"")}</p>
+      <p><b>Katılımcılar:</b> ${escapeHTML(m.attendees||"")}</p>
+      <p><b>Gündem:</b> ${escapeHTML(m.agenda||"")}</p>
+      <p><b>Kararlar:</b> ${escapeHTML(m.minutes||"")}</p>
+    </div>
+  `).join("")||"<p>Henüz toplantı bulunmuyor.</p>";
 }
 
 async function loadDecisions(){
-  const list = $("decisionList");
-  list.textContent = "Kararlar yükleniyor...";
+  const el=$("decisionsList");
+  if(!el) return;
 
-  const {data, error} = await client.from("decisions")
+  const {data,error}=await client
+    .from("decisions")
     .select("*")
-    .order("created_at", {ascending:false});
+    .order("created_at",{ascending:false});
 
   if(error){
-    list.textContent = "Kararlar yüklenemedi: " + error.message;
+    el.innerHTML="<p>Kararlar yüklenemedi: "+escapeHTML(error.message)+"</p>";
     return;
   }
 
-  list.innerHTML = "";
-
-  if(!data || data.length === 0){
-    list.textContent = "Henüz karar bulunmuyor.";
-    return;
-  }
-
-  data.forEach(decision => {
-    const item = document.createElement("div");
-    item.className = "record-item";
-
-    const title = decision.title || decision.description || decision.content || "Karar";
-    item.innerHTML =
-      "<h3>" + escapeHTML(title) + "</h3>" +
-      "<p>" + escapeHTML(decision.description || decision.content || "") + "</p>";
-
-    list.appendChild(item);
-  });
+  el.innerHTML=(data||[]).map(d=>`
+    <div class="card">
+      <h3>${escapeHTML(d.title||d.decision_title||"Karar")}</h3>
+      <p>${escapeHTML(d.description||d.content||d.decision_text||"")}</p>
+      <p><b>Durum:</b> ${escapeHTML(d.status||"")}</p>
+    </div>
+  `).join("")||"<p>Henüz karar bulunmuyor.</p>";
 }
 
 async function loadTasks(){
-  const list = $("taskList");
-  list.textContent = "Görevler yükleniyor...";
+  const el=$("tasksList");
+  if(!el) return;
 
-  const {data, error} = await client.from("tasks").select("*");
-
-  if(error){
-    list.textContent = "Görevler yüklenemedi: " + error.message;
-    return;
-  }
-
-  list.innerHTML = "";
-
-  if(!data || data.length === 0){
-    list.textContent = "Henüz görev bulunmuyor.";
-    return;
-  }
-
-  data.forEach(task => {
-    const item = document.createElement("div");
-    item.className = "record-item";
-
-    const title = task.title || task.task_title || task.description || "Görev";
-    item.innerHTML =
-      "<h3>" + escapeHTML(title) + "</h3>" +
-      "<p>" + escapeHTML(task.description || "") + "</p>" +
-      "<p><b>Durum:</b> " + escapeHTML(task.status || "Belirtilmemiş") + "</p>";
-
-    if(isPresident()){
-      const del = document.createElement("button");
-      del.className = "btn btn-danger";
-      del.textContent = "Görevi Sil";
-      del.onclick = () => deleteTask(task.id);
-      item.appendChild(del);
-    }
-
-    list.appendChild(item);
-  });
-}
-
-async function deleteTask(id){
-  if(!isPresident()){
-    alert("Görevleri yalnızca Komisyon Başkanı silebilir.");
-    return;
-  }
-
-  if(!confirm("Bu görevi silmek istediğinize emin misiniz?")) return;
-
-  const {error} = await client.from("tasks").delete().eq("id", id);
+  const {data,error}=await client
+    .from("tasks")
+    .select("*")
+    .order("created_at",{ascending:false});
 
   if(error){
-    alert("Görev silinemedi: " + error.message);
+    el.innerHTML="<p>Görevler yüklenemedi: "+escapeHTML(error.message)+"</p>";
     return;
   }
 
-  alert("Görev silindi.");
-  loadTasks();
+  el.innerHTML=(data||[]).map(t=>`
+    <div class="card">
+      <h3>${escapeHTML(t.title||t.task_title||"Görev")}</h3>
+      <p>${escapeHTML(t.description||t.content||"")}</p>
+      <p><b>Durum:</b> ${escapeHTML(t.status||"")}</p>
+      <p><b>Son tarih:</b> ${escapeHTML(t.due_date||"")}</p>
+    </div>
+  `).join("")||"<p>Henüz görev bulunmuyor.</p>";
 }
 
 async function loadUnits(){
-  const list = $("unitList");
-  list.textContent = "Birimler yükleniyor...";
+  const el=$("unitsList");
+  if(!el) return;
 
-  const {data, error} = await client.from("units").select("*");
+  const {data,error}=await client
+    .from("units")
+    .select("*")
+    .order("name",{ascending:true});
 
   if(error){
-    list.textContent = "Birimler yüklenemedi: " + error.message;
+    el.innerHTML="<p>Birimler yüklenemedi: "+escapeHTML(error.message)+"</p>";
     return;
   }
 
-  list.innerHTML = "";
-
-  if(!data || data.length === 0){
-    list.textContent = "Henüz birim bulunmuyor.";
-    return;
-  }
-
-  data.forEach(unit => {
-    const item = document.createElement("div");
-    item.className = "record-item";
-    item.textContent = unit.name || unit.title || "Birim";
-    list.appendChild(item);
-  });
+  el.innerHTML=(data||[]).map(u=>`
+    <div class="card">
+      <h3>${escapeHTML(u.name||u.title||"Birim")}</h3>
+      <p>${escapeHTML(u.description||"")}</p>
+    </div>
+  `).join("")||"<p>Henüz birim bulunmuyor.</p>";
 }
 
 async function loadUsers(){
-  const list = $("userList");
-  list.textContent = "Kullanıcılar yükleniyor...";
+  const el=$("usersList");
+  if(!el) return;
 
-  const {data, error} = await client.from("profiles")
-    .select("*")
-    .order("created_at", {ascending:true});
+  const {data,error}=await client
+    .from("profiles")
+    .select("id,full_name,role,active,unit_id,created_at")
+    .order("created_at",{ascending:true});
 
   if(error){
-    list.textContent = "Kullanıcılar yüklenemedi: " + error.message;
+    el.innerHTML="<p>Kullanıcılar yüklenemedi: "+escapeHTML(error.message)+"</p>";
     return;
   }
 
-  list.innerHTML = "";
-
-  if(!data || data.length === 0){
-    list.textContent = "Kullanıcı bulunamadı.";
-    return;
-  }
-
-  data.forEach(profile => {
-    const item = document.createElement("div");
-    item.className = "record-item";
-
-    item.innerHTML =
-      "<h3>" + escapeHTML(profile.full_name || "İsimsiz kullanıcı") + "</h3>" +
-      "<p><b>Görev:</b> " + escapeHTML(profile.position || profile.role || "Belirtilmemiş") + "</p>" +
-      "<p><b>Birim:</b> " + escapeHTML(profile.unit || "Belirtilmemiş") + "</p>" +
-      "<p><b>Durum:</b> " + escapeHTML(profile.status || "Aktif") + "</p>";
-
-    list.appendChild(item);
-  });
+  el.innerHTML=(data||[]).map(u=>`
+    <div class="card">
+      <h3>${escapeHTML(u.full_name||"İsimsiz kullanıcı")}</h3>
+      <p><b>Görev:</b> ${escapeHTML(u.role||"")}</p>
+      <p><b>Birim ID:</b> ${escapeHTML(u.unit_id||"")}</p>
+      <p><b>Durum:</b> ${u.active?"Aktif":"Pasif"}</p>
+    </div>
+  `).join("")||"<p>Henüz kullanıcı bulunmuyor.</p>";
 }
 
-client.auth.onAuthStateChange((_event, session) => {
-  currentUser = session?.user || null;
-  setTimeout(() => checkSession(), 0);
+async function loadDashboard(){
+  await checkSession();
+  if(!currentUser){
+    showPage("login");
+    return;
+  }
+
+  await Promise.all([
+    loadMeetings(),
+    loadDecisions(),
+    loadTasks(),
+    loadUnits(),
+    loadUsers(),
+    loadActivities()
+  ]);
+}
+
+const activityForm=$("activityCreateForm");
+if(activityForm){
+  activityForm.addEventListener("submit",createActivity);
+}
+
+const loginForm=$("loginForm");
+if(loginForm){
+  loginForm.addEventListener("submit",login);
+}
+
+const logoutButton=$("logoutButton");
+if(logoutButton){
+  logoutButton.addEventListener("click",logout);
+}
+
+client.auth.onAuthStateChange(()=>{
+  setTimeout(()=>{
+    checkSession();
+  },0);
 });
 
 async function startApp(){
-  $("meetingCreateArea").classList.add("hidden");
+  updateActivityManagerUI();
   await loadActivities();
   await checkSession();
 }
@@ -756,4 +703,3 @@ startApp();
 </script>
 </body>
 </html>
-
