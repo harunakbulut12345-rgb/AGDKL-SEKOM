@@ -9,566 +9,690 @@
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial;background:#eef2f6;color:#243447}
-header{background:#102b49;color:white;padding:18px;display:flex;align-items:center;gap:12px}
-.logo{border:2px solid white;border-radius:8px;padding:15px;font-weight:bold}
-header h1{font-size:21px;margin:0}
-header p{margin:5px 0 0}
-main{max-width:900px;margin:25px auto;padding:15px}
-.panel,.tile{background:white;padding:20px;border-radius:12px;margin-bottom:15px;box-shadow:0 3px 12px #0001}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+header{background:#102b49;color:white;padding:17px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.logo{border:2px solid white;border-radius:8px;padding:12px;font-weight:bold}
+header h1{font-size:20px;margin:0}
+header p{margin:5px 0 0;font-size:13px}
+main{max-width:950px;margin:22px auto;padding:12px}
+.panel,.tile,.activity{background:white;padding:18px;border-radius:12px;margin-bottom:15px;box-shadow:0 3px 12px #0001}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
 .tile{text-align:center;cursor:pointer}
-input,textarea,button,select{width:100%;padding:12px;margin:7px 0;border:1px solid #ccd4df;border-radius:7px;font-size:16px}
+.tile:hover{background:#f5f8fc}
+input,textarea,button,select{width:100%;padding:12px;margin:7px 0;border:1px solid #ccd4df;border-radius:7px;font-size:15px}
+textarea{min-height:85px}
 button{background:#173e65;color:white;border:0;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.5}
 .secondary{background:#687789}
 .success{background:#18794e}
 .danger{background:#a83232}
 .meeting{padding:14px;border:1px solid #ddd;border-radius:8px;margin:10px 0;background:white}
 .status{font-weight:bold;color:#173e65}
-.small{font-size:13px;color:#687789}
+.muted,.small{font-size:13px;color:#687789}
+.menu{position:relative}
+.menu-toggle{width:auto;margin:0;font-size:23px;padding:5px 13px}
+.menu-items{position:absolute;right:0;top:44px;background:white;min-width:190px;z-index:20;border-radius:9px;box-shadow:0 4px 15px #0003;overflow:hidden}
+.menu-items button{display:block;background:white;color:#243447;text-align:left;border-radius:0;margin:0}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.row button{flex:1;min-width:120px}
+.badge{display:inline-block;padding:5px 9px;background:#e8eef5;border-radius:20px;font-size:12px}
 [hidden]{display:none!important}
 </style>
 </head>
 <body>
+
 <header>
-<div class="logo">AGD</div>
-<div><h1>AGDKLİSEKOM</h1><p>Karar ve Yönetim Sistemi</p></div>
+ <div style="display:flex;align-items:center;gap:12px">
+  <div class="logo">AGD</div>
+  <div><h1>AGDKLİSEKOM</h1><p>Faaliyet ve Yönetim Platformu</p></div>
+ </div>
+ <div class="menu">
+  <button class="menu-toggle" id="menuToggle">⋮</button>
+  <div class="menu-items" id="menuItems" hidden>
+   <button onclick="showPublic()">Faaliyetler</button>
+   <button onclick="coming('İşlevler')">İşlevler</button>
+   <button onclick="coming('Görevler')">Görevler</button>
+   <button onclick="coming('Kurallar')">Kurallar</button>
+   <button onclick="openMeetings()">Toplantılar</button>
+   <button onclick="showLogin()">Yönetim Girişi</button>
+  </div>
+ </div>
 </header>
+
 <main>
-<section id="login" class="panel">
-<h2>Kullanıcı Girişi</h2>
-<form id="loginForm">
-<input id="email" type="email" placeholder="E-posta adresi" required>
-<input id="password" type="password" placeholder="Şifre" required>
-<button type="submit">Giriş Yap</button>
-</form>
-<p id="loginMessage"></p>
+
+<section id="publicHome">
+ <div class="panel">
+  <h2>Faaliyete katılmak istiyorum!</h2>
+  <p>Katılmak istediğiniz faaliyeti seçerek kayıt oluşturabilirsiniz.</p>
+ </div>
+ <div id="publicActivityList">Faaliyetler yükleniyor...</div>
+</section>
+
+<section id="registrationPage" hidden>
+ <div class="panel">
+  <button class="secondary" onclick="showPublic()">← Faaliyetlere dön</button>
+  <h2 id="registrationTitle">Faaliyet Kaydı</h2>
+  <p id="registrationInfo" class="muted"></p>
+  <form id="registrationForm">
+   <input id="studentName" placeholder="Ad Soyad" required maxlength="120">
+   <input id="studentPhone" type="tel" placeholder="Telefon" required maxlength="30">
+   <input id="studentSchool" placeholder="Okul" required maxlength="160">
+   <button type="submit">Kaydımı Oluştur</button>
+  </form>
+  <p id="registrationMessage"></p>
+ </div>
+</section>
+
+<section id="login" class="panel" hidden>
+ <button class="secondary" onclick="showPublic()">← Ana sayfa</button>
+ <h2>Yönetim Girişi</h2>
+ <form id="loginForm">
+  <input id="email" type="email" placeholder="E-posta adresi" required>
+  <input id="password" type="password" placeholder="Şifre" required>
+  <button type="submit">Giriş Yap</button>
+ </form>
+ <p id="loginMessage"></p>
 </section>
 
 <section id="dashboard" hidden>
-<div class="panel">
-<h2>Yönetim Paneli</h2>
-<p>Hoş geldiniz, <b id="userName"></b></p>
-<button id="logout">Güvenli Çıkış</button>
-</div>
-<div id="menu" class="grid">
-<div class="tile" id="meetingsButton"><h3>📅 Toplantılar</h3><p>Toplantıları yönet</p></div>
-<div class="tile" id="decisionsButton"><h3>📋 Kararlar</h3><p>Kararları takip et</p></div>
-<div class="tile" onclick="coming('Görevler')"><h3>✅ Görevler</h3><p>Görevleri takip et</p></div>
-<div class="tile" onclick="coming('Onay İşlemleri')"><h3>🖊️ Onay İşlemleri</h3></div>
-<div class="tile" onclick="coming('Birimler')"><h3>🏢 Birimler</h3></div>
-<div class="tile" id="usersButton"><h3>👥 Kullanıcılar</h3><p>Kullanıcıları görüntüle ve yönet</p></div>
-</div>
+ <div class="panel">
+  <h2>Yönetim Paneli</h2>
+  <p>Hoş geldiniz, <b id="userName"></b></p>
+  <p id="userRole" class="muted"></p>
+  <button id="logout">Güvenli Çıkış</button>
+ </div>
+ <div id="dashboardMenu" class="grid">
+  <div class="tile" onclick="openActivities()"><h3>🎯 Faaliyetler</h3><p>Faaliyet oluştur ve katılımcıları yönet</p></div>
+  <div class="tile" onclick="openMeetings()"><h3>📅 Toplantılar</h3><p>Toplantıları yönet</p></div>
+  <div class="tile" onclick="openDecisions()"><h3>📋 Kararlar</h3><p>Kararları takip et</p></div>
+  <div class="tile" onclick="coming('Görevler')"><h3>✅ Görevler</h3><p>Görevleri takip et</p></div>
+  <div class="tile" onclick="coming('Onay İşlemleri')"><h3>🖊️ Onay İşlemleri</h3></div>
+  <div class="tile" onclick="coming('Birimler')"><h3>🏢 Birimler</h3></div>
+  <div class="tile" onclick="openUsers()"><h3>👥 Kullanıcılar</h3><p>Kullanıcıları görüntüle</p></div>
+ </div>
 </section>
 
+<!-- FAALİYETLER -->
+<section id="activities" hidden>
+ <div class="panel">
+  <button class="secondary" onclick="backMenu()">← Yönetim Paneline Dön</button>
+  <h2>🎯 Faaliyet Yönetimi</h2>
+  <button id="newActivity">+ Yeni Faaliyet Oluştur</button>
+  <form id="activityForm" hidden>
+   <input id="activityTitle" placeholder="Faaliyet adı" required maxlength="180">
+   <textarea id="activityDescription" placeholder="Faaliyet açıklaması"></textarea>
+   <label>Tarih</label>
+   <input id="activityDate" type="date" required>
+   <label>Saat</label>
+   <input id="activityTime" type="time">
+   <input id="activityLocation" placeholder="Faaliyet yeri">
+   <input id="activityCapacity" type="number" min="1" step="1" placeholder="Kontenjan" required>
+   <div class="row">
+    <button type="submit">Kaydet ve yayınla</button>
+    <button type="button" class="secondary" id="cancelActivity">Vazgeç</button>
+   </div>
+  </form>
+  <p id="activityMessage"></p>
+ </div>
+ <div class="panel">
+  <h2>Faaliyetler ve Katılımcılar</h2>
+  <div id="adminActivityList">Yükleniyor...</div>
+ </div>
+</section>
+
+<!-- TOPLANTILAR -->
 <section id="meetings" hidden>
-<div class="panel">
-<button class="secondary" id="back">← Yönetim Paneline Dön</button>
-<h2>Toplantı Yönetimi</h2>
-<button id="newMeeting">+ Yeni Toplantı Oluştur</button>
-<form id="meetingForm" hidden>
-<input id="date" type="date" required>
-<input id="title" placeholder="Toplantı başlığı" required>
-<textarea id="attendees" placeholder="Katılımcılar"></textarea>
-<textarea id="agenda" placeholder="Gündem"></textarea>
-<textarea id="minutes" placeholder="Toplantı tutanağı"></textarea>
-<button type="submit">Toplantıyı Kaydet</button>
-<button type="button" class="secondary" id="cancel">Vazgeç</button>
-</form>
-<p id="meetingMessage"></p>
-</div>
-<div class="panel"><h2>Toplantı Kayıtları</h2><div id="meetingList">Yükleniyor...</div></div>
+ <div class="panel">
+  <button class="secondary" onclick="backMenu()">← Yönetim Paneline Dön</button>
+  <h2>📅 Toplantı Yönetimi</h2>
+  <button id="newMeeting">+ Yeni Toplantı Oluştur</button>
+  <form id="meetingForm" hidden>
+   <input id="date" type="date" required>
+   <input id="title" placeholder="Toplantı başlığı" required>
+   <textarea id="attendees" placeholder="Katılımcılar"></textarea>
+   <textarea id="agenda" placeholder="Gündem"></textarea>
+   <textarea id="minutes" placeholder="Toplantı tutanağı"></textarea>
+   <button type="submit">Toplantıyı Kaydet</button>
+   <button type="button" class="secondary" id="cancelMeeting">Vazgeç</button>
+  </form>
+  <p id="meetingMessage"></p>
+ </div>
+ <div class="panel">
+  <h2>Toplantı Kayıtları</h2>
+  <div id="meetingList">Yükleniyor...</div>
+ </div>
 </section>
 
+<!-- KARARLAR -->
 <section id="decisions" hidden>
-<div class="panel">
-<button class="secondary" id="decisionBack">← Yönetim Paneline Dön</button>
-<h2>Karar Yönetimi</h2>
-<p>Toplantı kararlarını buradan oluşturabilir ve takip edebilirsiniz.</p>
-<div id="decisionCreateArea"><button id="newDecision">+ Yeni Karar Oluştur</button></div>
-<form id="decisionForm" hidden>
-<label>İlgili Toplantı</label><select id="decisionMeeting"><option value="">Toplantı seçiniz</option></select>
-<label>Karar Başlığı</label><input id="decisionTitle" placeholder="Karar başlığı" required>
-<label>Karar Gerekçesi / Açıklama</label><textarea id="decisionRationale" placeholder="Karar açıklaması"></textarea>
-<label>İlgili Birim (Zorunlu)</label><select id="decisionUnit" required><option value="">Birim seçiniz</option></select>
-<label>Sorumlu Kişi</label><select id="decisionAssignee"><option value="">Sorumlu kişi seçiniz</option></select>
-<label>Son Tarih</label><input id="decisionDueDate" type="date">
-<button type="submit">Kararı Kaydet</button>
-<button type="button" class="secondary" id="cancelDecision">Vazgeç</button>
-</form>
-<p id="decisionMessage"></p>
-</div>
-<div class="panel"><h2>Karar Kayıtları</h2><div id="decisionList">Kararlar yükleniyor...</div></div>
+ <div class="panel">
+  <button class="secondary" onclick="backMenu()">← Yönetim Paneline Dön</button>
+  <h2>📋 Karar Yönetimi</h2>
+  <p>Toplantı kararlarını buradan oluşturabilir ve takip edebilirsiniz.</p>
+  <button id="newDecision">+ Yeni Karar Oluştur</button>
+  <form id="decisionForm" hidden>
+   <label>İlgili Toplantı</label>
+   <select id="decisionMeeting" required><option value="">Toplantı seçiniz</option></select>
+   <label>Karar Başlığı</label>
+   <input id="decisionTitle" placeholder="Karar başlığı" required>
+   <label>Karar Gerekçesi / Açıklama</label>
+   <textarea id="decisionRationale" placeholder="Karar açıklaması"></textarea>
+   <label>İlgili Birim (Zorunlu)</label>
+   <select id="decisionUnit" required><option value="">Birim seçiniz</option></select>
+   <label>Sorumlu Kişi</label>
+   <select id="decisionAssignee"><option value="">Sorumlu kişi seçiniz</option></select>
+   <label>Son Tarih</label>
+   <input id="decisionDueDate" type="date">
+   <button type="submit">Kararı Kaydet ve Onaya Gönder</button>
+   <button type="button" class="secondary" id="cancelDecision">Vazgeç</button>
+  </form>
+  <p id="decisionMessage"></p>
+ </div>
+ <div class="panel">
+  <h2>Karar Kayıtları</h2>
+  <div id="decisionList">Kararlar yükleniyor...</div>
+ </div>
 </section>
 
+<!-- KULLANICILAR -->
 <section id="users" hidden>
-<div class="panel">
-<button class="secondary" id="usersBack">← Yönetim Paneline Dön</button>
-<h2>👥 Kullanıcı Yönetimi</h2>
-<p id="usersNotice"></p>
-<div id="usersList">Kullanıcılar yükleniyor...</div>
-</div>
+ <div class="panel">
+  <button class="secondary" onclick="backMenu()">← Yönetim Paneline Dön</button>
+  <h2>👥 Kullanıcı Yönetimi</h2>
+  <p id="usersNotice"></p>
+  <div id="usersList">Kullanıcılar yükleniyor...</div>
+ </div>
 </section>
 
 <section id="other" class="panel" hidden>
-<button class="secondary" onclick="backMenu()">← Yönetim Paneline Dön</button>
-<h2 id="otherTitle"></h2>
-<p>Bu bölümün geliştirilmesine devam ediliyor.</p>
+ <button class="secondary" onclick="backMenu()">← Yönetim Paneline Dön</button>
+ <h2 id="otherTitle"></h2>
+ <p>Bu bölümün geliştirilmesine devam ediliyor.</p>
 </section>
+
 </main>
 
 <script>
 const client=window.supabase.createClient(
-"https://jxldxyfqkfsvajkzxyjr.supabase.co",
-"sb_publishable_6bo9gBRnMADXZmV_tfFASQ_2F2FMRhH"
+ "https://jxldxyfqkfsvajkzxyjr.supabase.co",
+ "sb_publishable_6bo9gBRnMADXZmV_tfFASQ_2F2FMRhH"
 );
+
 let currentUser=null;
 let profile=null;
+let selectedActivity=null;
+let editingActivityId=null;
 
-function isPresident(){return profile && profile.role==="komisyon_baskani";}
+const $=id=>document.getElementById(id);
+
+const sectionIds=[
+ "publicHome","registrationPage","login","dashboard",
+ "activities","meetings","decisions","users","other"
+];
+
+function isPresident(){
+ return profile && profile.role==="komisyon_baskani";
+}
 
 function show(id){
-["login","dashboard","meetings","decisions","users","other"].forEach(x=>document.getElementById(x).hidden=true);
-document.getElementById(id).hidden=false;
-}
-function backMenu(){show("dashboard");document.getElementById("menu").hidden=false;}
-
-async function loadProfile(user){
-const {data,error}=await client.from("profiles").select("id,full_name,role,active").eq("id",user.id).maybeSingle();
-if(error)throw error;
-if(!data)throw new Error("Kullanıcı profili bulunamadı.");
-if(data.active===false)throw new Error("Hesap pasif.");
-currentUser=user;profile=data;
-document.getElementById("userName").textContent=data.full_name||"Kullanıcı";
-show("dashboard");
+ sectionIds.forEach(x=>$(x).hidden=x!==id);
+ $("menuItems").hidden=true;
+ window.scrollTo(0,0);
 }
 
-document.getElementById("loginForm").addEventListener("submit",async e=>{
-e.preventDefault();
-const msg=document.getElementById("loginMessage");msg.textContent="Giriş kontrol ediliyor...";
-const {data,error}=await client.auth.signInWithPassword({email:document.getElementById("email").value.trim(),password:document.getElementById("password").value});
-if(error){msg.textContent="Giriş hatası: "+error.message;return;}
-try{await loadProfile(data.user);}catch(err){await client.auth.signOut();msg.textContent="Profil hatası: "+err.message;}
-});
-document.getElementById("logout").onclick=async()=>{await client.auth.signOut();currentUser=null;profile=null;show("login");};
-document.getElementById("meetingsButton").onclick=async()=>{document.getElementById("menu").hidden=true;show("meetings");document.getElementById("meetingForm").hidden=true;await loadMeetings();};
-document.getElementById("back").onclick=backMenu;
-document.getElementById("newMeeting").onclick=()=>{document.getElementById("meetingForm").hidden=false;};
-document.getElementById("cancel").onclick=()=>{document.getElementById("meetingForm").reset();document.getElementById("meetingForm").hidden=true;};
-
-async function loadMeetings(){
-const list=document.getElementById("meetingList");
-list.textContent="Toplantılar yükleniyor...";
-
-const {data,error}=await client.from("meetings")
-.select("id,meeting_date,title,attendees,agenda,minutes")
-.order("meeting_date",{ascending:false});
-
-if(error){list.textContent="Hata: "+error.message;return;}
-if(!data.length){list.textContent="Henüz toplantı kaydı bulunmuyor.";return;}
-
-list.innerHTML="";
-data.forEach(m=>{
-const box=document.createElement("div");box.className="meeting";
-const h=document.createElement("h3");h.textContent=m.title||"Başlıksız toplantı";
-const d=document.createElement("p");d.textContent="Tarih: "+(m.meeting_date||"-");
-const a=document.createElement("p");a.textContent="Katılımcılar: "+(m.attendees||"-");
-const g=document.createElement("p");g.textContent="Gündem: "+(m.agenda||"-");
-const t=document.createElement("p");t.textContent="Tutanak: "+(m.minutes||"-");
-
-box.append(h,d,a,g,t);
-
-/* Silme butonu yalnızca Komisyon Başkanı'na görünür */
-if(isPresident()){
-const deleteButton=document.createElement("button");
-deleteButton.className="danger";
-deleteButton.textContent="Toplantıyı Sil";
-deleteButton.onclick=()=>deleteMeeting(m.id,m.title||"Başlıksız toplantı");
-box.appendChild(deleteButton);
+function showPublic(){
+ show("publicHome");
+ loadPublicActivities();
 }
 
-list.appendChild(box);
-});
+function showLogin(){
+ show("login");
 }
 
-/* Toplantı silme güvenlik kontrolü */
-async function deleteMeeting(meetingId,meetingTitle){
-if(!isPresident()){
-alert("Bu işlem için yetkiniz bulunmuyor.");
-return;
+function backMenu(){
+ show("dashboard");
 }
-
-const {count,error:checkError}=await client
-.from("decisions")
-.select("id",{count:"exact",head:true})
-.eq("meeting_id",meetingId);
-
-if(checkError){
-alert("Karar kontrolü yapılamadı: "+checkError.message);
-return;
-}
-
-if(count>0){
-alert("Bu toplantıya bağlı "+count+" karar bulunuyor. Önce ilgili kararların durumunu kontrol etmelisiniz. Toplantı silinmedi.");
-return;
-}
-
-if(!confirm('"'+meetingTitle+'" toplantısını silmek istediğinize emin misiniz? Bu işlem geri alınamaz.'))return;
-
-const {error}=await client.from("meetings").delete().eq("id",meetingId);
-
-if(error){
-alert("Toplantı silinemedi: "+error.message);
-return;
-}
-
-alert("Toplantı başarıyla silindi.");
-await loadMeetings();
-}
-
-document.getElementById("meetingForm").addEventListener("submit",async e=>{
-e.preventDefault();
-const msg=document.getElementById("meetingMessage");
-msg.textContent="Kaydediliyor...";
-
-const meeting={
-meeting_date:document.getElementById("date").value,
-title:document.getElementById("title").value.trim(),
-attendees:document.getElementById("attendees").value.trim(),
-agenda:document.getElementById("agenda").value.trim(),
-minutes:document.getElementById("minutes").value.trim(),
-created_by:currentUser.id
-};
-
-const {error}=await client.from("meetings").insert(meeting);
-if(error){msg.textContent="Kayıt hatası: "+error.message;return;}
-
-msg.textContent="Toplantı başarıyla kaydedildi.";
-document.getElementById("meetingForm").reset();
-document.getElementById("meetingForm").hidden=true;
-await loadMeetings();
-});
-
-/* KARAR YÖNETİMİ */
-document.getElementById("decisionsButton").onclick=async()=>{
-document.getElementById("menu").hidden=true;
-show("decisions");
-document.getElementById("decisionForm").hidden=true;
-document.getElementById("decisionMessage").textContent="";
-document.getElementById("decisionCreateArea").hidden=!isPresident();
-await loadDecisionOptions();
-await loadDecisions();
-};
-
-document.getElementById("decisionBack").onclick=backMenu;
-document.getElementById("newDecision").onclick=()=>{document.getElementById("decisionForm").hidden=false;};
-document.getElementById("cancelDecision").onclick=()=>{document.getElementById("decisionForm").reset();document.getElementById("decisionForm").hidden=true;};
-
-async function loadDecisionOptions(){
-const meetingSelect=document.getElementById("decisionMeeting");
-const unitSelect=document.getElementById("decisionUnit");
-const assigneeSelect=document.getElementById("decisionAssignee");
-
-meetingSelect.innerHTML='<option value="">Toplantı seçiniz</option>';
-unitSelect.innerHTML='<option value="">Birim seçiniz</option>';
-assigneeSelect.innerHTML='<option value="">Sorumlu kişi seçiniz</option>';
-
-const [meetings,units,profiles]=await Promise.all([
-client.from("meetings").select("id,title,meeting_date").order("meeting_date",{ascending:false}),
-client.from("units").select("id,name").order("name"),
-client.from("profiles").select("id,full_name,unit_id").eq("active",true).order("full_name")
-]);
-
-if(meetings.error){
-document.getElementById("decisionMessage").textContent="Toplantılar alınamadı: "+meetings.error.message;
-}else{
-(meetings.data||[]).forEach(m=>{
-const o=document.createElement("option");
-o.value=m.id;
-o.textContent=(m.title||"Toplantı")+" - "+(m.meeting_date||"");
-meetingSelect.appendChild(o);
-});
-}
-
-if(units.error){
-document.getElementById("decisionMessage").textContent="Birimler alınamadı: "+units.error.message;
-}else{
-(units.data||[]).forEach(u=>{
-const o=document.createElement("option");
-o.value=u.id;o.textContent=u.name;unitSelect.appendChild(o);
-});
-}
-
-if(profiles.error){
-document.getElementById("decisionMessage").textContent="Kullanıcılar alınamadı: "+profiles.error.message;
-}else{
-(profiles.data||[]).forEach(p=>{
-const o=document.createElement("option");
-o.value=p.id;o.textContent=p.full_name||"İsimsiz kullanıcı";
-assigneeSelect.appendChild(o);
-});
-}
-}
-
-document.getElementById("decisionForm").addEventListener("submit",async e=>{
-e.preventDefault();
-const msg=document.getElementById("decisionMessage");
-
-if(!isPresident()){
-msg.textContent="Karar oluşturma yetkiniz bulunmuyor.";
-return;
-}
-
-const selectedUnit=document.getElementById("decisionUnit").value;
-if(!selectedUnit){
-msg.textContent="Lütfen birim seçiniz.";
-document.getElementById("decisionUnit").focus();
-return;
-}
-
-msg.textContent="Karar kaydediliyor...";
-
-const decision={
-meeting_id:document.getElementById("decisionMeeting").value||null,
-title:document.getElementById("decisionTitle").value.trim(),
-rationale:document.getElementById("decisionRationale").value.trim()||null,
-unit_id:selectedUnit,
-assignee_id:document.getElementById("decisionAssignee").value||null,
-due_date:document.getElementById("decisionDueDate").value||null,
-created_by:currentUser.id
-};
-
-const {error}=await client.from("decisions").insert(decision);
-if(error){msg.textContent="Karar kayıt hatası: "+error.message;return;}
-
-msg.textContent="Karar başarıyla kaydedildi. Otomatik karar numarası verildi.";
-document.getElementById("decisionForm").reset();
-document.getElementById("decisionForm").hidden=true;
-await loadDecisions();
-});
-
-function statusText(status){
-const names={
-taslak:"Taslak",
-baskan_onayi_bekliyor:"Başkan onayı bekliyor",
-onaylandi:"Onaylandı",
-reddedildi:"Reddedildi",
-bekliyor:"Bekliyor",
-devam_ediyor:"Devam ediyor",
-tamamlandi:"Tamamlandı",
-gecikti:"Gecikti"
-};
-return names[status]||status||"-";
-}
-
-async function loadDecisions(){
-const list=document.getElementById("decisionList");
-list.textContent="Kararlar yükleniyor...";
-
-const {data,error}=await client.from("decisions")
-.select("id,decision_no,meeting_id,title,rationale,unit_id,assignee_id,due_date,status,rejection_reason,created_at")
-.order("decision_no",{ascending:true});
-
-if(error){list.textContent="Kararları yüklerken hata: "+error.message;return;}
-if(!data.length){list.textContent="Henüz karar kaydı bulunmuyor.";return;}
-
-const [meetings,units,profiles]=await Promise.all([
-client.from("meetings").select("id,title"),
-client.from("units").select("id,name"),
-client.from("profiles").select("id,full_name")
-]);
-
-const meetingMap={},unitMap={},profileMap={};
-(meetings.data||[]).forEach(x=>meetingMap[x.id]=x.title);
-(units.data||[]).forEach(x=>unitMap[x.id]=x.name);
-(profiles.data||[]).forEach(x=>profileMap[x.id]=x.full_name);
-
-list.innerHTML="";
-
-data.forEach(d=>{
-const box=document.createElement("div");box.className="meeting";
-const h=document.createElement("h3");
-h.textContent="Karar No: "+(d.decision_no??"Henüz numara yok")+" - "+d.title;
-
-const meeting=document.createElement("p");
-meeting.textContent="Toplantı: "+(meetingMap[d.meeting_id]||"-");
-
-const rationale=document.createElement("p");
-rationale.textContent="Açıklama: "+(d.rationale||"-");
-
-const unit=document.createElement("p");
-unit.textContent="Birim: "+(unitMap[d.unit_id]||"-");
-
-const assignee=document.createElement("p");
-assignee.textContent="Sorumlu: "+(profileMap[d.assignee_id]||"-");
-
-const due=document.createElement("p");
-due.textContent="Son tarih: "+(d.due_date||"-");
-
-const status=document.createElement("p");
-status.className="status";
-status.textContent="Durum: "+statusText(d.status);
-
-box.append(h,meeting,rationale,unit,assignee,due,status);
-
-if(d.rejection_reason){
-const rejection=document.createElement("p");
-rejection.textContent="Ret gerekçesi: "+d.rejection_reason;
-box.appendChild(rejection);
-}
-
-if(isPresident()&&d.status==="baskan_onayi_bekliyor"){
-const approve=document.createElement("button");
-approve.className="success";
-approve.textContent="Kararı Onayla";
-approve.onclick=()=>approveDecision(d.id);
-
-const reject=document.createElement("button");
-reject.className="danger";
-reject.textContent="Kararı Reddet";
-reject.onclick=()=>rejectDecision(d.id);
-
-box.append(approve,reject);
-}
-
-list.appendChild(box);
-});
-}
-
-async function approveDecision(id){
-if(!isPresident())return;
-if(!confirm("Bu kararı onaylamak istiyor musunuz?"))return;
-
-const {error}=await client.from("decisions").update({
-status:"onaylandi",
-approved_by:currentUser.id,
-approved_at:new Date().toISOString(),
-rejection_reason:null
-}).eq("id",id);
-
-if(error){alert("Onay hatası: "+error.message);return;}
-alert("Karar onaylandı.");
-await loadDecisions();
-}
-
-async function rejectDecision(id){
-if(!isPresident())return;
-
-const reason=prompt("Ret gerekçesini yazınız:");
-if(reason===null)return;
-if(!reason.trim()){alert("Ret gerekçesi boş bırakılamaz.");return;}
-
-const {error}=await client.from("decisions").update({
-status:"reddedildi",
-approved_by:null,
-approved_at:null,
-rejection_reason:reason.trim()
-}).eq("id",id);
-
-if(error){alert("Ret işlemi hatası: "+error.message);return;}
-alert("Karar reddedildi.");
-await loadDecisions();
-}
-
-/* KULLANICI LİSTESİ */
-document.getElementById("usersButton").onclick=async()=>{
-document.getElementById("menu").hidden=true;
-show("users");
-
-const notice=document.getElementById("usersNotice");
-const list=document.getElementById("usersList");
-
-if(!isPresident()){
-notice.textContent="Kullanıcı listesini yalnızca Komisyon Başkanı görüntüleyebilir.";
-list.textContent="";
-return;
-}
-
-notice.textContent="Bu ekran mevcut kullanıcıları ve bağlı oldukları birimleri gösterir.";
-list.textContent="Kullanıcılar yükleniyor...";
-
-const [p,u]=await Promise.all([
-client.from("profiles").select("id,full_name,role,unit_id,active,created_at").order("full_name"),
-client.from("units").select("id,name").order("name")
-]);
-
-if(p.error){list.textContent="Kullanıcılar alınamadı: "+p.error.message;return;}
-if(u.error){list.textContent="Birimler alınamadı: "+u.error.message;return;}
-
-const unitNames={};
-(u.data||[]).forEach(x=>unitNames[x.id]=x.name);
-
-const roleNames={
-komisyon_baskani:"Komisyon Başkanı",
-teskilat_baskani:"Teşkilat Başkanı",
-egitim_baskani:"Eğitim Başkanı",
-sksf_baskani:"SKSF Başkanı",
-sksf_yardimcisi:"SKSF Birim Yardımcısı",
-sekreterya:"Sekreterya",
-sosyal_medya_1:"Sosyal Medya Sorumlusu 1",
-sosyal_medya_2:"Sosyal Medya Sorumlusu 2"
-};
-
-if(!p.data.length){
-list.textContent="Henüz kullanıcı profili bulunmuyor.";
-return;
-}
-
-list.innerHTML="";
-
-const roleOrder={
-komisyon_baskani:1,
-teskilat_baskani:2,
-egitim_baskani:3,
-sksf_baskani:4,
-sksf_yardimcisi:5,
-sekreterya:6,
-sosyal_medya_1:7,
-sosyal_medya_2:8
-};
-
-const sortedUsers=[...(p.data||[])].sort((a,b)=>
-(roleOrder[a.role]||99)-(roleOrder[b.role]||99)
-);
-
-sortedUsers.forEach(x=>{
-const card=document.createElement("div");card.className="meeting";
-const name=document.createElement("h3");
-name.textContent=x.full_name||"İsimsiz kullanıcı";
-
-const role=document.createElement("p");
-role.textContent="Görev: "+(roleNames[x.role]||x.role||"-");
-
-const unit=document.createElement("p");
-unit.textContent="Birim: "+(unitNames[x.unit_id]||"Birim atanmamış");
-
-const active=document.createElement("p");
-active.className="status";
-active.textContent=x.active===false?"Durum: Pasif":"Durum: Aktif";
-
-card.append(name,role,unit,active);
-list.appendChild(card);
-});
-};
-
-document.getElementById("usersBack").onclick=backMenu;
 
 function coming(title){
-document.getElementById("menu").hidden=true;
-document.getElementById("otherTitle").textContent=title;
-show("other");
+ $("otherTitle").textContent=title;
+ show("other");
 }
 
-async function checkSession(){
-const {data,error}=await client.auth.getSession();
-if(error)return;
-if(data.session){
-try{await loadProfile(data.session.user);}
-catch(e){
-await client.auth.signOut();
-document.getElementById("loginMessage").textContent=e.message;
+function dateText(d){
+ return d ? new Date(d+"T00:00:00").toLocaleDateString("tr-TR") : "-";
 }
+
+$("menuToggle").onclick=()=>{
+ $("menuItems").hidden=!$("menuItems").hidden;
+};
+
+document.addEventListener("click",e=>{
+ if(!e.target.closest(".menu")) $("menuItems").hidden=true;
+});
+
+async function loadProfile(user){
+ const {data,error}=await client
+  .from("profiles")
+  .select("id,full_name,role,active,unit_id")
+  .eq("id",user.id)
+  .maybeSingle();
+
+ if(error) throw error;
+ if(!data) throw new Error("Kullanıcı profili bulunamadı.");
+ if(data.active===false) throw new Error("Hesap pasif.");
+
+ currentUser=user;
+ profile=data;
+
+ $("userName").textContent=data.full_name||"Kullanıcı";
+ $("userRole").textContent="Yetki: "+data.role;
+ show("dashboard");
 }
+
+$("loginForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ const msg=$("loginMessage");
+ msg.textContent="Giriş kontrol ediliyor...";
+
+ const {data,error}=await client.auth.signInWithPassword({
+  email:$("email").value.trim(),
+  password:$("password").value
+ });
+
+ if(error){
+  msg.textContent="Giriş hatası: "+error.message;
+  return;
+ }
+
+ try{
+  await loadProfile(data.user);
+ }catch(err){
+  await client.auth.signOut();
+  msg.textContent="Profil hatası: "+err.message;
+ }
+});
+
+$("logout").onclick=async()=>{
+ await client.auth.signOut();
+ currentUser=null;
+ profile=null;
+ showPublic();
+};
+
+async function openActivities(){
+ show("activities");
+ $("activityForm").hidden=true;
+ await loadAdminActivities();
 }
-checkSession();
-</script>
-</bo
+
+async function openMeetings(){
+ show("meetings");
+ $("meetingForm").hidden=true;
+ await loadMeetings();
+}
+
+async function openDecisions(){
+ show("decisions");
+ $("decisionForm").hidden=true;
+ await loadDecisionOptions();
+ await loadDecisions();
+}
+
+async function openUsers(){
+ if(!isPresident()){
+  alert("Kullanıcıları görüntüleme yetkiniz yok.");
+  return;
+ }
+ show("users");
+ await loadUsers();
+}
+
+/* FAALİYET SAYACI */
+async function getActivityCounts(){
+ const {data,error}=await client.rpc("get_activity_registration_counts");
+ if(error) throw error;
+
+ return Object.fromEntries(
+  (data||[]).map(x=>[
+   x.activity_id,
+   Number(x.registration_count)
+  ])
+ );
+}
+
+/* HALKA AÇIK FAALİYETLER */
+async function loadPublicActivities(){
+ const host=$("publicActivityList");
+ host.textContent="Faaliyetler yükleniyor...";
+
+ const [a,c]=await Promise.all([
+  client.from("activities")
+   .select("id,title,description,activity_date,activity_time,location,capacity")
+   .eq("is_published",true)
+   .order("activity_date",{ascending:true}),
+  getActivityCounts().catch(()=>({}))
+ ]);
+
+ if(a.error){
+  host.textContent="Faaliyetler yüklenemedi: "+a.error.message;
+  return;
+ }
+
+ if(!a.data || !a.data.length){
+  host.textContent="Şu anda yayınlanmış faaliyet bulunmuyor.";
+  return;
+ }
+
+ host.innerHTML="";
+
+ a.data.forEach(x=>{
+  const count=c[x.id]??0;
+  const full=count>=x.capacity;
+  const card=document.createElement("div");
+  card.className="activity";
+
+  const h=document.createElement("h3");
+  h.textContent=x.title;
+
+  const d=document.createElement("p");
+  d.textContent=x.description||"";
+
+  const info=document.createElement("p");
+  info.className="muted";
+  info.textContent=
+   "Tarih: "+dateText(x.activity_date)+
+   " · Saat: "+(x.activity_time||"Belirtilmedi")+
+   " · Yer: "+(x.location||"Belirtilmedi");
+
+  const cap=document.createElement("p");
+  cap.innerHTML='<span class="badge">'+count+" / "+x.capacity+" kişi</span>";
+
+  const b=document.createElement("button");
+  b.textContent=full?"Kontenjan doldu – Kayıt kapandı":"Katıl";
+  b.disabled=full;
+
+  if(full){
+   b.className="secondary";
+  }else{
+   b.onclick=()=>openRegistration(x);
+  }
+
+  card.append(h,d,info,cap,b);
+  host.appendChild(card);
+ });
+}
+
+function openRegistration(a){
+ selectedActivity=a;
+ $("registrationTitle").textContent=a.title;
+ $("registrationInfo").textContent=
+  dateText(a.activity_date)+" · "+
+  (a.activity_time||"")+" · "+
+  (a.location||"");
+
+ $("registrationForm").reset();
+ $("registrationMessage").textContent="";
+ show("registrationPage");
+}
+
+$("registrationForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ if(!selectedActivity)return;
+
+ const button=e.submitter;
+ button.disabled=true;
+ $("registrationMessage").textContent="Kaydınız oluşturuluyor...";
+
+ const payload={
+  activity_id:selectedActivity.id,
+  full_name:$("studentName").value.trim(),
+  phone:$("studentPhone").value.trim(),
+  school:$("studentSchool").value.trim()
+ };
+
+ const {error}=await client
+  .from("activity_registrations")
+  .insert(payload);
+
+ button.disabled=false;
+
+ if(error){
+  const msg=error.message||"";
+  $("registrationMessage").textContent=
+   msg.toLowerCase().includes("unique")
+   ?"Bu telefon numarasıyla bu faaliyete daha önce kayıt yapılmış."
+   :msg.includes("Kontenjan")
+   ?"Kontenjan doldu. Kayıt kapandı."
+   :"Kayıt yapılamadı: "+msg;
+  return;
+ }
+
+ $("registrationMessage").textContent=
+  "Kaydınız başarıyla alındı. Teşekkür ederiz.";
+
+ $("registrationForm").reset();
+ await loadPublicActivities();
+});
+
+/* FAALİYET YÖNETİMİ */
+$("newActivity").onclick=()=>{
+ if(!isPresident()){
+  alert("Faaliyet oluşturma yetkiniz yok.");
+  return;
+ }
+ editingActivityId=null;
+ $("activityForm").reset();
+ $("activityForm").hidden=false;
+ $("activityMessage").textContent="";
+};
+
+$("cancelActivity").onclick=()=>{
+ $("activityForm").reset();
+ $("activityForm").hidden=true;
+ editingActivityId=null;
+};
+
+$("activityForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+
+ if(!isPresident()){
+  alert("Bu işlem için yetkiniz yok.");
+  return;
+ }
+
+ const payload={
+  title:$("activityTitle").value.trim(),
+  description:$("activityDescription").value.trim()||null,
+  activity_date:$("activityDate").value,
+  activity_time:$("activityTime").value||null,
+  location:$("activityLocation").value.trim()||null,
+  capacity:Number($("activityCapacity").value),
+  is_published:true
+ };
+
+ $("activityMessage").textContent="Kaydediliyor...";
+
+ const result=editingActivityId
+  ?await client.from("activities").update(payload).eq("id",editingActivityId)
+  :await client.from("activities").insert({...payload,created_by:currentUser.id});
+
+ if(result.error){
+  $("activityMessage").textContent="Kayıt hatası: "+result.error.message;
+  return;
+ }
+
+ $("activityMessage").textContent="Faaliyet kaydedildi ve yayınlandı.";
+ $("activityForm").reset();
+ $("activityForm").hidden=true;
+ editingActivityId=null;
+
+ await loadAdminActivities();
+});
+
+async function loadAdminActivities(){
+ const host=$("adminActivityList");
+ host.textContent="Faaliyetler yükleniyor...";
+
+ const [a,c]=await Promise.all([
+  client.from("activities").select("*").order("activity_date",{ascending:false}),
+  getActivityCounts().catch(()=>({}))
+ ]);
+
+ if(a.error){
+  host.textContent="Hata: "+a.error.message;
+  return;
+ }
+
+ if(!a.data || !a.data.length){
+  host.textContent="Henüz faaliyet kaydı bulunmuyor.";
+  return;
+ }
+
+ host.innerHTML="";
+
+ a.data.forEach(x=>{
+  const box=document.createElement("div");
+  box.className="meeting";
+
+  const h=document.createElement("h3");
+  h.textContent=x.title;
+
+  const p=document.createElement("p");
+  p.textContent=
+   dateText(x.activity_date)+" · "+
+   (x.activity_time||"")+" · "+
+   (x.location||"");
+
+  const n=document.createElement("p");
+  n.className="status";
+  n.textContent="Kayıt: "+(c[x.id]??"Sayaç alınamadı")+" / "+x.capacity;
+
+  box.append(h,p,n);
+
+  if(isPresident()){
+   const edit=document.createElement("button");
+   edit.textContent="Düzenle";
+   edit.onclick=()=>editActivity(x);
+
+   const people=document.createElement("button");
+   people.className="secondary";
+   people.textContent="Katılımcıları Gör";
+   people.onclick=()=>showRegistrations(x);
+
+   const del=document.createElement("button");
+   del.className="danger";
+   del.textContent="Faaliyeti Kaldır";
+   del.onclick=()=>deleteActivity(x);
+
+   box.append(edit,people,del);
+  }
+
+  host.appendChild(box);
+ });
+}
+
+function editActivity(x){
+ if(!isPresident())return;
+
+ editingActivityId=x.id;
+ $("activityTitle").value=x.title;
+ $("activityDescription").value=x.description||"";
+ $("activityDate").value=x.activity_date;
+ $("activityTime").value=x.activity_time||"";
+ $("activityLocation").value=x.location||"";
+ $("activityCapacity").value=x.capacity;
+ $("activityForm").hidden=false;
+ $("activityMessage").textContent="Düzenleme yapıyorsunuz.";
+ window.scrollTo(0,0);
+}
+
+async function showRegistrations(a){
+ if(!isPresident())return;
+
+ const {data,error}=await client
+  .from("activity_registrations")
+  .select("full_name,phone,school,created_at")
+  .eq("activity_id",a.id)
+  .order("created_at",{ascending:true});
+
+ if(error){
+  alert("Katılımcılar alınamadı: "+error.message);
+  return;
+ }
+
+ const rows=(data||[]).map((x,i)=>
+  (i+1)+". "+x.full_name+" | "+x.phone+" | "+x.school
+ );
+
+ alert(
+  a.title+"\nToplam: "+(data||[]).length+
+  "\n\n"+(rows.join("\n")||"Henüz kayıt yok.")
+ );
+}
+
+async function deleteActivity(a){
+ if(!isPresident())return;
+
+ if(!confirm('"'+a.title+'" faaliyetini ve tüm kayıtlarını kaldırmak istiyor musunuz? Bu işlem geri alınamaz.'))return;
+
+ const {error}=await client.from("activities").delete().eq("id",a.id);
+
+ if(error){
+  alert("Faaliyet silinemedi: "+error.message);
+  return;
+ }
+
+ alert("Faaliyet kaldırıldı.");
+ await loadAdminActivities();
+}
+
+/* TOPLANTILAR */
+$("newMeeting").onclick=()=>{
+ if(!isPresident()){
+  alert("Toplantı oluşturma yetkiniz yok.");
+  return;
+ }
+ $("meetingForm").hidden=false;
+};
+
+$("cancelMeeting").onclick=()=>{
+ $("meetingForm").reset();
+ $("meetingForm").hidden=true;
+};
+
+async function loadMeetings(){
+ const list=$("meetingList");
+ list.textContent="Toplantılar yükleniyor...";
+
+ const {data,error}=await client
+  .from("meetings")
+  .select("id,meeting_date,title,attendees,agenda,minutes")
+  .order("meeting_date",{ascending:false});
+
+ if(error){
+  list.textContent="Hata: "+error.message;
+  return;
+ }
+
+ if(!data || !data.length){
+  list.textContent="Henüz toplantı kaydı bulunmuyor.";
+  return;
+ }
+
+ list.innerHTML="";
+
+ data.forEach(m=>{
+  const box=document.createElement("div");
+  box.className="meeting";
+
+  const h=document.createElement("h3");
+  h.textContent=m.title||"Başlıksız toplantı";
+
+  const d=document.createElement("p");
+  d.textContent="Tarih: "+dateText(m.meeting_date);
+
+  const a=document.createElement("p");
+  a.textContent="Katılımcılar: "+(m.attendees||"-");
+
+  const g=document.createElement("p");
+  g.textConte
