@@ -18,14 +18,14 @@
 <aside id="drawer">
  <div class="drawer-head"><h2>Menü</h2><button id="closeDrawer">✕</button></div>
  <div id="drawerUser" class="muted">Oturum açılmadı</div>
- <div id="guestMenuLinks" class="hidden"><p class="muted" style="padding:8px 14px 0">Ziyaretçi Sayfaları</p><button class="drawer-link" data-page="commission">Komisyonumuz</button><button class="drawer-link" data-page="units">Birimlerimiz</button><button class="drawer-link" data-page="account">Hesap Aç / Giriş Yap</button></div>
+ <div id="publicMenuLinks"><p class="muted" style="padding:8px 14px 0">Herkese Açık Sayfalar</p><button class="drawer-link" data-page="commission">Komisyonumuz</button><button class="drawer-link" data-page="units">Birimlerimiz</button><button class="drawer-link" data-page="account">Hesap Aç / Giriş Yap</button></div>
  <div id="managerMenuLinks" class="hidden">
   <button class="drawer-link" data-page="home">Ana Sayfa</button><button class="drawer-link" data-page="activities">Faaliyetler</button><button class="drawer-link" data-page="meetings">Toplantılar</button><button class="drawer-link" data-page="decisions">Kararlar</button><button class="drawer-link" data-page="tasks">Görevler</button><button class="drawer-link" data-page="units">Birimler</button><button class="drawer-link" data-page="users">Kullanıcılar</button><button class="drawer-link hidden" id="logoutBtn">Çıkış Yap</button>
  </div>
 </aside>
 <main>
 <section id="page-home">
- <div class="card"><h2>AGDKLİSEKOM'a Hoş Geldiniz</h2><p>Toplantı, karar, görev ve faaliyet takip platformu.</p></div>
+ <div class="card"><h2>AGDKLİSEKOM'a Hoş Geldiniz</h2><p>Ahlak ve maneviyatla donanmış, daha güzel bir gelecek ve daha iyi bir gençlik için birlikte çalışıyoruz.</p></div>
  <div class="card">
   <h2>Faaliyetlerimizden Kareler</h2>
   <p class="muted">AGD Kestel faaliyetlerimizden fotoğraflar.</p>
@@ -84,7 +84,7 @@ function updateRegistrationAccess(){const ok=isVerifiedUser();const form=$("regi
 async function finishPublicAuth(){sessionStorage.removeItem("agdk_guest");await refreshProfile();updateMenu();updateRegistrationAccess();showPage("activities");showMessage("registrationMessage","Hesabınız doğrulandı. Artık faaliyet kaydı oluşturabilirsiniz.","success");}
 function closeMenu(){$("drawer").classList.remove("open");$("drawer-bg").classList.remove("open");}
 function openMenu(){$("drawer").classList.add("open");$("drawer-bg").classList.add("open");}
-function updateMenu(){const logged=!!currentUser,guest=isGuest();$("logoutBtn").classList.toggle("hidden",!logged);$("drawerUser").textContent=currentProfile?.full_name||currentUser?.email||currentUser?.phone||(guest?"Misafir olarak devam ediliyor":"Oturum açılmadı");/* Komisyonumuz ve Birimlerimiz tüm ziyaretçilere açıktır. */$("guestMenuLinks").classList.toggle("hidden",logged);$("managerMenuLinks").classList.toggle("hidden",!logged||!currentProfile||!profileIsActive());$("guestEntryBtn").classList.toggle("hidden",logged||guest);$("managerEntryBtn").classList.toggle("hidden",logged||guest);updateRegistrationAccess();}
+function updateMenu(){const logged=!!currentUser,guest=isGuest();$("logoutBtn").classList.toggle("hidden",!logged);$("drawerUser").textContent=currentProfile?.full_name||currentUser?.email||currentUser?.phone||(guest?"Misafir olarak devam ediliyor":"Oturum açılmadı");/* Komisyonumuz ve Birimlerimiz giriş yapmayanlar dahil herkese açıktır. */$("publicMenuLinks").classList.remove("hidden");$("managerMenuLinks").classList.toggle("hidden",!logged||!currentProfile||!profileIsActive());$("guestEntryBtn").classList.toggle("hidden",logged||guest);$("managerEntryBtn").classList.toggle("hidden",logged||guest);updateRegistrationAccess();}
 function updateRoleUI(){$("activityCreateArea").classList.toggle("hidden",!canManage());$("taskCreateArea").classList.toggle("hidden",!canAssign());$("meetingCreateArea").classList.toggle("hidden",!currentUser);$("decisionCreateArea").classList.toggle("hidden",!currentUser);}
 function enterGuest(){sessionStorage.setItem("agdk_guest","1");updateMenu();showPage("activities");}
 function showPage(name){const publicPages=["home","activities","commission","units","login","account"];if((!currentUser||!currentProfile||!profileIsActive())&&!publicPages.includes(name))name="activities";if(isGuest()&&["meetings","decisions","tasks","users","dashboard"].includes(name))name="activities";document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));const target=$("page-"+name);if(target)target.classList.remove("hidden");closeMenu();const loaders={activities:loadActivities,meetings:loadMeetings,decisions:loadDecisions,tasks:loadTasks,units:loadUnits,users:loadUsers};if(loaders[name])loaders[name]();if(name==="activities")updateRegistrationAccess();}
