@@ -1,350 +1,447 @@
-
 <!DOCTYPE html>
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#102b49">
-<title>AGDKLİSEKOM Yönetim Sistemi</title>
+<title>AGDKLİSEKOM | Karar ve Yönetim Sistemi</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 *{box-sizing:border-box}
 body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#f1f4f8;
-color:#243449;
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#f1f4f8;
+ color:#243447;
 }
 header{
-background:#102b49;
-color:white;
-padding:18px 22px;
-display:flex;
-align-items:center;
-gap:15px;
+ background:#102b49;
+ color:white;
+ padding:18px;
+ display:flex;
+ align-items:center;
+ gap:14px;
 }
 .logo{
-width:60px;
-height:60px;
-border-radius:10px;
-background:white;
-color:#102b49;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:23px;
-font-weight:bold;
+ width:55px;
+ height:55px;
+ border:2px solid white;
+ border-radius:10px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-weight:bold;
+ font-size:20px;
 }
-header h1{margin:0;font-size:22px}
-header p{margin:7px 0 0;color:#d2dce7}
+header h1{font-size:21px;margin:0}
+header p{margin:5px 0 0;color:#d5deea}
 main{max-width:1000px;margin:25px auto;padding:15px}
-.login-card{
-max-width:420px;
-margin:55px auto;
-background:white;
-padding:30px;
-border-radius:15px;
-box-shadow:0 5px 25px #102b4915;
+.panel{
+ background:white;
+ padding:22px;
+ border-radius:12px;
+ box-shadow:0 3px 14px #00000012;
+ margin-bottom:18px;
 }
-.login-card h2{color:#102b49;text-align:center}
-.login-card p{text-align:center;color:#718096}
-input{
-width:100%;
-padding:14px;
-margin:9px 0;
-border:1px solid #d5dce5;
-border-radius:8px;
-font-size:16px;
+h2{color:#102b49}
+input,textarea,button{
+ width:100%;
+ padding:12px;
+ margin:7px 0;
+ border-radius:7px;
+ border:1px solid #ccd4df;
+ font-size:15px;
 }
+textarea{min-height:85px}
 button{
-background:#102b49;
-color:white;
-border:0;
-padding:13px 18px;
-border-radius:8px;
-cursor:pointer;
-font-size:15px;
+ background:#173e65;
+ color:white;
+ border:0;
+ cursor:pointer;
+ font-weight:bold;
 }
-button:hover{background:#1c4268}
-.login-card button{width:100%;margin-top:12px}
-#message{
-color:#b42318;
-font-size:14px;
-text-align:center;
-}
-.welcome{
-background:white;
-padding:24px;
-border-radius:14px;
-margin-bottom:22px;
-border-left:5px solid #102b49;
-}
-.welcome h2{color:#102b49;margin-top:0}
-.section-title{color:#102b49;margin:25px 0 14px}
+button:hover{background:#245783}
+.secondary{background:#687789}
 .grid{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:15px;
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+ gap:15px;
 }
-.item{
-background:white;
-padding:22px;
-border-radius:13px;
-border:1px solid #e0e6ed;
+.tile{
+ background:white;
+ padding:25px 15px;
+ border-radius:12px;
+ text-align:center;
+ box-shadow:0 3px 12px #00000012;
+ cursor:pointer;
+ border:1px solid #e0e5eb;
 }
-.item h3{color:#102b49;margin:0 0 9px}
-.item p{color:#68788b;font-size:14px}
-.icon{font-size:27px;margin-bottom:10px}
-.topline{
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:12px;
-flex-wrap:wrap;
+.tile h3{color:#173e65;margin:5px}
+.tile p{color:#697789;font-size:14px}
+.meeting{
+ border:1px solid #dce2e9;
+ border-radius:9px;
+ padding:15px;
+ margin:12px 0;
 }
-.user-info{color:#d2dce7;font-size:13px}
-footer{
-text-align:center;
-color:#718096;
-padding:25px;
-font-size:13px;
-}
-.hidden{display:none!important}
-@media(max-width:550px){
-.grid{grid-template-columns:1fr}
-header h1{font-size:19px}
-.login-card{margin:25px auto}
-}
+.meeting h3{margin-top:0;color:#173e65}
+.muted{color:#687789;font-size:13px}
+.error{color:#b42318}
+.success{color:#167647}
+[hidden]{display:none!important}
 </style>
 </head>
 
 <body>
 
 <header>
-<div class="logo">AGD</div>
-<div>
-<h1>AGDKLİSEKOM</h1>
-<p>Karar ve Yönetim Sistemi</p>
-</div>
+ <div class="logo">AGD</div>
+ <div>
+  <h1>AGDKLİSEKOM</h1>
+  <p>Karar ve Yönetim Sistemi</p>
+ </div>
 </header>
 
 <main>
 
-<!-- GİRİŞ EKRANI -->
-<section id="loginScreen" class="login-card">
-<h2>Sistem Girişi</h2>
-<p>AGDKLİSEKOM Yönetim Platformu</p>
+<section id="loginPanel" class="panel">
+ <h2>Kullanıcı Girişi</h2>
+ <p>Sisteme kayıtlı e-posta adresiniz ve şifrenizle giriş yapın.</p>
 
-<form id="loginForm">
-<input
-type="email"
-id="email"
-placeholder="E-posta adresiniz"
-autocomplete="username"
-required>
+ <form id="loginForm">
+  <input id="email" type="email" placeholder="E-posta adresi" required>
+  <input id="password" type="password" placeholder="Şifre" required>
+  <button type="submit">Giriş Yap</button>
+ </form>
 
-<input
-type="password"
-id="password"
-placeholder="Şifreniz"
-autocomplete="current-password"
-required>
-
-<button type="submit" id="loginButton">
-Giriş Yap
-</button>
-</form>
-
-<div id="message"></div>
+ <p id="loginMessage"></p>
 </section>
 
-<!-- YÖNETİM PANELİ -->
-<section id="dashboard" class="hidden">
+<section id="dashboard" hidden>
+ <div class="panel">
+  <h2>Yönetim Paneli</h2>
+  <p>Hoş geldiniz, <strong id="userName"></strong></p>
+  <p class="muted" id="userRole"></p>
+  <button class="secondary" id="logoutButton">Güvenli Çıkış</button>
+ </div>
 
-<div class="welcome">
-<div class="topline">
-<div>
-<h2>Yönetim Paneli</h2>
-<p>AGDKLİSEKOM dijital karar, toplantı ve görev takip sistemine hoş geldiniz.</p>
-</div>
-<button onclick="logout()">Çıkış Yap</button>
-</div>
+ <div id="dashboardMenu" class="grid">
+  <div class="tile" id="meetingsButton">
+   <h3>📅 Toplantılar</h3>
+   <p>Toplantı oluştur ve toplantıları görüntüle</p>
+  </div>
 
-<strong id="userName">Kullanıcı</strong>
-<div class="user-info" id="userRole"></div>
-</div>
+  <div class="tile" id="decisionsButton">
+   <h3>📋 Kararlar</h3>
+   <p>Toplantı kararlarını takip et</p>
+  </div>
 
-<h2 class="section-title">Yönetim İşlemleri</h2>
+  <div class="tile" id="tasksButton">
+   <h3>✅ Görevler</h3>
+   <p>Görevleri takip et</p>
+  </div>
 
-<div class="grid">
+  <div class="tile" id="approvalButton">
+   <h3>🖊️ Onay İşlemleri</h3>
+   <p>Başkan onaylarını takip et</p>
+  </div>
 
-<div class="item">
-<div class="icon">📅</div>
-<h3>Toplantılar</h3>
-<p>Toplantıları oluştur ve takip et.</p>
-</div>
+  <div class="tile" id="unitsButton">
+   <h3>🏢 Birimler</h3>
+   <p>Birimleri görüntüle</p>
+  </div>
 
-<div class="item">
-<div class="icon">📋</div>
-<h3>Kararlar</h3>
-<p>Alınan kararları görüntüle ve yönet.</p>
-</div>
+  <div class="tile" id="usersButton">
+   <h3>👥 Kullanıcılar</h3>
+   <p>Kullanıcı yönetimi</p>
+  </div>
+ </div>
+</section>
 
-<div class="item">
-<div class="icon">📝</div>
-<h3>Görevler</h3>
-<p>Birimlere verilen görevleri takip et.</p>
-</div>
+<section id="meetingsSection" hidden>
+ <div class="panel">
+  <button class="secondary" id="backButton">← Yönetim Paneline Dön</button>
+  <h2>Toplantı Yönetimi</h2>
+  <button id="newMeetingButton">+ Yeni Toplantı Oluştur</button>
 
-<div class="item">
-<div class="icon">✅</div>
-<h3>Onay İşlemleri</h3>
-<p>Komisyon Başkanı karar onaylarını yönet.</p>
-</div>
+  <form id="meetingForm" hidden>
+   <h3>Yeni Toplantı</h3>
 
-<div class="item">
-<div class="icon">🏢</div>
-<h3>Birimler</h3>
-<p>Organizasyon birimlerini görüntüle.</p>
-</div>
+   <label>Toplantı Tarihi</label>
+   <input id="meetingDate" type="date" required>
 
-<div class="item">
-<div class="icon">👥</div>
-<h3>Kullanıcılar</h3>
-<p>Kullanıcıları ve yetkileri yönet.</p>
-</div>
+   <label>Toplantı Başlığı</label>
+   <input id="meetingTitle" type="text" placeholder="Toplantı başlığı" required>
 
-</div>
+   <label>Katılımcılar</label>
+   <textarea id="meetingAttendees" placeholder="Katılımcıların adları"></textarea>
+
+   <label>Gündem</label>
+   <textarea id="meetingAgenda" placeholder="Toplantı gündemi"></textarea>
+
+   <label>Toplantı Tutanağı</label>
+   <textarea id="meetingMinutes" placeholder="Toplantı tutanağı"></textarea>
+
+   <button type="submit">Toplantıyı Kaydet</button>
+   <button type="button" class="secondary" id="cancelMeetingButton">Vazgeç</button>
+  </form>
+
+  <p id="meetingMessage"></p>
+ </div>
+
+ <div class="panel">
+  <h2>Toplantı Kayıtları</h2>
+  <div id="meetingList">Toplantılar yükleniyor...</div>
+ </div>
+</section>
+
+<section id="comingSoon" class="panel" hidden>
+ <button class="secondary" id="comingBackButton">← Yönetim Paneline Dön</button>
+ <h2 id="comingTitle">Modül</h2>
+ <p>Bu modülün geliştirilmesine devam ediliyor.</p>
 </section>
 
 </main>
 
-<footer>
-AGDKLİSEKOM © 2026 | Kurumsal Yönetim Sistemi
-</footer>
-
 <script>
-
-// SUPABASE BAĞLANTISI
-const SUPABASE_URL =
-"https://jxldxyfqkfsvajkzxyjr.supabase.co";
-
-const SUPABASE_KEY =
-"sb_publishable_6bo9gBRnMADXZmV_tfFASQ_2F2FMRhH";
+const SUPABASE_URL = "https://jxldxyfqkfsvajkzxyjr.supabase.co";
+const SUPABASE_KEY = "sb_publishable_6bo9gBRnMADXZmV_tfFASQ_2F2FMRhH";
 
 const client = window.supabase.createClient(
-SUPABASE_URL,
-SUPABASE_KEY
+ SUPABASE_URL,
+ SUPABASE_KEY
 );
 
-// EKRANLAR
-const loginScreen = document.getElementById("loginScreen");
-const dashboard = document.getElementById("dashboard");
-const message = document.getElementById("message");
+let currentUser = null;
+let currentProfile = null;
 
-function showLogin(text = "") {
-dashboard.classList.add("hidden");
-loginScreen.classList.remove("hidden");
-message.textContent = text;
+const $ = id => document.getElementById(id);
+
+function showMessage(id, message, type="error"){
+ const el = $(id);
+ el.textContent = message;
+ el.className = type;
 }
 
-async function showDashboard(user) {
-
-const {data: profile, error} = await client
-.from("profiles")
-.select("full_name, role, active")
-.eq("id", user.id)
-.maybeSingle();
-
-if(error || !profile) {
-    console.error("PROFİL HATASI:", error);
-
-    const detay = error
-        ? error.message
-        : "Sorgu başarılı ancak profil kaydı bulunamadı.";
-
-    await client.auth.signOut();
-
-    showLogin("Profil kontrol hatası: " + detay);
-    return;
+function showDashboard(){
+ $("loginPanel").hidden = true;
+ $("dashboard").hidden = false;
+ $("meetingsSection").hidden = true;
+ $("comingSoon").hidden = true;
+ $("userName").textContent = currentProfile.full_name || "Kullanıcı";
+ $("userRole").textContent = "Görev: " + (currentProfile.role || "Kullanıcı");
 }
 
-if(profile.active !== true) {
-await client.auth.signOut();
-showLogin("Hesabınız aktif değil.");
-return;
+function showLogin(message=""){
+ $("dashboard").hidden = true;
+ $("meetingsSection").hidden = true;
+ $("comingSoon").hidden = true;
+ $("loginPanel").hidden = false;
+ showMessage("loginMessage", message);
 }
 
-document.getElementById("userName").textContent =
-profile.full_name || "Kullanıcı";
+async function loadProfile(user){
+ const {data, error} = await client
+  .from("profiles")
+  .select("id, full_name, role, active")
+  .eq("id", user.id)
+  .maybeSingle();
 
-document.getElementById("userRole").textContent =
-"Görev: " + String(profile.role || "").replaceAll("_"," ");
+ if(error) throw error;
 
-loginScreen.classList.add("hidden");
-dashboard.classList.remove("hidden");
+ if(!data){
+  throw new Error("Kullanıcı profili bulunamadı.");
+ }
+
+ if(data.active === false){
+  throw new Error("Bu kullanıcı hesabı pasif durumda.");
+ }
+
+ currentUser = user;
+ currentProfile = data;
 }
 
-// GİRİŞ İŞLEMİ
-document.getElementById("loginForm")
-.addEventListener("submit", async function(e) {
+async function checkSession(){
+ const {data, error} = await client.auth.getSession();
 
-e.preventDefault();
+ if(error){
+  showLogin(error.message);
+  return;
+ }
 
-const email = document.getElementById("email").value.trim();
-const password = document.getElementById("password").value;
-const button = document.getElementById("loginButton");
+ if(data.session){
+  try{
+   await loadProfile(data.session.user);
+   showDashboard();
+  }catch(e){
+   await client.auth.signOut();
+   showLogin("Profil kontrol hatası: " + e.message);
+  }
+ }
+}
 
-button.disabled = true;
-button.textContent = "Kontrol ediliyor...";
-message.textContent = "";
+$("loginForm").addEventListener("submit", async function(e){
+ e.preventDefault();
 
-try {
+ const email = $("email").value.trim();
+ const password = $("password").value;
 
-const {data, error} = await client.auth.signInWithPassword({
-email: email,
-password: password
+ showMessage("loginMessage","Giriş kontrol ediliyor...","muted");
+
+ const {data, error} = await client.auth.signInWithPassword({
+  email,
+  password
+ });
+
+ if(error){
+  showMessage("loginMessage","Giriş hatası: " + error.message);
+  return;
+ }
+
+ try{
+  await loadProfile(data.user);
+  showDashboard();
+ }catch(e){
+  await client.auth.signOut();
+  showMessage("loginMessage","Profil hatası: " + e.message);
+ }
 });
 
-if(error) {
-showLogin("Giriş başarısız: E-posta veya şifre hatalı.");
-} else {
-await showDashboard(data.user);
-}
-
-} catch(err) {
-showLogin("Bağlantı hatası. İnternet bağlantınızı kontrol edin.");
-}
-
-button.disabled = false;
-button.textContent = "Giriş Yap";
-
+$("logoutButton").addEventListener("click", async function(){
+ await client.auth.signOut();
+ currentUser = null;
+ currentProfile = null;
+ showLogin("Güvenli çıkış yapıldı.","success");
 });
 
-// ÇIKIŞ
-async function logout() {
-await client.auth.signOut();
-document.getElementById("password").value = "";
-showLogin("Güvenli çıkış yapıldı.");
+$("meetingsButton").addEventListener("click", openMeetings);
+
+async function openMeetings(){
+ $("dashboardMenu").hidden = true;
+ $("meetingsSection").hidden = false;
+ $("comingSoon").hidden = true;
+ $("meetingForm").hidden = true;
+ $("meetingList").textContent = "Toplantılar yükleniyor...";
+ await loadMeetings();
+ window.scrollTo(0,0);
 }
 
-// SAYFA YENİLENDİĞİNDE OTURUM KONTROLÜ
-async function checkSession() {
+$("backButton").addEventListener("click", function(){
+ $("meetingsSection").hidden = true;
+ $("comingSoon").hidden = true;
+ $("dashboardMenu").hidden = false;
+ window.scrollTo(0,0);
+});
 
-const {data} = await client.auth.getSession();
+$("newMeetingButton").addEventListener("click", function(){
+ $("meetingForm").hidden = false;
+ $("meetingMessage").textContent = "";
+});
 
-if(data.session) {
-await showDashboard(data.session.user);
-} else {
-showLogin();
+$("cancelMeetingButton").addEventListener("click", function(){
+ $("meetingForm").reset();
+ $("meetingForm").hidden = true;
+});
+
+async function loadMeetings(){
+ const list = $("meetingList");
+ list.textContent = "Toplantılar yükleniyor...";
+
+ const {data, error} = await client
+  .from("meetings")
+  .select("id, meeting_date, title, attendees, agenda, minutes, created_at")
+  .order("meeting_date", {ascending:false});
+
+ if(error){
+  list.textContent = "Toplantılar yüklenemedi: " + error.message;
+  return;
+ }
+
+ if(!data || data.length === 0){
+  list.textContent = "Henüz kayıtlı toplantı bulunmuyor.";
+  return;
+ }
+
+ list.innerHTML = "";
+
+ data.forEach(meeting => {
+  const box = document.createElement("div");
+  box.className = "meeting";
+
+  const title = document.createElement("h3");
+  title.textContent = meeting.title || "Başlıksız toplantı";
+
+  const date = document.createElement("p");
+  date.textContent = "Tarih: " + (meeting.meeting_date || "-");
+
+  const attendees = document.createElement("p");
+  attendees.textContent = "Katılımcılar: " + (meeting.attendees || "-");
+
+  const agenda = document.createElement("p");
+  agenda.textContent = "Gündem: " + (meeting.agenda || "-");
+
+  const minutes = document.createElement("p");
+  minutes.textContent = "Tutanak: " + (meeting.minutes || "-");
+
+  box.append(title,date,attendees,agenda,minutes);
+  list.appendChild(box);
+ });
 }
 
+$("meetingForm").addEventListener("submit", async function(e){
+ e.preventDefault();
+
+ if(!currentUser){
+  showMessage("meetingMessage","Oturum bulunamadı. Lütfen tekrar giriş yapın.");
+  return;
+ }
+
+ showMessage("meetingMessage","Toplantı kaydediliyor...","muted");
+
+ const meeting = {
+  meeting_date: $("meetingDate").value,
+  title: $("meetingTitle").value.trim(),
+  attendees: $("meetingAttendees").value.trim(),
+  agenda: $("meetingAgenda").value.trim(),
+  minutes: $("meetingMinutes").value.trim(),
+  created_by: currentUser.id
+ };
+
+ const {error} = await client
+  .from("meetings")
+  .insert(meeting);
+
+ if(error){
+  showMessage("meetingMessage","Kayıt hatası: " + error.message);
+  return;
+ }
+
+ showMessage("meetingMessage","Toplantı başarıyla kaydedildi.","success");
+ $("meetingForm").reset();
+ $("meetingForm").hidden = true;
+ await loadMeetings();
+});
+
+function openComingSoon(title){
+ $("dashboardMenu").hidden = true;
+ $("meetingsSection").hidden = true;
+ $("comingSoon").hidden = false;
+ $("comingTitle").textContent = title;
 }
+
+$("decisionsButton").addEventListener("click",()=>openComingSoon("Kararlar"));
+$("tasksButton").addEventListener("click",()=>openComingSoon("Görevler"));
+$("approvalButton").addEventListener("click",()=>openComingSoon("Onay İşlemleri"));
+$("unitsButton").addEventListener("click",()=>openComingSoon("Birimler"));
+$("usersButton").addEventListener("click",()=>openComingSoon("Kullanıcılar"));
+
+$("comingBackButton").addEventListener("click",function(){
+ $("comingSoon").hidden = true;
+ $("dashboardMenu").hidden = false;
+});
 
 checkSession();
-
 </script>
 
 </body>
