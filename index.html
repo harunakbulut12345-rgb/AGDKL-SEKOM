@@ -245,7 +245,7 @@ footer{text-align:center;color:#7b8798;padding:25px;font-size:12px}
 const SUPABASE_URL = "https://jxldxyfqkfsvajkzxyjr.supabase.co";
 const SUPABASE_KEY = "sb_publishable_6bo9gBRnMADXZmV_tfFASQ_2F2FMRhH";
 const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
+const db = client;
 let currentUser = null;
 let currentProfile = null;
 let activitiesCache = [];
