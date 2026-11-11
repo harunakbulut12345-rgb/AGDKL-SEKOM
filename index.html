@@ -14,6 +14,8 @@
 .header-actions{display:flex;align-items:center;gap:6px}.header-actions .btn{padding:8px 9px;font-size:12px}.brand-wrap{display:flex;align-items:center;gap:10px;min-width:0}.agd-emblem{width:48px;height:48px;flex:0 0 48px;border-radius:50%;background:#fff;color:#142b50;display:flex;flex-direction:column;align-items:center;justify-content:center;border:2px solid #d9e5f5;box-shadow:0 0 0 2px #ffffff25;line-height:1}.agd-emblem strong{font-size:16px;font-weight:900;letter-spacing:-1px}.agd-emblem small{font-size:7px;font-weight:900;letter-spacing:1px;margin-top:3px}.brand-logo{color:#fff;line-height:1;text-align:center;min-width:120px}.brand-top{display:flex;gap:10px;align-items:center;font-weight:900;font-size:19px;letter-spacing:1px}.brand-bottom{font-size:11px;font-weight:700;letter-spacing:5px;margin-top:5px}@media(max-width:420px){header{padding:12px 9px}.header-actions .btn{font-size:10px;padding:7px 6px}.brand-wrap{gap:6px}.agd-emblem{width:39px;height:39px;flex-basis:39px}.agd-emblem strong{font-size:14px}.agd-emblem small{font-size:6px}.brand-top{font-size:16px;gap:6px}.brand-logo{min-width:95px}}
 
 .instagram-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:16px;align-items:start}.instagram-card{border:1px solid #e1e6ee;border-radius:10px;padding:12px;min-width:0}.instagram-card h3{margin:2px 0 10px}.instagram-card iframe{display:block;width:100%;max-width:540px;height:650px;margin:0 auto;border:0;border-radius:8px;background:#f7f8fa}.instagram-card a{display:inline-block;margin-top:10px;color:#174b88;font-size:13px;text-decoration:none}.instagram-card a:hover{text-decoration:underline}@media(max-width:420px){.instagram-card iframe{height:600px}}
+
+.commission-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:14px;margin-top:20px}.commission-member{border:1px solid #dfe6f0;border-radius:12px;padding:20px 14px;text-align:center;background:linear-gradient(180deg,#fff,#f7f9fc);min-width:0}.commission-member h3{margin:12px 0 7px;color:#17365f}.commission-avatar{width:66px;height:66px;margin:0 auto;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#174b88;color:#fff;font-weight:800;font-size:18px;letter-spacing:.5px;border:3px solid #dce8f7}.commission-president{border:2px solid #c5d7ed}.commission-president .commission-avatar{background:#142b50}.commission-role{margin:0;color:#263d5c;font-weight:700;font-size:14px}.commission-unit{margin:7px 0 0;color:#687589;font-size:12px}
 </style>
 </head>
 <body>
@@ -48,7 +50,22 @@
   </div>
  </div>
 </section>
-<section id="page-commission" class="hidden"><div class="card"><h2>Komisyonumuz</h2><p>AGDKLİSEKOM Kestel komisyonu hakkında bilgilere bu bölümden ulaşabilirsiniz.</p></div></section>
+<section id="page-commission" class="hidden">
+ <div class="card">
+  <h2>Komisyonumuz</h2>
+  <p>AGDKLİSEKOM Kestel komisyonu olarak ahlak ve maneviyatla donanmış, daha güzel bir gelecek ve daha iyi bir gençlik için birlikte çalışıyoruz.</p>
+  <div class="commission-grid">
+   <article class="commission-member commission-president"><div class="commission-avatar">HA</div><h3>Harun Akbulut</h3><p class="commission-role">Komisyon Başkanı</p><p class="commission-unit">Kestel Lise Komisyonu</p></article>
+   <article class="commission-member"><div class="commission-avatar">YİD</div><h3>Yusuf İslam Değirmen</h3><p class="commission-role">Teşkilat Birimi Başkanı</p><p class="commission-unit">Kestel Lise Komisyonu</p></article>
+   <article class="commission-member"><div class="commission-avatar">ZEÖ</div><h3>Zahid Enes Özkan</h3><p class="commission-role">Eğitim Birimi Başkanı</p><p class="commission-unit">Kestel Lise Komisyonu</p></article>
+   <article class="commission-member"><div class="commission-avatar">MA</div><h3>Mert Akkuş</h3><p class="commission-role">SKSF Birimi Başkanı</p><p class="commission-unit">Kestel Lise Komisyonu</p></article>
+   <article class="commission-member"><div class="commission-avatar">EP</div><h3>Emirhan Peksöz</h3><p class="commission-role">SKSF Birimi Yardımcısı</p><p class="commission-unit">Kestel Lise Komisyonu</p></article>
+   <article class="commission-member"><div class="commission-avatar">MT</div><h3>Metehan Tozlu</h3><p class="commission-role">Sekreterya Birimi</p><p class="commission-unit">Kestel Lise Komisyonu</p></article>
+   <article class="commission-member"><div class="commission-avatar">EEB</div><h3>Eymen Efe Bayrak</h3><p class="commission-role">Sosyal Medya ve Dijital Medya Sorumlusu</p><p class="commission-unit">Kestel Lise Komisyonu</p></article>
+   <article class="commission-member"><div class="commission-avatar">MK</div><h3>Muhammet Keleş</h3><p class="commission-role">Sosyal Medya ve Dijital Medya Sorumlusu</p><p class="commission-unit">Kestel Lise Komisyonu</p></article>
+  </div>
+ </div>
+</section>
 <section id="page-activities" class="hidden">
  <div class="card"><h2>Faaliyetlerimiz</h2><p class="muted">Açık faaliyetleri inceleyebilir ve kontenjan bulunduğu sürece kayıt oluşturabilirsiniz.</p><div id="activityList">Faaliyetler yükleniyor...</div></div>
  <div class="card" id="registrationCard"><h2>Faaliyete Kayıt Ol</h2><div id="registrationAuthNotice" class="notice">Faaliyete kayıt olmak için önce e-posta veya telefon numaranızla hesap oluşturup doğrulama yapmalısınız. <div class="actions"><button class="btn" type="button" id="openAccountFromRegistration">Hesap Aç / Giriş Yap</button></div></div><form id="registrationForm" class="hidden"><p class="muted" id="registrationSignedInAs"></p><label>Faaliyet</label><select id="registrationActivity" required><option value="">Faaliyet seçiniz</option></select><label>Ad Soyad</label><input id="registrationName" required placeholder="Adınız ve soyadınız"><label>Telefon</label><input id="registrationPhone" required type="tel" placeholder="05XXXXXXXXX"><label>Okul</label><input id="registrationSchool" required maxlength="200" placeholder="Okulunuzun adı"><button class="btn btn-success" type="submit">Kaydımı Oluştur</button></form><div id="registrationMessage"></div></div>
