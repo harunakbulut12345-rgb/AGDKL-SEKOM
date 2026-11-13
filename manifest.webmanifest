@@ -1,11 +1,18 @@
 {
-  "name": "AGD LİSEKOM Kestel",
-  "short_name": "AGD LİSEKOM",
-  "description": "AGD Kestel Lise Komisyonu",
-  "start_url": "./",
+  "id": "./",
+  "name": "AGDKLİSEKOM",
+  "short_name": "AGDKLİSEKOM",
+  "description": "AGD Kestel Lise Komisyonu uygulaması",
+  "lang": "tr-TR",
+  "start_url": "./#home",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#123b70",
-  "orientation": "portrait"
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait",
+  "background_color": "#f5f6f4",
+  "theme_color": "#171d38",
+  "icons": [
+    {"src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
+    {"src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+  ]
 }
