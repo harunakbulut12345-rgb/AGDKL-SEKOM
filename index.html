@@ -243,6 +243,9 @@ async function init(){try{
   if(list)list.textContent="Başlangıç sırasında hata: "+(err.message||err);
 }}
 if("scrollRestoration" in history)history.scrollRestoration="manual";
+// Kurulu uygulama yeniden acildiginda onceki sayfa/yonetim hash'ini geri yukleme.
+// Her yeni uygulama acilisinda baslangic rotasi Ana Sayfa olsun.
+try{history.replaceState({agdPage:"home"},"",location.pathname+location.search+"#home");}catch(e){console.warn("Ana sayfa rotasi ayarlanamadi:",e);}
 init();
 
 // Uygulamayi telefona kurulabilir ve temel duzeyde cevrimdisi hazir hale getirir.
