@@ -168,7 +168,7 @@ function showPage(name,options={}){
  if(isGuest()&&["meetings","decisions","tasks","users","dashboard"].includes(name))name="activities";
  const previous=window.__agdCurrentPage||null;
  if(!options.pop&&history.state?.agdPage!==name){history.pushState({agdPage:name},"",location.pathname+location.search+"#"+name);}
- document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));const target=$("page-"+name);if(target){target.classList.remove("hidden");if(previous!==name){target.style.animation="none";void target.offsetWidth;target.style.animation="";}}
+ document.querySelectorAll("main > section[id^=\"page-\"]").forEach(s=>s.classList.add("hidden"));const target=$("page-"+name);if(target){target.classList.remove("hidden");if(previous!==name){target.style.animation="none";void target.offsetWidth;target.style.animation="";}}
  window.__agdCurrentPage=name;
  if(previous!==name&&!window.__openJoinActivity){window.scrollTo({top:0,behavior:"smooth"});}
  document.querySelectorAll(".bottom-nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===name||(name==="activities"&&b.dataset.page==="join-activity")));
