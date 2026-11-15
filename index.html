@@ -92,16 +92,20 @@ button:active,.btn:active{transform:scale(.975)}
 </section>
 
 <section id="page-schools" class="hidden">
- <div class="card">
+ <div class="card" id="schoolListView">
   <h2>Okul Teşkilatımız</h2>
-  <p>AGD okul başkanlarımız ve görev yaptıkları okullar.</p>
-  <div class="commission-grid">
-   <article class="commission-member"><div class="commission-avatar">ÇA</div><h3>Kestel Hasan Aslanoba Anadolu Lisesi</h3><p class="commission-role">AGD Okul Başkanı</p><p class="commission-unit">Çağatay Acar</p></article>
-   <article class="commission-member"><div class="commission-avatar">KC</div><h3>Kestel Hasan Coşkun Anadolu Lisesi</h3><p class="commission-role">AGD Okul Başkanı</p><p class="commission-unit">Kemal Can</p></article>
-   <article class="commission-member"><div class="commission-avatar">OY</div><h3>Kestel Çimento Mesleki ve Teknik Anadolu Lisesi</h3><p class="commission-role">AGD Okul Başkanı</p><p class="commission-unit">Osman Yerli</p></article>
-   <article class="commission-member"><div class="commission-avatar">YEY</div><h3>Uludağ İmam-Hatip Proje Lisesi</h3><p class="commission-role">AGD Okul Başkanı</p><p class="commission-unit">Yusuf Emir Yalçın</p></article>
-   <article class="commission-member"><div class="commission-avatar">HE</div><h3>Vani Mehmet İmam-Hatip Lisesi</h3><p class="commission-role">AGD Okul Başkanı</p><p class="commission-unit">Halim Eroğlu</p></article>
+  <p>Başkanını görmek istediğiniz okulu seçin.</p>
+  <div class="list" style="display:grid;gap:12px">
+   <button class="item" type="button" onclick="openSchoolDetail(0)" style="width:100%;text-align:left;cursor:pointer"><strong>Kestel Hasan Aslanoba Anadolu Lisesi</strong><span style="float:right">›</span><p class="muted">Okul teşkilatını görüntüle</p></button>
+   <button class="item" type="button" onclick="openSchoolDetail(1)" style="width:100%;text-align:left;cursor:pointer"><strong>Kestel Hasan Coşkun Anadolu Lisesi</strong><span style="float:right">›</span><p class="muted">Okul teşkilatını görüntüle</p></button>
+   <button class="item" type="button" onclick="openSchoolDetail(2)" style="width:100%;text-align:left;cursor:pointer"><strong>Kestel Çimento Mesleki ve Teknik Anadolu Lisesi</strong><span style="float:right">›</span><p class="muted">Okul teşkilatını görüntüle</p></button>
+   <button class="item" type="button" onclick="openSchoolDetail(3)" style="width:100%;text-align:left;cursor:pointer"><strong>Uludağ İmam-Hatip Proje Lisesi</strong><span style="float:right">›</span><p class="muted">Okul teşkilatını görüntüle</p></button>
+   <button class="item" type="button" onclick="openSchoolDetail(4)" style="width:100%;text-align:left;cursor:pointer"><strong>Vani Mehmet İmam-Hatip Lisesi</strong><span style="float:right">›</span><p class="muted">Okul teşkilatını görüntüle</p></button>
   </div>
+ </div>
+ <div class="card hidden" id="schoolDetailView">
+  <button class="btn btn-secondary" type="button" onclick="closeSchoolDetail()">← Okullara Geri Dön</button>
+  <div id="schoolDetailContent" style="text-align:center;padding:28px 12px"></div>
  </div>
 </section>
 
@@ -162,7 +166,7 @@ function openMenu(){$("drawer").classList.add("open");$("drawer-bg").classList.a
 function updateMenu(){
  const logged=!!currentUser,active=logged&&!!currentProfile&&profileIsActive(),authorized=active&&canManage(),guest=isGuest();
  $("drawerUser").textContent=currentProfile?.full_name||currentUser?.email||currentUser?.phone||(guest?"Misafir olarak devam ediliyor":"Oturum açılmadı");
- $("publicMenuLinks").classList.toggle("hidden",logged||guest);
+ $("publicMenuLinks").classList.toggle("hidden",logged);
  $("standardMenuLinks").classList.toggle("hidden",!active||authorized);
  $("managerMenuLinks").classList.toggle("hidden",!authorized);
  $("logoutBtn").classList.toggle("hidden",!authorized);if($("dashboardLogoutBtn"))$("dashboardLogoutBtn").classList.toggle("hidden",!authorized);
@@ -176,6 +180,15 @@ function updateMenu(){
 }
 function updateRoleUI(){$("activityCreateArea").classList.toggle("hidden",!canManage());if($("homeSettingsArea"))$("homeSettingsArea").classList.toggle("hidden",!isPresident());$("taskCreateArea").classList.toggle("hidden",!canAssign());$("meetingCreateArea").classList.toggle("hidden",!currentUser);$("decisionCreateArea").classList.toggle("hidden",!currentUser);}
 function enterGuest(){sessionStorage.setItem("agdk_guest","1");updateMenu();showPage("activities");}
+const agdSchools=[
+ {name:"Kestel Hasan Aslanoba Anadolu Lisesi",president:"Çağatay Acar",initials:"ÇA"},
+ {name:"Kestel Hasan Coşkun Anadolu Lisesi",president:"Kemal Can",initials:"KC"},
+ {name:"Kestel Çimento Mesleki ve Teknik Anadolu Lisesi",president:"Osman Yerli",initials:"OY"},
+ {name:"Uludağ İmam-Hatip Proje Lisesi",president:"Yusuf Emir Yalçın",initials:"YEY"},
+ {name:"Vani Mehmet İmam-Hatip Lisesi",president:"Halim Eroğlu",initials:"HE"}
+];
+function openSchoolDetail(index){const school=agdSchools[index];if(!school)return;$('schoolListView').classList.add('hidden');$('schoolDetailView').classList.remove('hidden');$('schoolDetailContent').innerHTML='<div class="commission-avatar" style="margin:0 auto 18px">'+school.initials+'</div><h2>'+school.name+'</h2><p class="commission-role">AGD Okul Başkanı</p><h2 style="margin-top:12px">'+school.president+'</h2>';window.scrollTo({top:0,behavior:'smooth'});}
+function closeSchoolDetail(){$('schoolDetailView').classList.add('hidden');$('schoolListView').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});}
 function showPage(name,options={}){
  const publicPages=['home','activities','commission','schools','units','login','account'],adminPages=['meetings','decisions','tasks','users'];
  if(name==="join-activity")name="activities";
