@@ -54,12 +54,12 @@ button:active,.btn:active{transform:scale(.975)}
 <aside id="drawer">
  <div class="drawer-head"><h2>Menü</h2><button id="closeDrawer">✕</button></div>
  <div id="drawerUser" class="muted">Oturum açılmadı</div>
- <div id="publicMenuLinks"><p class="muted" style="padding:8px 14px 0">Herkese Açık Sayfalar</p><button class="drawer-link" data-page="commission">Komisyonumuz</button><button class="drawer-link" data-page="units">Birimlerimiz</button><button class="drawer-link" data-page="account">Hesap Aç / Giriş Yap</button><button class="drawer-link" id="guestEntryMenuBtn" type="button">Misafir Girişi</button></div>
+ <div id="publicMenuLinks"><p class="muted" style="padding:8px 14px 0">Herkese Açık Sayfalar</p><button class="drawer-link" data-page="commission">Komisyonumuz</button><button class="drawer-link" data-page="schools">Okul Teşkilatımız</button><button class="drawer-link" data-page="units">Birimlerimiz</button><button class="drawer-link" data-page="account">Hesap Aç / Giriş Yap</button><button class="drawer-link" id="guestEntryMenuBtn" type="button">Misafir Girişi</button></div>
  <div id="standardMenuLinks" class="hidden">
-  <button class="drawer-link" data-page="home">Ana Sayfa</button><button class="drawer-link" data-page="activities">Faaliyetlerimiz</button><button class="drawer-link" data-page="join-activity">Faaliyete Katıl</button><button class="drawer-link" data-page="dashboard">Yönetim</button><button class="drawer-link" id="standardLogoutBtn" type="button">Çıkış Yap</button>
+  <button class="drawer-link" data-page="home">Ana Sayfa</button><button class="drawer-link" data-page="activities">Faaliyetlerimiz</button><button class="drawer-link" data-page="join-activity">Faaliyete Katıl</button><button class="drawer-link" data-page="dashboard">Yönetim</button><button class="drawer-link" data-page="schools">Okul Teşkilatımız</button><button class="drawer-link" id="standardLogoutBtn" type="button">Çıkış Yap</button>
  </div>
  <div id="managerMenuLinks" class="hidden">
-  <button class="drawer-link" data-page="home">Ana Sayfa</button><button class="drawer-link" data-page="activities">Faaliyetlerimiz</button><button class="drawer-link" data-page="meetings">Toplantılar</button><button class="drawer-link" data-page="decisions">Kararlar</button><button class="drawer-link" data-page="tasks">Görevler</button><button class="drawer-link" data-page="units">Birimler</button><button class="drawer-link" data-page="users">Kullanıcılar</button><button class="drawer-link" data-page="dashboard">Yönetim</button><button class="drawer-link hidden" id="logoutBtn">Çıkış Yap</button>
+  <button class="drawer-link" data-page="home">Ana Sayfa</button><button class="drawer-link" data-page="activities">Faaliyetlerimiz</button><button class="drawer-link" data-page="meetings">Toplantılar</button><button class="drawer-link" data-page="decisions">Kararlar</button><button class="drawer-link" data-page="tasks">Görevler</button><button class="drawer-link" data-page="units">Birimler</button><button class="drawer-link" data-page="users">Kullanıcılar</button><button class="drawer-link" data-page="dashboard">Yönetim</button><button class="drawer-link" data-page="schools">Okul Teşkilatımız</button><button class="drawer-link hidden" id="logoutBtn">Çıkış Yap</button>
  </div>
 </aside>
 <main>
@@ -90,6 +90,21 @@ button:active,.btn:active{transform:scale(.975)}
   </div>
  </div>
 </section>
+
+<section id="page-schools" class="hidden">
+ <div class="card">
+  <h2>Okul Teşkilatımız</h2>
+  <p>AGD okul başkanlarımız ve görev yaptıkları okullar.</p>
+  <div class="commission-grid">
+   <article class="commission-member"><div class="commission-avatar">ÇA</div><h3>Kestel Hasan Aslanoba Anadolu Lisesi</h3><p class="commission-role">AGD Okul Başkanı</p><p class="commission-unit">Çağatay Acar</p></article>
+   <article class="commission-member"><div class="commission-avatar">KC</div><h3>Kestel Hasan Coşkun Anadolu Lisesi</h3><p class="commission-role">AGD Okul Başkanı</p><p class="commission-unit">Kemal Can</p></article>
+   <article class="commission-member"><div class="commission-avatar">OY</div><h3>Kestel Çimento Mesleki ve Teknik Anadolu Lisesi</h3><p class="commission-role">AGD Okul Başkanı</p><p class="commission-unit">Osman Yerli</p></article>
+   <article class="commission-member"><div class="commission-avatar">YEY</div><h3>Uludağ İmam-Hatip Proje Lisesi</h3><p class="commission-role">AGD Okul Başkanı</p><p class="commission-unit">Yusuf Emir Yalçın</p></article>
+   <article class="commission-member"><div class="commission-avatar">HE</div><h3>Vani Mehmet İmam-Hatip Lisesi</h3><p class="commission-role">AGD Okul Başkanı</p><p class="commission-unit">Halim Eroğlu</p></article>
+  </div>
+ </div>
+</section>
+
 <section id="page-activities" class="hidden">
  <div class="card"><h2>Faaliyetlerimiz</h2><p class="muted">Açık faaliyetleri inceleyebilir ve kontenjan bulunduğu sürece kayıt oluşturabilirsiniz.</p><div id="activityList">Faaliyetler yükleniyor...</div></div>
  <div class="card" id="registrationCard"><h2>Faaliyete Kayıt Ol</h2><div id="registrationAuthNotice" class="notice">Faaliyete kayıt olmak için önce e-posta adresinizle hesap oluşturup doğrulama yapmalısınız. <div class="actions"><button class="btn" type="button" id="openAccountFromRegistration">Hesap Aç / Giriş Yap</button></div></div><form id="registrationForm" class="hidden"><p class="muted" id="registrationSignedInAs"></p><label>Faaliyet</label><select id="registrationActivity" required><option value="">Faaliyet seçiniz</option></select><label>Ad Soyad</label><input id="registrationName" required placeholder="Adınız ve soyadınız"><label>Telefon</label><input id="registrationPhone" required type="tel" placeholder="05XXXXXXXXX"><label>Okul</label><input id="registrationSchool" required maxlength="200" placeholder="Okulunuzun adı"><button class="btn btn-success" type="submit">Kaydımı Oluştur</button></form><div id="registrationMessage"></div></div>
@@ -101,6 +116,7 @@ button:active,.btn:active{transform:scale(.975)}
  <div class="card hidden" id="homeSettingsArea"><h2>Ana Sayfa Düzenleme</h2><p class="muted">Bu alan yalnızca Komisyon Başkanı tarafından düzenlenebilir. Burada yaptığınız değişiklikler Ana Sayfa'yı ziyaret eden herkese yansır.</p><form id="homeSettingsForm"><label>Ana başlık</label><input id="homeEditHeroTitle" maxlength="120"><label>Açıklama</label><textarea id="homeEditHeroSubtitle" maxlength="300"></textarea><div class="two-col"><div><label>Faaliyet sayısı başlığı</label><input id="homeEditActivitiesLabel" maxlength="50" readonly></div><div><label>Komisyon sayısı başlığı</label><input id="homeEditCommissionLabel" maxlength="50" readonly></div><div><label>Teşkilatçı sayısı başlığı</label><input id="homeEditOrganizerLabel" maxlength="50" readonly></div><div><label>Galeri başlığı</label><input id="homeEditGalleryTitle" maxlength="70"></div></div><label>Fotoğraf ekle</label><input id="homeGalleryFiles" type="file" accept="image/*" multiple><p class="muted">Seçtiğiniz fotoğraflar mevcut fotoğraflara eklenir. Fotoğrafları aşağıdaki listeden tek tek silebilirsiniz. En fazla 12 fotoğraf, her biri 5 MB.</p><div id="homeGalleryManageList" class="home-gallery-manage-list"><p class="muted">Yüklenmiş fotoğraflar kontrol ediliyor...</p></div><div class="two-col"><div><label>Faaliyet sayısı (boş bırakılırsa otomatik)</label><input id="homeEditActivitiesCount" type="number" min="0"></div><div><label>Komisyon sayısı (boş bırakılırsa otomatik)</label><input id="homeEditCommissionCount" type="number" min="0"></div><div><label>Teşkilatçı sayısı (boş bırakılırsa otomatik)</label><input id="homeEditOrganizerCount" type="number" min="0"></div></div><button class="btn btn-success" type="submit">Ana Sayfayı Kaydet</button></form><div id="homeSettingsMessage"></div></div>
  <div class="card hidden" id="activityCreateArea"><h2>Yeni Faaliyet Ekle</h2><form id="activityCreateForm"><label>Faaliyet Başlığı</label><input id="activityTitle" required maxlength="200"><label>Faaliyet Açıklaması</label><textarea id="activityDescription"></textarea><label>Faaliyet Tarihi</label><input id="activityDate" type="date"><label>Faaliyet Yeri</label><input id="activityLocation"><label>Kontenjan (Kişi Sayısı)</label><input id="activityCapacity" type="number" min="1" step="1" required placeholder="Örn. 30"><button class="btn btn-success" type="submit">Faaliyeti Kaydet</button></form><div id="activityCreateMessage"></div></div>
  <div class="two-col" id="dashboardPublicLinks">
+   <div class="card"><h3>Okul Teşkilatımız</h3><p>Okullarımızdaki AGD okul başkanlarını inceleyin.</p><button class="btn" type="button" onclick="showPage('schools')">Okul Teşkilatımızı Gör</button></div>
   <div class="card"><h3>Komisyonumuz</h3><p>AGDKLİSEKOM Kestel komisyonunu tanıyın.</p><button class="btn" type="button" onclick="showPage('commission')">Komisyonumuzu Gör</button></div>
   <div class="card"><h3>Birimlerimiz</h3><p>Komisyon bünyesindeki birimleri inceleyin.</p><button class="btn" type="button" onclick="showPage('units')">Birimlerimizi Gör</button></div>
  </div>
@@ -161,7 +177,7 @@ function updateMenu(){
 function updateRoleUI(){$("activityCreateArea").classList.toggle("hidden",!canManage());if($("homeSettingsArea"))$("homeSettingsArea").classList.toggle("hidden",!isPresident());$("taskCreateArea").classList.toggle("hidden",!canAssign());$("meetingCreateArea").classList.toggle("hidden",!currentUser);$("decisionCreateArea").classList.toggle("hidden",!currentUser);}
 function enterGuest(){sessionStorage.setItem("agdk_guest","1");updateMenu();showPage("activities");}
 function showPage(name,options={}){
- const publicPages=['home','activities','commission','units','login','account'],adminPages=['meetings','decisions','tasks','users'];
+ const publicPages=['home','activities','commission','schools','units','login','account'],adminPages=['meetings','decisions','tasks','users'];
  if(name==="join-activity")name="activities";
  if((!currentUser||!currentProfile||!profileIsActive())&&!publicPages.includes(name))name="activities";
  if(currentUser&&profileIsActive()&&!canManage()&&adminPages.includes(name))name="dashboard";
