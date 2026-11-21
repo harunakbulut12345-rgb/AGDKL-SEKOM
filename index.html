@@ -46,6 +46,7 @@ button:active,.btn:active{transform:scale(.975)}
 @media(max-width:560px){main{padding:0 12px}.home-stats{gap:8px}.stat-card{min-height:124px;padding:13px 6px;border-radius:19px}.stat-icon{width:34px;height:34px}.card{padding:17px;border-radius:20px}.gallery-track{gap:14px}.gallery-photo img{height:auto}.home-activity-card{grid-template-columns:112px minmax(0,1fr)}.home-activity-thumb{min-height:135px}.home-activity-body{padding:12px}.home-activity-body h3{font-size:15px}.home-activity-body p{font-size:12px}.bottom-nav{bottom:8px}}
 @media(max-width:360px){.stat-card span:last-child{font-size:10px}.home-activity-card{grid-template-columns:1fr}.home-activity-thumb{height:175px}.brand-top{font-size:14px}}
 
+ .section-back{display:inline-flex;align-items:center;gap:6px;margin:0 0 14px;font-weight:700}
 </style>
 <meta name="google-site-verification" content="hrxTU9PNL4CVSUT0IZM-tgag3WLCqxXBsW-xsbL2QHk" />
 </head>
@@ -77,6 +78,7 @@ button:active,.btn:active{transform:scale(.975)}
 </section>
 <section id="page-commission" class="hidden">
  <div class="card">
+  <button class="btn btn-light section-back" type="button" onclick="showPage('dashboard')">← Yönetim'e Geri Dön</button>
   <h2>Komisyonumuz</h2>
   <p>AGDKLİSEKOM Kestel komisyonu olarak ahlak ve maneviyatla donanmış, daha güzel bir gelecek ve daha iyi bir gençlik için birlikte çalışıyoruz.</p>
   <div class="commission-grid">
@@ -94,6 +96,7 @@ button:active,.btn:active{transform:scale(.975)}
 
 <section id="page-schools" class="hidden">
  <div class="card" id="schoolListView">
+  <button class="btn btn-light section-back" type="button" onclick="showPage('dashboard')">← Yönetim'e Geri Dön</button>
   <h2>Okul Teşkilatımız</h2>
   
   <div class="list" style="display:grid;gap:12px">
@@ -130,7 +133,7 @@ button:active,.btn:active{transform:scale(.975)}
 <section id="page-meetings" class="hidden"><div class="card"><h2>Toplantılar</h2><div id="meetingCreateArea" class="hidden"><h3>Yeni Toplantı Oluştur</h3><form id="meetingForm"><label>Toplantı Başlığı</label><input id="meetingTitle" required><label>Toplantı Tarihi</label><input id="meetingDate" type="date" required><label>Katılımcılar</label><textarea id="meetingAttendees"></textarea><label>Gündem</label><textarea id="meetingAgenda"></textarea><label>Toplantı Notları</label><textarea id="meetingMinutes"></textarea><button class="btn" type="submit">Toplantıyı Kaydet</button></form><div id="meetingMessage"></div></div><div id="meetingList">Toplantılar yükleniyor...</div></div></section>
 <section id="page-decisions" class="hidden"><div class="card"><h2>Kararlar</h2><div id="decisionCreateArea" class="hidden"><h3>Yeni Karar Ekle</h3><form id="decisionForm"><label>Toplantı</label><select id="decisionMeeting"><option value="">Toplantı seçiniz</option></select><label>Karar Başlığı</label><input id="decisionTitle" required><label>Gerekçe / Açıklama</label><textarea id="decisionRationale"></textarea><label>İlgili Birim (zorunlu)</label><select id="decisionUnit" required><option value="">Birim seçiniz</option></select><label>Sorumlu Üye</label><select id="decisionAssignee"><option value="">Sorumlu seçiniz</option></select><label>Son Tarih</label><input id="decisionDueDate" type="date"><button class="btn btn-success" type="submit">Kararı Kaydet</button></form><div id="decisionMessage"></div></div><div id="decisionList">Kararlar yükleniyor...</div></div></section>
 <section id="page-tasks" class="hidden"><div class="card"><h2>Görevler</h2><div class="card hidden" id="taskCreateArea"><h3>Yeni Görev Ata</h3><form id="taskCreateForm"><label>Görev Başlığı</label><input id="taskTitle" required maxlength="200"><label>Görev Açıklaması</label><textarea id="taskDescription"></textarea><label>Görev Verilecek Üye</label><select id="taskAssignee" required><option value="">Üyeler yükleniyor...</option></select><label>Son Tarih</label><input id="taskDueDate" type="date"><button class="btn btn-success" type="submit">Görevi Ata</button></form><div id="taskCreateMessage"></div></div><div id="taskList">Görevler yükleniyor...</div></div></section>
-<section id="page-units" class="hidden"><div class="card"><h2>Birimler</h2><div id="unitList">Birimler yükleniyor...</div></div></section>
+<section id="page-units" class="hidden"><div class="card"><button class="btn btn-light section-back" type="button" onclick="showPage('dashboard')">← Yönetim'e Geri Dön</button><h2>Birimler</h2><div id="unitList">Birimler yükleniyor...</div></div></section>
 <section id="page-users" class="hidden"><div class="card"><h2>Kullanıcılar</h2><div id="userList">Kullanıcılar yükleniyor...</div></div></section>
 </main>
 <nav class="bottom-nav" id="bottomNav" aria-label="Alt gezinme"><button type="button" data-page="home" class="active"><span class="nav-icon">⌂</span><span>Ana Sayfa</span></button><button type="button" data-page="activities"><span class="nav-icon">▣</span><span>Faaliyetlerimiz</span></button><button type="button" data-page="join-activity" id="joinNavButton"><span class="nav-icon">＋</span><span>Faaliyete Katıl</span></button><button type="button" data-page="meetings" class="authorized-nav hidden"><span class="nav-icon">▤</span><span>Toplantılar</span></button><button type="button" data-page="decisions" class="authorized-nav hidden"><span class="nav-icon">✓</span><span>Kararlar</span></button><button type="button" data-page="dashboard"><span class="nav-icon">☻</span><span>Yönetim</span></button></nav>
