@@ -184,7 +184,7 @@ function updateMenu(){
  $("publicMenuLinks").classList.toggle("hidden",logged);
  $("standardMenuLinks").classList.toggle("hidden",!active||authorized);
  $("managerMenuLinks").classList.toggle("hidden",!authorized);
- $("logoutBtn").classList.toggle("hidden",!authorized);if($("dashboardLogoutBtn"))$("dashboardLogoutBtn").classList.toggle("hidden",!authorized);
+ $("logoutBtn").classList.toggle("hidden",!authorized);if($("dashboardLogoutBtn"))$("dashboardLogoutBtn").classList.toggle("hidden",!active);
  $("standardLogoutBtn").classList.toggle("hidden",!active||authorized);
  $("loginEntryBtn").classList.toggle("hidden",logged||guest);$("managerEntryBtn").classList.toggle("hidden",logged||guest);
  document.querySelectorAll(".authorized-nav").forEach(b=>b.classList.toggle("hidden",!authorized));document.querySelectorAll('[data-page="decisions"]').forEach(b=>{if(b.id!=="secretaryDecisionLink")b.classList.toggle("hidden",!canViewDecisions());});if($("secretaryDecisionLink"))$("secretaryDecisionLink").classList.toggle("hidden",!isSecretary());
@@ -212,6 +212,7 @@ function agdBackPage(){
  if(current!==fallback)showPage(fallback);else showPage("home");
 }
 function showPage(name,options={}){
+ const requestedPage=name;
  const publicPages=['home','activities','commission','schools','units','login','account','dashboard'],adminPages=['meetings','decisions','tasks','users'];
  if(name==="join-activity")name="activities";
  if((!currentUser||!currentProfile||!profileIsActive())&&!publicPages.includes(name))name="activities";
@@ -224,7 +225,7 @@ function showPage(name,options={}){
  document.querySelectorAll("main > section[id^=\"page-\"]").forEach(s=>{s.classList.add("hidden");s.classList.remove("page-enter");});const target=$("page-"+name);if(target){target.classList.remove("hidden");if(previous!==name){void target.offsetWidth;target.classList.add("page-enter");}}
  window.__agdCurrentPage=name;
  if(previous!==name&&!window.__openJoinActivity){window.scrollTo({top:0,behavior:"smooth"});}
- document.querySelectorAll(".bottom-nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===name||(name==="activities"&&b.dataset.page==="join-activity")));
+ document.querySelectorAll(".bottom-nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===requestedPage));
  closeMenu();const loaders={activities:loadActivities,meetings:loadMeetings,decisions:loadDecisions,tasks:loadTasks,units:loadUnits,users:loadUsers};if(loaders[name])loaders[name]();
  if(name==="dashboard"){if(isPresident()){renderHomeGalleryManager();applyHomeSettings();}}
  if(name==="activities"){updateRegistrationAccess();if(window.__openJoinActivity){window.__openJoinActivity=false;setTimeout(()=>$("registrationCard")?.scrollIntoView({behavior:"smooth",block:"start"}),120);}}
