@@ -35,13 +35,22 @@ main{max-width:1050px;margin:18px auto;padding:0 16px}
 #page-activities .item{border-radius:16px;padding:18px;margin:14px 0}.item h3,.item p{overflow-wrap:break-word;word-break:normal;hyphens:none}
 .bottom-nav{position:fixed;transition:opacity .18s ease,transform .18s ease;z-index:30;bottom:10px;left:50%;transform:translateX(-50%);width:min(620px,calc(100% - 28px));display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:8px;background:#ffffffed;backdrop-filter:blur(16px);border:1px solid #e8eaf0;border-radius:28px;box-shadow:0 8px 30px #15213b20}.bottom-nav button{border:0;background:transparent;color:#9298a5;border-radius:20px;padding:7px 2px 5px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;font-size:10px;font-weight:700;min-width:0}.bottom-nav button .nav-icon{font-size:21px;line-height:1.2}.bottom-nav button.active{background:#edf0f5;color:#18213b}.bottom-nav button span:last-child{white-space:nowrap}
 #homeSettingsArea{border:1px dashed #b7c5d9;background:#fbfcff}#homeSettingsForm label{display:block;font-size:13px;font-weight:700;color:#48536a;margin-top:8px} .home-gallery-manage-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin:12px 0}.home-gallery-manage-item{border:1px solid #e2e7ef;border-radius:12px;overflow:hidden;background:#fff}.home-gallery-manage-item img{display:block;width:100%;height:105px;object-fit:cover}.home-gallery-manage-item button{width:100%;border:0;border-radius:0;padding:9px 6px;font-size:12px}
-/* Uygulama hissi: akıcı ekran geçişleri ve mobil kaydırma davranışı */
+/* AGD uygulama deneyimi: akıcı ekran geçişleri, net dokunma geri bildirimi */
+html{scroll-behavior:smooth}
 main section{animation:none;will-change:auto}
-main section.page-enter{animation:appPageIn .18s cubic-bezier(.2,.75,.25,1) both;will-change:opacity,transform}
-@keyframes appPageIn{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
-button,.btn,.bottom-nav button,.drawer-link{transition:background-color .18s ease,color .18s ease,transform .18s ease,box-shadow .18s ease}
-button:active,.btn:active{transform:scale(.975)}
-.card,.item,.home-activity-card,.commission-member{transition:box-shadow .2s ease,transform .2s ease}
+main section.page-enter{animation:appPageIn .30s cubic-bezier(.22,.75,.22,1) both;will-change:opacity,transform}
+@keyframes appPageIn{from{opacity:0;transform:translate3d(0,16px,0) scale(.992);filter:blur(1.5px)}to{opacity:1;transform:translate3d(0,0,0) scale(1);filter:blur(0)}}
+button,.btn,.bottom-nav button,.drawer-link{position:relative;overflow:hidden;isolation:isolate;transition:background-color .2s ease,color .2s ease,transform .16s cubic-bezier(.2,.8,.2,1),box-shadow .2s ease,filter .2s ease;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+button:active,.btn:active,.bottom-nav button:active,.drawer-link:active{transform:scale(.965);filter:brightness(.94)}
+button:focus-visible,.btn:focus-visible,.drawer-link:focus-visible,.bottom-nav button:focus-visible{outline:3px solid #8bb8f0;outline-offset:3px}
+.btn{box-shadow:0 2px 5px #142b5018}
+.btn:hover{box-shadow:0 5px 13px #142b5025;filter:brightness(1.045)}
+.btn:active{box-shadow:0 1px 3px #142b5020}
+button .agd-ripple{position:absolute;z-index:-1;border-radius:50%;pointer-events:none;background:currentColor;opacity:.18;transform:scale(0);animation:agdRipple .52s ease-out forwards}
+@keyframes agdRipple{to{transform:scale(1);opacity:0}}
+.card,.item,.home-activity-card,.commission-member{transition:box-shadow .22s ease,transform .22s ease}
+.card:focus-within,.item:focus-within{box-shadow:0 5px 18px #142b5018}
+@media(hover:hover){.drawer-link:hover,.bottom-nav button:hover{transform:translateY(-1px)}.card:hover,.item:hover{box-shadow:0 5px 16px #142b5014}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 @media(max-width:560px){main{padding:0 12px}.home-stats{gap:8px}.stat-card{min-height:124px;padding:13px 6px;border-radius:19px}.stat-icon{width:34px;height:34px}.card{padding:17px;border-radius:20px}.gallery-track{gap:14px}.gallery-photo img{height:auto}.home-activity-card{grid-template-columns:112px minmax(0,1fr)}.home-activity-thumb{min-height:135px}.home-activity-body{padding:12px}.home-activity-body h3{font-size:15px}.home-activity-body p{font-size:12px}.bottom-nav{bottom:8px}}
 @media(max-width:360px){.stat-card span:last-child{font-size:10px}.home-activity-card{grid-template-columns:1fr}.home-activity-thumb{height:175px}.brand-top{font-size:14px}}
@@ -210,7 +219,7 @@ function showPage(name,options={}){
  if(!options.pop&&previous&&previous!==name){window.__agdNavigationStack.push(previous);}
  if(options.pop&&window.__agdNavigationStack.length){window.__agdNavigationStack.pop();}
  if(!options.pop&&history.state?.agdPage!==name){history.pushState({agdPage:name},"",location.pathname+location.search+"#"+name);}
- document.querySelectorAll("main > section[id^=\"page-\"]").forEach(s=>{s.classList.add("hidden");s.classList.remove("page-enter");});const target=$("page-"+name);if(target){target.classList.remove("hidden");if(previous!==name){target.classList.add("page-enter");}}
+ document.querySelectorAll("main > section[id^=\"page-\"]").forEach(s=>{s.classList.add("hidden");s.classList.remove("page-enter");});const target=$("page-"+name);if(target){target.classList.remove("hidden");if(previous!==name){void target.offsetWidth;target.classList.add("page-enter");}}
  window.__agdCurrentPage=name;
  if(previous!==name&&!window.__openJoinActivity){window.scrollTo({top:0,behavior:"smooth"});}
  document.querySelectorAll(".bottom-nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===name||(name==="activities"&&b.dataset.page==="join-activity")));
@@ -219,6 +228,14 @@ function showPage(name,options={}){
  if(name==="activities"){updateRegistrationAccess();if(window.__openJoinActivity){window.__openJoinActivity=false;setTimeout(()=>$("registrationCard")?.scrollIntoView({behavior:"smooth",block:"start"}),120);}}
 }
 window.addEventListener("popstate",function(event){const page=event.state?.agdPage||(location.hash||"#home").slice(1);showPage(page,{pop:true});});
+// Tüm butonlarda aynı hafif dokunma/ripple geri bildirimi; sonradan eklenen butonları da kapsar.
+document.addEventListener("pointerdown",function(e){
+ const b=e.target.closest("button");if(!b||b.disabled)return;
+ const r=b.getBoundingClientRect(),d=Math.max(r.width,r.height)*1.55;
+ const wave=document.createElement("span");wave.className="agd-ripple";wave.style.width=d+"px";wave.style.height=d+"px";
+ wave.style.left=(e.clientX-r.left-d/2)+"px";wave.style.top=(e.clientY-r.top-d/2)+"px";
+ b.appendChild(wave);wave.addEventListener("animationend",()=>wave.remove(),{once:true});
+});
 if($("menuBtn"))$("menuBtn").addEventListener("click",openMenu);$("closeDrawer").addEventListener("click",closeMenu);$("drawer-bg").addEventListener("click",closeMenu);
 $("loginEntryBtn").addEventListener("click",()=>showPage("account"));$("guestEntryMenuBtn").addEventListener("click",enterGuest);$("openAccountFromRegistration").addEventListener("click",()=>showPage("account"));$("managerEntryBtn").addEventListener("click",()=>showPage("login"));
 document.querySelectorAll(".drawer-link[data-page], #publicInfoLinks [data-page], .bottom-nav [data-page], #page-home [data-page]").forEach(b=>b.addEventListener("click",()=>{if(b.dataset.page==="join-activity")window.__openJoinActivity=true;showPage(b.dataset.page);}));
