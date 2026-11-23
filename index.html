@@ -173,7 +173,7 @@ function profileIsActive(){const v=currentProfile?.active;return v===true||v===1
 function normalizedRole(){return String(currentProfile?.role||"").trim().toLowerCase();}
 function canManage(){return !!currentUser&&profileIsActive()&&[PRESIDENT,ORGANIZER].includes(normalizedRole());}
 function canAssign(){return canManage();}
-function isPresident(){return normalizedRole()===PRESIDENT&&profileIsActive();}
+function isPresident(){return !!currentUser&&!!currentProfile&&normalizedRole()===PRESIDENT&&profileIsActive();}
 const COMMISSION_ROLES=[PRESIDENT,ORGANIZER,"egitim_baskani","sksf_baskani","sksf_yardimcisi",SECRETARY,"sosyal_medya_1","sosyal_medya_2"];
 function isCommissionMember(){return !!currentUser&&profileIsActive()&&COMMISSION_ROLES.includes(normalizedRole());}
 function isSecretary(){return normalizedRole()===SECRETARY&&profileIsActive();}
@@ -298,7 +298,7 @@ async function createOrganizer(e){
  $("organizerCreateForm").reset();showMessage("organizerCreateMessage","Teşkilatçı başarıyla eklendi.","success");await loadOrganizers();
 }
 async function deleteOrganizer(id,name){
- if(!isPresident()){showMessage("organizerCreateMessage","Teşkilatçı silme yetkisi yalnızca Komisyon Başkanındadır.","error");return;}
+ if(!currentUser||!isPresident()){showMessage("organizerCreateMessage","Teşkilatçı silme yetkisi yalnızca Komisyon Başkanındadır.","error");return;}
  if(!confirm('"'+(name||"Bu teşkilatçı")+'" kaydını silmek istediğinize emin misiniz?'))return;
  const {error}=await db.from("organizers").delete().eq("id",id);
  if(error){alert("Teşkilatçı silinemedi: "+error.message);return;}
