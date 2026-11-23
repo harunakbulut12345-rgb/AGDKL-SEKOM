@@ -145,7 +145,7 @@ button .agd-ripple{position:absolute;z-index:-1;border-radius:50%;pointer-events
 <section id="page-units" class="hidden"><div class="agd-page-back-wrap" style="margin:0 0 12px"><button class="btn btn-light agd-page-back" type="button" onclick="agdBackPage()">← Geri</button></div><div class="card"><h2>Birimler</h2><div id="unitList">Birimler yükleniyor...</div></div></section>
 <section id="page-organizers" class="hidden"><div class="agd-page-back-wrap" style="margin:0 0 12px"><button class="btn btn-light agd-page-back" type="button" onclick="agdBackPage()">← Geri</button></div>
 <div class="card"><h2>Teşkilatçılarımız</h2><p class="muted">AGD Kestel teşkilatımıza katılan arkadaşlarımız.</p>
-<div id="organizerAddArea" class="hidden item" style="background:#f4fbf6;border-color:#ccebd7"><h3>Yeni Teşkilatçı Ekle</h3><form id="organizerCreateForm"><label>Ad Soyad</label><input id="organizerFullName" required maxlength="150" placeholder="Teşkilatçının adı soyadı"><label>Okul</label><input id="organizerSchool" required maxlength="200" placeholder="Okulunun adı"><button class="btn btn-success" type="submit">Teşkilatçıyı Kaydet</button></form><div id="organizerCreateMessage"></div></div>
+<div id="organizerAddArea" class="hidden item" style="background:#f4fbf6;border-color:#ccebd7"><h3>Yeni Teşkilatçı Ekle</h3><form id="organizerCreateForm"><label>Ad Soyad</label><input id="organizerFullName" required maxlength="150" placeholder="Teşkilatçının adı soyadı"><label>Telefon Numarası</label><input id="organizerPhone" type="tel" required maxlength="30" placeholder="05XX XXX XX XX"><label>Okul</label><input id="organizerSchool" required maxlength="200" placeholder="Okulunun adı"><label>Görevi</label><input id="organizerDuty" required maxlength="150" placeholder="Örn. Okul teşkilatçısı"><button class="btn btn-success" type="submit">Teşkilatçıyı Kaydet</button></form><div id="organizerCreateMessage"></div></div>
 <div id="organizerList">Teşkilatçılar yükleniyor...</div></div></section>
 <section id="page-users" class="hidden"><div class="agd-page-back-wrap" style="margin:0 0 12px"><button class="btn btn-light agd-page-back" type="button" onclick="agdBackPage()">← Geri</button></div><div class="card"><h2>Kullanıcılar</h2><div id="userList">Kullanıcılar yükleniyor...</div></div></section>
 </main>
@@ -281,21 +281,28 @@ async function loadActivityRegistrations(activityId,container,button){let panel=
 async function loadMeetings(){const list=$("meetingList");list.textContent="Toplantılar yükleniyor...";const {data,error}=await db.from("meetings").select("id,meeting_date,title,attendees,agenda,minutes,created_by").order("meeting_date",{ascending:false});if(error){list.textContent="Toplantılar yüklenemedi: "+error.message;return;}list.innerHTML="";if(!data?.length){list.textContent="Henüz toplantı bulunmuyor.";return;}data.forEach(m=>{const d=document.createElement("div");d.className="item";d.innerHTML="<h3>"+escapeHTML(m.title||"Toplantı")+"</h3><p><b>Tarih:</b> "+(m.meeting_date?new Date(m.meeting_date).toLocaleDateString("tr-TR"):"-")+"</p><p><b>Katılımcılar:</b> "+escapeHTML(m.attendees||"-")+"</p><p><b>Gündem:</b> "+escapeHTML(m.agenda||"-")+"</p><p><b>Notlar:</b> "+escapeHTML(m.minutes||"-")+"</p>";list.appendChild(d);});}
 async function loadOrganizers(){
  const list=$("organizerList");if(!list)return;list.textContent="Teşkilatçılar yükleniyor...";
- const {data,error}=await db.from("organizers").select("id,full_name,school,created_at").order("created_at",{ascending:false});
- if(error){list.textContent="Teşkilatçılar yüklenemedi: "+error.message+" (Gerekli tablo ve erişim izinleri için verilen SQL kodunu çalıştırın.)";return;}
+ const {data,error}=await db.from("organizers").select("id,full_name,phone,school,duty,created_at").order("created_at",{ascending:true});
+ if(error){list.textContent="Teşkilatçılar yüklenemedi: "+error.message+" (Yeni telefon ve görev alanları için SQL güncellemesini çalıştırın.)";return;}
  list.innerHTML="";
  if(!data?.length){list.textContent="Henüz teşkilatçı eklenmemiş.";return;}
- data.forEach(person=>{const item=document.createElement("div");item.className="item";const name=document.createElement("h3");name.textContent=person.full_name||"İsimsiz";const school=document.createElement("p");school.textContent="Okul: "+(person.school||"Belirtilmemiş");item.append(name,school);list.appendChild(item);});
+ data.forEach((person,index)=>{const item=document.createElement("div");item.className="item";const name=document.createElement("h3");name.textContent=(index+1)+". "+(person.full_name||"İsimsiz");const phone=document.createElement("p");phone.textContent="Telefon: "+(person.phone||"Belirtilmemiş");const school=document.createElement("p");school.textContent="Okul: "+(person.school||"Belirtilmemiş");const duty=document.createElement("p");duty.textContent="Görev: "+(person.duty||"Belirtilmemiş");item.append(name,phone,school,duty);if(isPresident()){const del=document.createElement("button");del.type="button";del.className="btn btn-light";del.textContent="Teşkilatçıyı Sil";del.style.cssText="color:#b42318;border:1px solid #f0b8b4;margin-top:8px";del.addEventListener("click",()=>deleteOrganizer(person.id,person.full_name));item.appendChild(del);}list.appendChild(item);});
 }
 async function createOrganizer(e){
  e.preventDefault();if(!isCommissionMember()){showMessage("organizerCreateMessage","Teşkilatçı ekleme yetkisi yalnızca aktif komisyon üyelerindedir.","error");return;}
- const full_name=$("organizerFullName").value.trim(),school=$("organizerSchool").value.trim();
- if(!full_name||!school){showMessage("organizerCreateMessage","Ad soyad ve okul alanlarını doldurun.","error");return;}
+ const full_name=$("organizerFullName").value.trim(),phone=$("organizerPhone").value.trim(),school=$("organizerSchool").value.trim(),duty=$("organizerDuty").value.trim();
+ if(!full_name||!phone||!school||!duty){showMessage("organizerCreateMessage","Ad soyad, telefon, okul ve görev alanlarını doldurun.","error");return;}
  const btn=$("organizerCreateForm").querySelector('button[type="submit"]');btn.disabled=true;btn.textContent="Kaydediliyor...";
- const {error}=await db.from("organizers").insert({full_name,school,created_by:currentUser.id});
+ const {error}=await db.from("organizers").insert({full_name,phone,school,duty,created_by:currentUser.id});
  btn.disabled=false;btn.textContent="Teşkilatçıyı Kaydet";
  if(error){showMessage("organizerCreateMessage","Teşkilatçı kaydedilemedi: "+error.message,"error");return;}
  $("organizerCreateForm").reset();showMessage("organizerCreateMessage","Teşkilatçı başarıyla eklendi.","success");await loadOrganizers();
+}
+async function deleteOrganizer(id,name){
+ if(!isPresident()){showMessage("organizerCreateMessage","Teşkilatçı silme yetkisi yalnızca Komisyon Başkanındadır.","error");return;}
+ if(!confirm('"'+(name||"Bu teşkilatçı")+'" kaydını silmek istediğinize emin misiniz?'))return;
+ const {error}=await db.from("organizers").delete().eq("id",id);
+ if(error){alert("Teşkilatçı silinemedi: "+error.message);return;}
+ await loadOrganizers();
 }
 async function loadUnits(){const list=$("unitList");list.textContent="Birimler yükleniyor...";const {data,error}=await db.from("units").select("id,name").order("name");if(error){list.textContent="Birimler yüklenemedi: "+error.message;return;}list.innerHTML="";(data||[]).forEach(u=>{const d=document.createElement("div");d.className="item";d.textContent=u.name;list.appendChild(d);});if(!data?.length)list.textContent="Birim bulunamadı.";populateUnitSelect(data||[]);}
 function populateUnitSelect(units){const sel=$("decisionUnit");if(!sel)return;const old=sel.value;sel.innerHTML='<option value="">Birim seçiniz</option>';units.forEach(u=>{const o=document.createElement("option");o.value=u.id;o.textContent=u.name;sel.appendChild(o);});if(old)sel.value=old;}
